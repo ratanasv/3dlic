@@ -1,45 +1,45 @@
 #pragma once
 #include "StdAfx.h"
+using std::shared_ptr;
+using std::vector;
 
-class GeometryAbstractFactoryImpl{
+class GeometryAbstractFactory{
 public:
-	virtual ~GeometryAbstractFactoryImpl(){};
-	virtual std::shared_ptr<std::vector<vir::vec3>> get_vertices()=0;
-	virtual std::shared_ptr<std::vector<vir::vec3>> get_normals()=0;
-	virtual std::shared_ptr<std::vector<vir::vec2>> get_tex_coord()=0;
-	virtual std::shared_ptr<std::vector<unsigned>> get_indices()=0;
+	virtual ~GeometryAbstractFactory(){};
+	virtual shared_ptr<vector<vir::vec3>> get_vertices()=0;
+	virtual shared_ptr<vector<vir::vec3>> get_normals()=0;
+	virtual shared_ptr<vector<vir::vec2>> get_tex_coord()=0;
+	virtual shared_ptr<vector<unsigned>> get_indices()=0;
 };
-typedef std::shared_ptr<GeometryAbstractFactoryImpl> GeometryAbstractFactory;
 
-class OBJFactoryImpl: public GeometryAbstractFactoryImpl{
+class OBJFactory: public GeometryAbstractFactory{
 public:
-	OBJFactoryImpl(const char* fn);
-	virtual std::shared_ptr<std::vector<vir::vec3>> get_vertices();
-	virtual std::shared_ptr<std::vector<vir::vec3>> get_normals();
-	virtual std::shared_ptr<std::vector<vir::vec2>> get_tex_coord();
-	virtual std::shared_ptr<std::vector<unsigned>> get_indices();
+	OBJFactory(const char* fn);
+	virtual shared_ptr<vector<vir::vec3>> get_vertices();
+	virtual shared_ptr<vector<vir::vec3>> get_normals();
+	virtual shared_ptr<vector<vir::vec2>> get_tex_coord();
+	virtual shared_ptr<vector<unsigned>> get_indices();
 private:
 	obj::ObjModel _model;
 };
 
-class GeometryDelegateeImpl{
+class GeometryDelegatee{
 public:
-	virtual ~GeometryDelegateeImpl(){};
+	virtual ~GeometryDelegatee(){};
 protected:
-	GeometryDelegateeImpl(const GeometryAbstractFactory& factory):
+	GeometryDelegatee(const shared_ptr<GeometryAbstractFactory>& factory):
 		_factory(factory){};
-	GeometryAbstractFactory _factory;
+	shared_ptr<GeometryAbstractFactory> _factory;
 public:
 	virtual void send_to_gpu()=0;
 	virtual void pre_render()=0;
 	virtual void post_render()=0;
 	virtual void render()=0;
 };
-typedef std::shared_ptr<GeometryDelegateeImpl> GeometryDelegatee;
 
-class VAODelegateeImpl:public GeometryDelegateeImpl{
+class VAODelegatee:public GeometryDelegatee{
 public:
-	VAODelegateeImpl(const GeometryAbstractFactory& factory);
+	VAODelegatee(const shared_ptr<GeometryAbstractFactory>& factory);
 	virtual void send_to_gpu();
 	virtual void pre_render();
 	virtual void post_render();
@@ -49,12 +49,12 @@ private:
 	unsigned _num_indices;
 };
 
-class VirModelImpl{
+class VirModel{
 public:
-	virtual ~VirModelImpl(){};
-	VirModelImpl(const GeometryDelegatee& delegatee):
+	virtual ~VirModel(){};
+	VirModel(const shared_ptr<GeometryDelegatee>& delegatee):
 		_delegatee(delegatee){_delegatee->send_to_gpu();};
-	GeometryDelegatee _delegatee;
+	shared_ptr<GeometryDelegatee> _delegatee;
 public:
 	virtual void render(){
 		_delegatee->pre_render();
@@ -62,4 +62,3 @@ public:
 		_delegatee->post_render();
 	}
 };
-typedef std::shared_ptr<VirModelImpl> VirModel;

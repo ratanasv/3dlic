@@ -4,7 +4,7 @@
 using namespace std;
 using namespace vir;
 
-OBJFactoryImpl::OBJFactoryImpl( const char* fn )
+OBJFactory::OBJFactory( const char* fn )
 {
 	using namespace obj;
 	std::filebuf fb;
@@ -18,7 +18,7 @@ OBJFactoryImpl::OBJFactoryImpl( const char* fn )
 
 
 
-std::shared_ptr<std::vector<vir::vec3>> OBJFactoryImpl::get_vertices()
+std::shared_ptr<std::vector<vir::vec3>> OBJFactory::get_vertices()
 {
 	static shared_ptr<vector<vec3>> vertices(NULL);
 	if(vertices.get() == NULL){
@@ -31,7 +31,7 @@ std::shared_ptr<std::vector<vir::vec3>> OBJFactoryImpl::get_vertices()
 	return vertices;
 }
 
-std::shared_ptr<std::vector<vir::vec3>> OBJFactoryImpl::get_normals()
+std::shared_ptr<std::vector<vir::vec3>> OBJFactory::get_normals()
 {
 	static shared_ptr<vector<vec3>> normals(NULL);
 	if(normals.get() == NULL){
@@ -43,7 +43,7 @@ std::shared_ptr<std::vector<vir::vec3>> OBJFactoryImpl::get_normals()
 	return normals;
 }
 
-std::shared_ptr<std::vector<vir::vec2>> OBJFactoryImpl::get_tex_coord()
+std::shared_ptr<std::vector<vir::vec2>> OBJFactory::get_tex_coord()
 {
 	static shared_ptr<vector<vec2>> tex_coord(NULL);
 	if(tex_coord.get() == NULL){
@@ -60,7 +60,7 @@ std::shared_ptr<std::vector<vir::vec2>> OBJFactoryImpl::get_tex_coord()
 	return tex_coord;
 }
 
-std::shared_ptr<std::vector<unsigned>> OBJFactoryImpl::get_indices()
+std::shared_ptr<std::vector<unsigned>> OBJFactory::get_indices()
 {
 	static shared_ptr<vector<unsigned>> indices(NULL);
 	if(indices.get() == NULL){
@@ -73,12 +73,12 @@ std::shared_ptr<std::vector<unsigned>> OBJFactoryImpl::get_indices()
 	return indices;
 }
 
-VAODelegateeImpl::VAODelegateeImpl( const GeometryAbstractFactory& factory ):
-	GeometryDelegateeImpl(factory){
+VAODelegatee::VAODelegatee( const shared_ptr<GeometryAbstractFactory>& factory ):
+	GeometryDelegatee(factory){
 		_num_indices = factory->get_indices()->size();
 	};
 
-void VAODelegateeImpl::send_to_gpu()
+void VAODelegatee::send_to_gpu()
 {
 	glGenVertexArrays( 1, &_vao );
 	glBindVertexArray( _vao );
@@ -114,17 +114,17 @@ void VAODelegateeImpl::send_to_gpu()
 	glBindVertexArray(0);
 }
 
-void VAODelegateeImpl::pre_render()
+void VAODelegatee::pre_render()
 {
 	glBindVertexArray(_vao);
 }
 
-void VAODelegateeImpl::post_render()
+void VAODelegatee::post_render()
 {
 	glBindVertexArray(0);
 }
 
-void VAODelegateeImpl::render()
+void VAODelegatee::render()
 {
 	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, 0);
 }

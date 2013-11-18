@@ -24,36 +24,34 @@ public:
 	virtual ~TextureAbstractFactory(){};
 };
 
-class ImageTex2DFactoryImpl: public TextureAbstractFactory{
+class ImageTex2DFactory: public TextureAbstractFactory{
 private:
-	std::shared_ptr<unsigned char> _texels;
+	shared_ptr<unsigned char> _texels;
 public:
-	ImageTex2DFactoryImpl(const char* file_name);
+	ImageTex2DFactory(const char* file_name);
 private:
 	void flip_vertically();
 public:
 	virtual void* get_data();
 
 };
-typedef std::shared_ptr<ImageTex2DFactoryImpl> ImageTex2DFactory;
 
-class NoiseTex3DFactoryImpl: public TextureAbstractFactory{
+class NoiseTex3DFactory: public TextureAbstractFactory{
 private:
-	std::shared_ptr<unsigned char> _texels;
+	shared_ptr<unsigned char> _texels;
 public:
-	NoiseTex3DFactoryImpl(const char* file_name);
+	NoiseTex3DFactory(const char* file_name);
 public:
 	virtual void* get_data();
 };
-typedef std::shared_ptr<NoiseTex3DFactoryImpl> NoiseTex3DFactory;
 //-------END OF FACTORY----------
 
 //-------START OF DELEGATEE--------
-class TextureDelegateeImpl{
+class TextureDelegatee{
 public:
-	virtual ~TextureDelegateeImpl(){};
+	virtual ~TextureDelegatee(){};
 protected:
-	TextureDelegateeImpl(const shared_ptr<TextureAbstractFactory>& factory):
+	TextureDelegatee(const shared_ptr<TextureAbstractFactory>& factory):
 		_factory(factory){};
 	shared_ptr<TextureAbstractFactory> _factory;
 public:
@@ -61,37 +59,34 @@ public:
 	virtual void pre_render()=0;
 	virtual void post_render()=0;
 };
-typedef std::shared_ptr<TextureDelegateeImpl> TextureDelegatee;
 
-class GLTextureDelegateeImpl: public TextureDelegateeImpl{
+class GLTextureDelegatee: public TextureDelegatee{
 public:
-	GLTextureDelegateeImpl(const shared_ptr<TextureAbstractFactory>& factory);
+	GLTextureDelegatee(const shared_ptr<TextureAbstractFactory>& factory);
 	virtual void send_to_gpu();
 	virtual void pre_render();
 	virtual void post_render();
 protected:
-	std::shared_ptr<unsigned> _tex_handle;
+	shared_ptr<unsigned> _tex_handle;
 	const unsigned _which_tex;
 	GLenum _bind_site;
 };
-typedef std::shared_ptr<GLTextureDelegateeImpl> GLTextureDelegatee;
 
-class GLTexReplaceDelegateeImpl: public GLTextureDelegateeImpl{
+class GLTexReplaceDelegatee: public GLTextureDelegatee{
 public:
-	GLTexReplaceDelegateeImpl(const shared_ptr<TextureAbstractFactory>& factory);
+	GLTexReplaceDelegatee(const shared_ptr<TextureAbstractFactory>& factory);
 	virtual void pre_render();
 };
-typedef std::shared_ptr<GLTexReplaceDelegateeImpl> GLTexReplaceDelegatee;
 //------END OF DELEGATEE------
 
 //------ACTUAL END-USERS API-------
-class VirTexImpl{
+class VirTex{
 public:
-	virtual ~VirTexImpl(){};
-	VirTexImpl(const TextureDelegatee& delegatee):
+	virtual ~VirTex(){};
+	VirTex(const shared_ptr<TextureDelegatee>& delegatee):
 		_delegatee(delegatee){_delegatee->send_to_gpu();};
 protected:
-	TextureDelegatee _delegatee;
+	shared_ptr<TextureDelegatee> _delegatee;
 public:
 	virtual void pre_render(){
 		_delegatee->pre_render();
@@ -100,6 +95,5 @@ public:
 		_delegatee->post_render();
 	}
 };
-typedef std::shared_ptr<VirTexImpl> VirTex;
 
 //------ACTUAL END-USERS API-------

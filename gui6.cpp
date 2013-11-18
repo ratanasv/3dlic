@@ -7,7 +7,7 @@
 using namespace vir;
 using namespace std;
 GLSLProgram* vir_shaders;
-VirTex perlin;
+shared_ptr<VirTex> perlin;
 
 static void viTexCoord3f(float s, float t, float p){
 	vir_shaders->SetAttribute("TexCoord",s,t,p);
@@ -112,9 +112,9 @@ void init6()
 	vir_shaders->Use();
 	vir_shaders->GetAttributeLocation("TexCoord");
 	vir_shaders->GetAttributeLocation("asdf");
-	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactoryImpl(
+	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
 		"noise3d.256.tex"));
-	auto delegatee = TextureDelegatee(new GLTexReplaceDelegateeImpl(
+	shared_ptr<TextureDelegatee> delegatee(new GLTexReplaceDelegatee(
 		factory));
-	perlin = VirTex(new VirTexImpl(delegatee));
+	shared_ptr<VirTex> perlin(new VirTex(delegatee));
 }

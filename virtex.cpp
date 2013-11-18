@@ -4,7 +4,7 @@
 using namespace std;
 using namespace vir;
 
-ImageTex2DFactoryImpl::ImageTex2DFactoryImpl(const char* file_name){
+ImageTex2DFactory::ImageTex2DFactory(const char* file_name){
 	unsigned char* tex_ptr = SOIL_load_image(file_name,
 		&_width,&_height,&_channel,SOIL_LOAD_RGB);
 	assert(tex_ptr != NULL);
@@ -16,7 +16,7 @@ ImageTex2DFactoryImpl::ImageTex2DFactoryImpl(const char* file_name){
 	_data_type = GL_UNSIGNED_BYTE;
 }
 
-void ImageTex2DFactoryImpl::flip_vertically(){
+void ImageTex2DFactory::flip_vertically(){
 	shared_ptr<unsigned char> flipped(new unsigned char[_width*_height*_channel],
 		[] (unsigned char* uc){delete[] uc;});
 	unsigned char* upside_down = _texels.get();
@@ -31,11 +31,11 @@ void ImageTex2DFactoryImpl::flip_vertically(){
 	_texels = flipped;
 }
 
-void* ImageTex2DFactoryImpl::get_data(){
+void* ImageTex2DFactory::get_data(){
 	return (void*)_texels.get();
 }
 
-NoiseTex3DFactoryImpl::NoiseTex3DFactoryImpl( const char* file_name){
+NoiseTex3DFactory::NoiseTex3DFactory( const char* file_name){
 	FILE* fp = fopen(file_name, "rb");
 	if(!fp){
 		MessageBox( NULL,
@@ -60,15 +60,15 @@ NoiseTex3DFactoryImpl::NoiseTex3DFactoryImpl( const char* file_name){
 }
 
 
-void* NoiseTex3DFactoryImpl::get_data(){
+void* NoiseTex3DFactory::get_data(){
 	return _texels.get();
 }
 
 
-GLTextureDelegateeImpl::GLTextureDelegateeImpl( const shared_ptr<TextureAbstractFactory>& factory ):
-TextureDelegateeImpl(factory), _which_tex(0), _tex_handle(NULL){};
+GLTextureDelegatee::GLTextureDelegatee( const shared_ptr<TextureAbstractFactory>& factory ):
+TextureDelegatee(factory), _which_tex(0), _tex_handle(NULL){};
 
-void GLTextureDelegateeImpl::send_to_gpu(){
+void GLTextureDelegatee::send_to_gpu(){
 	int ch = _factory->get_channel();
 	int width = _factory->get_width();
 	int height = _factory->get_height();
@@ -96,23 +96,23 @@ void GLTextureDelegateeImpl::send_to_gpu(){
 	glBindTexture(_bind_site, 0);
 }
 
-void GLTextureDelegateeImpl::pre_render(){
+void GLTextureDelegatee::pre_render(){
 	glActiveTexture(GL_TEXTURE0+_which_tex);
 	glEnable(_bind_site);
 	glBindTexture(_bind_site, *_tex_handle);
 }
 
-void GLTextureDelegateeImpl::post_render(){
+void GLTextureDelegatee::post_render(){
 	glActiveTexture(GL_TEXTURE0+_which_tex);
 	glEnable(_bind_site);
 	glBindTexture(_bind_site, 0);
 }
 
 
-GLTexReplaceDelegateeImpl::GLTexReplaceDelegateeImpl( const shared_ptr<TextureAbstractFactory>& factory ):
-	GLTextureDelegateeImpl(factory){};
+GLTexReplaceDelegatee::GLTexReplaceDelegatee( const shared_ptr<TextureAbstractFactory>& factory ):
+	GLTextureDelegatee(factory){};
 
-void GLTexReplaceDelegateeImpl::pre_render()
+void GLTexReplaceDelegatee::pre_render()
 {
 	glActiveTexture(GL_TEXTURE0+_which_tex);
 	glEnable(_bind_site);
