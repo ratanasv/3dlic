@@ -1,0 +1,31 @@
+#pragma once
+#include <map>
+#include <cassert>
+#include <cstdio>
+#include <memory>
+#include <cmath>
+#include <vector>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <utility>
+#include "vec.h"
+#include "glew.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include "glut.h"
+#include "glui.h"
+#include <omp.h>
+#include "abstract.h"
+#include "vec.h"
+#include "SOIL.h"
+#include <cstdio>
+#include <tuple>
+#include <cstdio>
+#include <cstdlib>
+#include <cctype>
+#include "objload.h"
+#include "glslprogram.h"
+#include "windows.h"
+
+#pragma message("Compiling PCH")
