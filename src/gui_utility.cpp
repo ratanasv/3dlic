@@ -9,20 +9,21 @@ map<SLIDER_ID, SliderBundle> BunchOfSliders;
 map<CHECKBOX_ID, CheckboxBundle> BunchOfCheckboxes;
 map<int, RadioBundle> Bunch_Of_Radios;
 
-void callback(int id)
-{
-	auto it = BunchOfSliders.begin();
-	for(; it!=BunchOfSliders.end(); it++)
-		it->second.refresh();
-	auto it2 = BunchOfCheckboxes.begin();
-	for(; it2 != BunchOfCheckboxes.end(); it2++)
-		it2->second.refresh();
-	for(auto it3=Bunch_Of_Radios.begin(); it3!=Bunch_Of_Radios.end(); it3++)
-		it3->second.refresh();
+void callback(int id) {
+	
+	for (auto it : BunchOfSliders) {
+		it.second.refresh();
+	}
+	for (auto it : BunchOfCheckboxes) {
+		it.second.refresh();
+	}
+	for (auto it : Bunch_Of_Radios) {
+		it.second.refresh();
+	}
 	glutPostRedisplay( );//post redisplay
 }
 
-void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, const SliderBundle& sb_in) {\
+void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, const SliderBundle& sb_in) {
 	BunchOfSliders.insert(pair<SLIDER_ID, SliderBundle>(sb_in.id, sb_in));
 	SliderBundle& sb = BunchOfSliders.at(sb_in.id);
 	if(sb.two_sided)

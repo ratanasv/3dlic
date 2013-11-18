@@ -45,7 +45,7 @@ public:
 	int val;
 	int def_val;
 	CHECKBOX_ID id;
-	CheckboxBundle(GLUI_Checkbox* checkbox, int val, int def_val, CHECKBOX_ID id ):
+	CheckboxBundle(GLUI_Checkbox* checkbox, int val, int def_val, CHECKBOX_ID id) :
 		checkbox(checkbox), val(val), def_val(def_val), id(id) {};
 	void refresh() {
 
@@ -64,7 +64,7 @@ struct CheckboxBundle& cb_in);
 class RadioBundle {
 public:
 	int _id;
-	RadioBundle(){};
+	RadioBundle() {};
 	RadioBundle( GLUI* main_glui, GLUI_Panel* panel, int id, char** labels, 
 		int num_label, void (*callback)(int));
 	void refresh();

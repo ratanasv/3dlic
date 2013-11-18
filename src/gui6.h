@@ -1,7 +1,7 @@
 #pragma once
 #include "StdAfx.h"
 
-struct ElevationData{
+struct ElevationData {
 	float MinLng, MaxLng,  MinLat, MaxLat;
 	int NumLngs, NumLats;
 	float MinHgt, MaxHgt;

@@ -78,12 +78,15 @@ void draw6() {
 }
 
 void reset6() {
-	for(auto it1=BunchOfSliders.begin(); it1!=BunchOfSliders.end(); it1++)
-		it1->second.reset();
-	for(auto it2=BunchOfCheckboxes.begin(); it2!=BunchOfCheckboxes.end(); it2++)
-		it2->second.reset();
-	for(auto it3=Bunch_Of_Radios.begin(); it3!=Bunch_Of_Radios.end(); it3++)
-		it3->second.reset();
+	for (auto it : BunchOfSliders) {
+		it.second.reset();
+	}
+	for (auto it : BunchOfCheckboxes) {
+		it.second.reset();
+	}
+	for (auto it : Bunch_Of_Radios) {
+		it.second.reset();
+	}
 }
 
 void animate6(float t) {
@@ -98,8 +101,7 @@ void disable_light() {
 
 
 
-void init6()
-{
+void init6() {
 	vir_shaders = new GLSLProgram();
 	vir_shaders->Create("p10.vert", "p10.frag");
 	vir_shaders->Use();
