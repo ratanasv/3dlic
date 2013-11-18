@@ -18,6 +18,30 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\abstract.h" />
+    <ClInclude Include="src\glslprogram.h" />
+    <ClInclude Include="src\gui6.h" />
+    <ClInclude Include="src\gui_utility.h" />
+    <ClInclude Include="src\objload.h" />
+    <ClInclude Include="src\StdAfx.h" />
+    <ClInclude Include="src\vec.h" />
+    <ClInclude Include="src\virmodel.h" />
+    <ClInclude Include="src\virtex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\abstract.cpp" />
+    <ClCompile Include="src\glslprogram.cpp" />
+    <ClCompile Include="src\gui6.cpp" />
+    <ClCompile Include="src\gui_utility.cpp" />
+    <ClCompile Include="src\sample.cpp" />
+    <ClCompile Include="src\StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\virmodel.cpp" />
+    <ClCompile Include="src\virtex.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{51CB8F8D-219A-4A00-988E-5D392EC775D6}</ProjectGuid>
     <RootNamespace>My3dlic</RootNamespace>
@@ -87,6 +111,7 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>E:\Vault\boost_1_54_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -148,27 +173,6 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="abstract.h" />
-    <ClInclude Include="glslprogram.h" />
-    <ClInclude Include="objload.h" />
-    <ClInclude Include="StdAfx.h" />
-    <ClInclude Include="vec.h" />
-    <ClInclude Include="virmodel.h" />
-    <ClInclude Include="virtex.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="abstract.cpp" />
-    <ClCompile Include="glslprogram.cpp" />
-    <ClCompile Include="gui6.cpp" />
-    <ClCompile Include="gui_utility.cpp" />
-    <ClCompile Include="sample.cpp" />
-    <ClCompile Include="StdAfx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="virmodel.cpp" />
-    <ClCompile Include="virtex.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

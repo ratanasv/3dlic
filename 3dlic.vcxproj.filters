@@ -15,51 +15,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="objload.h">
+    <ClInclude Include="src\vec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vec.h">
+    <ClInclude Include="src\virmodel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="virmodel.h">
+    <ClInclude Include="src\virtex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="virtex.h">
+    <ClInclude Include="src\abstract.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="abstract.h">
+    <ClInclude Include="src\glslprogram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="glslprogram.h">
+    <ClInclude Include="src\gui_utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StdAfx.h">
+    <ClInclude Include="src\gui6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objload.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="abstract.cpp">
+    <ClCompile Include="src\virmodel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glslprogram.cpp">
+    <ClCompile Include="src\virtex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui_utility.cpp">
+    <ClCompile Include="src\abstract.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui6.cpp">
+    <ClCompile Include="src\glslprogram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sample.cpp">
+    <ClCompile Include="src\gui_utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="virmodel.cpp">
+    <ClCompile Include="src\gui6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="virtex.cpp">
+    <ClCompile Include="src\sample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
+    <ClCompile Include="src\StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

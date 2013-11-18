@@ -10,9 +10,6 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="VirTexTest.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{12ADDA48-17C5-49E9-9F5C-62F0C4F29FBB}</ProjectGuid>
     <RootNamespace>test</RootNamespace>
