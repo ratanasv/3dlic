@@ -1,31 +1,30 @@
 #include "StdAfx.h"
 #include "gui_utility.h"
 
-using namespace std;
+using std::map;
+using std::pair;
 using namespace vir;
 
-std::map<int, struct SliderBundle> Bunch_Of_Sliders;
-std::map<int, struct CheckboxBundle> Bunch_Of_Checkboxes;
-std::map<int, RadioBundle> Bunch_Of_Radios;
+map<SLIDER_ID, SliderBundle> BunchOfSliders;
+map<CHECKBOX_ID, CheckboxBundle> BunchOfCheckboxes;
+map<int, RadioBundle> Bunch_Of_Radios;
 
 void callback(int id)
 {
-	auto it = Bunch_Of_Sliders.begin();
-	for(; it!=Bunch_Of_Sliders.end(); it++)
+	auto it = BunchOfSliders.begin();
+	for(; it!=BunchOfSliders.end(); it++)
 		it->second.refresh();
-	auto it2 = Bunch_Of_Checkboxes.begin();
-	for(; it2 != Bunch_Of_Checkboxes.end(); it2++)
+	auto it2 = BunchOfCheckboxes.begin();
+	for(; it2 != BunchOfCheckboxes.end(); it2++)
 		it2->second.refresh();
 	for(auto it3=Bunch_Of_Radios.begin(); it3!=Bunch_Of_Radios.end(); it3++)
 		it3->second.refresh();
 	glutPostRedisplay( );//post redisplay
 }
 
-void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, 
-struct SliderBundle& sb_in)
-{
-	Bunch_Of_Sliders[sb_in.id] = sb_in;
-	auto& sb = Bunch_Of_Sliders[sb_in.id];
+void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, const SliderBundle& sb_in) {\
+	BunchOfSliders.insert(pair<SLIDER_ID, SliderBundle>(sb_in.id, sb_in));
+	SliderBundle& sb = BunchOfSliders.at(sb_in.id);
 	if(sb.two_sided)
 		sb.slider = main_glui->add_slider_to_panel(panel, 1, GLUI_HSLIDER_FLOAT, 
 			sb.vals, sb.id, (GLUI_Update_CB)callback);
@@ -40,10 +39,9 @@ struct SliderBundle& sb_in)
 }
 
 void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
-struct CheckboxBundle& cb_in)
-{
-	Bunch_Of_Checkboxes[cb_in.id] = cb_in;//do this first
-	auto& cb = Bunch_Of_Checkboxes[cb_in.id];
+struct CheckboxBundle& cb_in) {
+	BunchOfCheckboxes.insert(pair<CHECKBOX_ID, CheckboxBundle>(cb_in.id, cb_in));
+	auto& cb = BunchOfCheckboxes.at(cb_in.id);
 	cb.checkbox = main_glui->add_checkbox_to_panel(panel, name, &cb.val, 
 		cb.id, (GLUI_Update_CB)callback);
 	cb.refresh();
@@ -91,20 +89,17 @@ void hsv_to_rgb(float hsv[3], float rgb[3])
 }
 
 
-void RadioBundle::reset()
-{
+void RadioBundle::reset() {
 	_counter = 0;
 }
 
-void RadioBundle::refresh()
-{
+void RadioBundle::refresh() {
 	_callback(_counter);
 }
 
 
 RadioBundle::RadioBundle( GLUI* main_glui, GLUI_Panel* panel, int id, 
-	char** labels, int num_label, void (*callback)(int))
-{
+char** labels, int num_label, void (*callback)(int)) {
 	Bunch_Of_Radios[id] = *this;
 	RadioBundle& rad = Bunch_Of_Radios[id];
 	rad._id = id;
@@ -113,6 +108,7 @@ RadioBundle::RadioBundle( GLUI* main_glui, GLUI_Panel* panel, int id,
 	GLUI_Panel* tiny_panel = main_glui->add_panel_to_panel(panel, labels[0]);
 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(tiny_panel, 
 		&rad._counter,_id, callback);
-	for(int i=1; i<num_label; i++)
+	for (int i=1; i<num_label; i++) {
 		main_glui->add_radiobutton_to_group(group, labels[i]);
+	}
 }

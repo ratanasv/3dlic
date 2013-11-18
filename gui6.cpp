@@ -6,15 +6,14 @@
 
 using namespace vir;
 using namespace std;
-GLSLProgram* vir_shaders;
+static GLSLProgram* vir_shaders;
 shared_ptr<VirTex> perlin;
 
 static void viTexCoord3f(float s, float t, float p){
 	vir_shaders->SetAttribute("TexCoord",s,t,p);
 }
 
-void init_light()
-{
+void init_light() {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glMatrixMode(GL_PROJECTION);
@@ -39,13 +38,12 @@ void init_light()
 }
 
 
-void create_proj6_panel(GLUI* main_glui)
-{
+void create_proj6_panel(GLUI* main_glui) {
 	GLUI_Panel* panel = main_glui->add_rollout("project6", 1);
-	slider45_factory(main_glui, panel, struct SliderBundle(NULL, NULL, 
+	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
 		vec2(1.0,2.0), vec2(1.0,2.0), vec2(0.0,5.0), T_CLAMP, 
 		"TEMP = %2.4f- %2.4f", true));
-	slider45_factory(main_glui, panel, struct SliderBundle(NULL, NULL, 
+	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
 		vec2(0.5,2.0), vec2(0.5,2.0), vec2(0.0,1000.0), ALPHA, 
 		"ALPHA = %2.4f", false));
 // 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);
@@ -55,18 +53,16 @@ void create_proj6_panel(GLUI* main_glui)
 
 }
 
-void draw_terrain()
-{
+void draw_terrain() {
 	
 }
 
 
-void draw6()
-{
+void draw6() {
 	vir_shaders->Use();
 	perlin->pre_render();
 	vir_shaders->SetUniform("noise3d", 0);
-	float p = Bunch_Of_Sliders[ALPHA].vals.x;
+	float p = BunchOfSliders.at(ALPHA).vals.x;
 	vir_shaders->SetUniform("multiplier", p);
 	glBegin(GL_QUADS);
 	viTexCoord3f(0.0,0.0,p);
@@ -81,25 +77,22 @@ void draw6()
 	perlin->post_render();
 }
 
-void reset6()
-{
-	for(auto it1=Bunch_Of_Sliders.begin(); it1!=Bunch_Of_Sliders.end(); it1++)
+void reset6() {
+	for(auto it1=BunchOfSliders.begin(); it1!=BunchOfSliders.end(); it1++)
 		it1->second.reset();
-	for(auto it2=Bunch_Of_Checkboxes.begin(); it2!=Bunch_Of_Checkboxes.end(); it2++)
+	for(auto it2=BunchOfCheckboxes.begin(); it2!=BunchOfCheckboxes.end(); it2++)
 		it2->second.reset();
 	for(auto it3=Bunch_Of_Radios.begin(); it3!=Bunch_Of_Radios.end(); it3++)
 		it3->second.reset();
 }
 
-void animate6(float t)
-{
+void animate6(float t) {
 	
 }
 
 
 
-void disable_light()
-{
+void disable_light() {
 	glDisable(GL_LIGHTING);
 }
 
