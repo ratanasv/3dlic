@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3dlic", "3dlic.vcxproj", "{51CB8F8D-219A-4A00-988E-5D392EC775D6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{12ADDA48-17C5-49E9-9F5C-62F0C4F29FBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,12 @@ Global
 		{51CB8F8D-219A-4A00-988E-5D392EC775D6}.Release|Win32.Build.0 = Release|Win32
 		{51CB8F8D-219A-4A00-988E-5D392EC775D6}.Release|x64.ActiveCfg = Release|x64
 		{51CB8F8D-219A-4A00-988E-5D392EC775D6}.Release|x64.Build.0 = Release|x64
+		{12ADDA48-17C5-49E9-9F5C-62F0C4F29FBB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{12ADDA48-17C5-49E9-9F5C-62F0C4F29FBB}.Debug|Win32.Build.0 = Debug|Win32
+		{12ADDA48-17C5-49E9-9F5C-62F0C4F29FBB}.Debug|x64.ActiveCfg = Debug|Win32
+		{12ADDA48-17C5-49E9-9F5C-62F0C4F29FBB}.Release|Win32.ActiveCfg = Release|Win32
+		{12ADDA48-17C5-49E9-9F5C-62F0C4F29FBB}.Release|Win32.Build.0 = Release|Win32
+		{12ADDA48-17C5-49E9-9F5C-62F0C4F29FBB}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
