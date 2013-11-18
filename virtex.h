@@ -2,6 +2,8 @@
 #include "StdAfx.h"
 
 using std::shared_ptr;
+using std::string;
+
 
 //--------START OF FACTORY----------
 class TextureAbstractFactory{
@@ -19,7 +21,7 @@ public:
 	int get_depth(){return _depth;}
 	GLenum get_data_channel(){return _data_channel;}
 	GLenum get_data_type(){return _data_type;}
-	virtual void* get_data()=0;
+	virtual void* get_data() = 0;
 
 	virtual ~TextureAbstractFactory(){};
 };
@@ -28,7 +30,7 @@ class ImageTex2DFactory: public TextureAbstractFactory{
 private:
 	shared_ptr<unsigned char> _texels;
 public:
-	ImageTex2DFactory(const char* file_name);
+	ImageTex2DFactory(const string& file_name);
 private:
 	void flip_vertically();
 public:
@@ -40,7 +42,7 @@ class NoiseTex3DFactory: public TextureAbstractFactory{
 private:
 	shared_ptr<unsigned char> _texels;
 public:
-	NoiseTex3DFactory(const char* file_name);
+	NoiseTex3DFactory(const string& file_name);
 public:
 	virtual void* get_data();
 };
@@ -51,8 +53,8 @@ class TextureDelegatee{
 public:
 	virtual ~TextureDelegatee(){};
 protected:
-	TextureDelegatee(const shared_ptr<TextureAbstractFactory>& factory):
-		_factory(factory){};
+	TextureDelegatee(const shared_ptr<TextureAbstractFactory>& factory) :
+		_factory(factory) {};
 	shared_ptr<TextureAbstractFactory> _factory;
 public:
 	virtual void send_to_gpu()=0;
@@ -72,7 +74,7 @@ protected:
 	GLenum _bind_site;
 };
 
-class GLTexReplaceDelegatee: public GLTextureDelegatee{
+class GLTexReplaceDelegatee: public GLTextureDelegatee {
 public:
 	GLTexReplaceDelegatee(const shared_ptr<TextureAbstractFactory>& factory);
 	virtual void pre_render();
@@ -83,15 +85,15 @@ public:
 class VirTex{
 public:
 	virtual ~VirTex(){};
-	VirTex(const shared_ptr<TextureDelegatee>& delegatee):
-		_delegatee(delegatee){_delegatee->send_to_gpu();};
+	VirTex(const shared_ptr<TextureDelegatee>& delegatee) :
+		_delegatee(delegatee) {_delegatee->send_to_gpu();};
 protected:
 	shared_ptr<TextureDelegatee> _delegatee;
 public:
-	virtual void pre_render(){
+	virtual void pre_render() {
 		_delegatee->pre_render();
 	}
-	virtual void post_render(){
+	virtual void post_render() {
 		_delegatee->post_render();
 	}
 };

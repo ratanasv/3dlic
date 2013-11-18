@@ -116,5 +116,5 @@ void init6()
 		"noise3d.256.tex"));
 	shared_ptr<TextureDelegatee> delegatee(new GLTexReplaceDelegatee(
 		factory));
-	shared_ptr<VirTex> perlin(new VirTex(delegatee));
+	perlin.reset(new VirTex(delegatee));
 }

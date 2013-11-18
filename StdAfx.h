@@ -24,8 +24,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cctype>
+#include <stdexcept>
 #include "objload.h"
 #include "glslprogram.h"
 #include "windows.h"
+#include "boost/filesystem.hpp"
 
 #pragma message("Compiling PCH")
