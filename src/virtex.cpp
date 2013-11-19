@@ -15,6 +15,19 @@ static void validatePath(const string& fileName) {
 	}
 }
 
+GLenum convertToGLenum( TextureAbstractFactory::NUM_CHANNEL ch ) {
+	switch(ch) {
+	case(TextureAbstractFactory::RED) :
+		return GL_RED;
+	case(TextureAbstractFactory::RGB) :
+		return GL_RGB;
+	case(TextureAbstractFactory::RGBA) :
+		return GL_RGBA;
+	default:
+		throw invalid_argument("unsupported GL texture channel");
+	}
+}
+
 ImageTex2DFactory::ImageTex2DFactory(const string& file_name) {
 	validatePath(file_name);
 	unsigned char* tex_ptr = SOIL_load_image(file_name.c_str(),
@@ -50,7 +63,8 @@ void* ImageTex2DFactory::get_data() {
 	return (void*)_texels.get();
 }
 
-NoiseTex3DFactory::NoiseTex3DFactory( const string& file_name) {
+NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, 
+TextureAbstractFactory::NUM_CHANNEL ch) : _numChannel(ch) {
 	shared_ptr<FILE> fp(fopen(file_name.c_str(), "rb"), [](FILE* f) {
 		fclose(f);
 	});
@@ -63,8 +77,9 @@ NoiseTex3DFactory::NoiseTex3DFactory( const string& file_name) {
 	fread(&_width, sizeof(int), 1, fp.get());
 	fread(&_height, sizeof(int), 1, fp.get());
 	fread(&_depth, sizeof(int), 1, fp.get());
-	_channel = 4;
-	_data_channel = GL_RGBA;
+	_channel = static_cast<int>(_numChannel);
+	_data_channel = convertToGLenum(_numChannel);
+
 	_data_type = GL_UNSIGNED_BYTE;
 	unsigned total = _width*_height*_depth*_channel;
 	_texels = shared_ptr<unsigned char>(new unsigned char[total], [](unsigned char* f) {
@@ -102,7 +117,7 @@ void GLTextureDelegatee::send_to_gpu() {
 		delete[] u; glDeleteTextures(1, u);
 	});
 
-	glActiveTexture(GL_TEXTURE0+_which_tex);
+	glActiveTexture(GL_TEXTURE0 + _which_tex);
 	glEnable(_bind_site);
 	glGenTextures(1, _tex_handle.get());
 	glBindTexture(_bind_site, *_tex_handle);

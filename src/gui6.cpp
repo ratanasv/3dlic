@@ -8,7 +8,8 @@ using namespace vir;
 using std::string;
 namespace fs = boost::filesystem;
 static GLSLProgram* vir_shaders;
-shared_ptr<VirTex> SparseNoise;
+static shared_ptr<VirTex> SparseNoise;
+
 
 static void viTexCoord3f(float s, float t, float p){
 	vir_shaders->SetAttribute("TexCoord",s,t,p);
@@ -114,7 +115,7 @@ void init6() {
 	vir_shaders->GetAttributeLocation("TexCoord");
 	vir_shaders->GetAttributeLocation("asdf");
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
-		NOISE_PATH.string().c_str()));
+		NOISE_PATH.string().c_str(), TextureAbstractFactory::RED));
 	shared_ptr<TextureDelegatee> delegatee(new GLTexReplaceDelegatee(
 		factory));
 	SparseNoise.reset(new VirTex(delegatee));
