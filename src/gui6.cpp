@@ -5,9 +5,10 @@
 #include "virmodel.h"
 
 using namespace vir;
-using namespace std;
+using std::string;
+namespace fs = boost::filesystem;
 static GLSLProgram* vir_shaders;
-shared_ptr<VirTex> perlin;
+shared_ptr<VirTex> SparseNoise;
 
 static void viTexCoord3f(float s, float t, float p){
 	vir_shaders->SetAttribute("TexCoord",s,t,p);
@@ -60,7 +61,7 @@ void draw_terrain() {
 
 void draw6() {
 	vir_shaders->Use();
-	perlin->pre_render();
+	SparseNoise->pre_render();
 	vir_shaders->SetUniform("noise3d", 0);
 	float p = BunchOfSliders.at(ALPHA).vals.x;
 	vir_shaders->SetUniform("multiplier", p);
@@ -74,7 +75,7 @@ void draw6() {
 	viTexCoord3f(0.0,1.0,p);
 	glVertex3f(-1.0,1.0,0.0);
 	glEnd();
-	perlin->post_render();
+	SparseNoise->post_render();
 }
 
 void reset6() {
@@ -102,14 +103,19 @@ void disable_light() {
 
 
 void init6() {
+	static const string BASE_PATH("E:/Vault/3dlic");
+	static fs::path VERTEX_SHADER_PATH(BASE_PATH + "/shader/vert.vert");
+	static fs::path FRAGMENT_SHADER_PATH(BASE_PATH + "/shader/frag.frag");
+	static fs::path NOISE_PATH(BASE_PATH + "/noise/noise-256-sparse");
 	vir_shaders = new GLSLProgram();
-	vir_shaders->Create("p10.vert", "p10.frag");
+	vir_shaders->Create(VERTEX_SHADER_PATH.string().c_str(),
+		FRAGMENT_SHADER_PATH.string().c_str());
 	vir_shaders->Use();
 	vir_shaders->GetAttributeLocation("TexCoord");
 	vir_shaders->GetAttributeLocation("asdf");
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
-		"noise3d.256.tex"));
+		NOISE_PATH.string().c_str()));
 	shared_ptr<TextureDelegatee> delegatee(new GLTexReplaceDelegatee(
 		factory));
-	perlin.reset(new VirTex(delegatee));
+	SparseNoise.reset(new VirTex(delegatee));
 }

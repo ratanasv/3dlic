@@ -33,8 +33,8 @@ BinaryTypes [ ] =
 extern char *Gstap;		// set later
 
 static
-char *
-GetExtension( char *file )
+const char*
+GetExtension( const char *file )
 {
 	int n = (int)strlen(file) - 1;	// index of last non-null character
 
@@ -85,7 +85,7 @@ GLSLProgram::GLSLProgram( )
 //	which I know to supply but I'm worried users won't
 
 bool
-GLSLProgram::Create( char *file0, char *file1, char *file2, char *file3, char * file4, char *file5 )
+GLSLProgram::Create( const char* file0, const char* file1, const char* file2, const char* file3, const char*  file4, const char* file5 )
 {
 	return CreateHelper( file0, file1, file2, file3, file4, file5, NULL );
 }
@@ -94,7 +94,7 @@ GLSLProgram::Create( char *file0, char *file1, char *file2, char *file3, char * 
 // this is the varargs version of the Create method
 
 bool
-GLSLProgram::CreateHelper( char *file0, ... )
+GLSLProgram::CreateHelper( const char *file0, ... )
 {
 	GLsizei n = 0;
 	GLchar *buf;
@@ -120,13 +120,13 @@ GLSLProgram::CreateHelper( char *file0, ... )
 	// I am depending on the caller passing in a NULL as the final argument.
 	// If they don't, bad things will happen.
 
-	char *file = file0;
+	const char *file = file0;
 	int type;
 	while( file != NULL )
 	{
 		int maxBinaryTypes = sizeof(BinaryTypes) / sizeof(struct GLbinarytype);
 		type = -1;
-		char *extension = GetExtension( file );
+		const char* extension = GetExtension( file );
 		// fprintf( stderr, "File = '%s', extension = '%s'\n", file, extension );
 
 		for( int i = 0; i < maxBinaryTypes; i++ )

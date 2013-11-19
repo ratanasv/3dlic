@@ -62,7 +62,7 @@ class GLSLProgram
 	bool	CanDoTessEvaluationShaders;
 	bool	CanDoVertexShaders;
 	int	CompileShader( GLuint );
-	bool	CreateHelper( char *, ... );
+	bool	CreateHelper( const char *, ... );
 	
 	int	GetUniformLocation( char * );
 
@@ -70,7 +70,7 @@ class GLSLProgram
   public:
 		GLSLProgram( );
 	int	GetAttributeLocation( char * );
-	bool	Create( char *, char * = NULL, char * = NULL, char * = NULL, char * = NULL, char * = NULL );
+	bool	Create( const char*, const char* = NULL, const char* = NULL, const char* = NULL, const char* = NULL, const char* = NULL );
 	void	DispatchCompute( GLuint, GLuint = 1, GLuint = 1 );
 	bool	IsExtensionSupported( const char * );
 	bool	IsNotValid( );

@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "virtex.h"
 
-using namespace std;
 using namespace vir;
+using std::shared_ptr;
 using std::invalid_argument;
 using std::runtime_error;
 namespace fs = boost::filesystem;
@@ -51,28 +51,28 @@ void* ImageTex2DFactory::get_data() {
 }
 
 NoiseTex3DFactory::NoiseTex3DFactory( const string& file_name) {
-	FILE* fp = fopen(file_name.c_str(), "rb");
-	if(!fp) {
+	shared_ptr<FILE> fp(fopen(file_name.c_str(), "rb"), [](FILE* f) {
+		fclose(f);
+	});
+	if (fp.get() == NULL) {
 		MessageBox( NULL,
 			"Vir says: Cannot locate noise3d texture.",
 			"Error", MB_ICONSTOP);
 		exit(EXIT_FAILURE);
 	}
-	fread(&_width, sizeof(int), 1, fp);
-	fread(&_height, sizeof(int), 1, fp);
-	fread(&_depth, sizeof(int), 1, fp);
+	fread(&_width, sizeof(int), 1, fp.get());
+	fread(&_height, sizeof(int), 1, fp.get());
+	fread(&_depth, sizeof(int), 1, fp.get());
 	_channel = 4;
 	_data_channel = GL_RGBA;
 	_data_type = GL_UNSIGNED_BYTE;
 	unsigned total = _width*_height*_depth*_channel;
-	unsigned char* data = new unsigned char[total];
-	
-	fread(data, sizeof(unsigned char), total, fp);
-	memset(data, 240, sizeof(unsigned char)*total);
-	fclose(fp);
- 	_texels = shared_ptr<unsigned char>(data, [](unsigned char* f) {
+	_texels = shared_ptr<unsigned char>(new unsigned char[total], [](unsigned char* f) {
 		delete[] f;
 	});
+	
+	fread(_texels.get(), sizeof(unsigned char), total, fp.get());
+	memset(_texels.get(), 240, sizeof(unsigned char)*total);
 }
 
 
