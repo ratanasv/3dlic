@@ -29,5 +29,6 @@
 #include "glslprogram.h"
 #include "windows.h"
 #include "boost/filesystem.hpp"
+#include <algorithm>
 
 #pragma message("Compiling PCH")
