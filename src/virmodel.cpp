@@ -104,9 +104,9 @@ void VAODelegatee::send_to_gpu() {
 	glGenBuffers(1, &vt_buf);
 	glBindBuffer(GL_ARRAY_BUFFER, vt_buf);
 	auto vts = _factory->get_tex_coord();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec2)*vts->size(), vts->data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*vts->size(), vts->data(), GL_STATIC_DRAW);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glTexCoordPointer(2, GL_FLOAT, 0, 0);
+	glTexCoordPointer(3, GL_FLOAT, 0, 0);
 
 	glGenBuffers(1, &in_buf);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, in_buf);

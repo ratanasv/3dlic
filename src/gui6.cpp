@@ -112,8 +112,6 @@ void init6() {
 	vir_shaders->Create(VERTEX_SHADER_PATH.string().c_str(),
 		FRAGMENT_SHADER_PATH.string().c_str());
 	vir_shaders->Use();
-	vir_shaders->GetAttributeLocation("TexCoord");
-	vir_shaders->GetAttributeLocation("asdf");
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
 		NOISE_PATH.string().c_str(), TextureAbstractFactory::RED));
 	shared_ptr<TextureDelegatee> delegatee(new GLTexReplaceDelegatee(
