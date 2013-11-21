@@ -12,7 +12,6 @@ out vec3 fNormal;
 
 void main(void) {
 	vec4 xyPlane = vec4(vPosition, 1.0);
-	xyPlane.z = xyCuttingPlaneZValue;
 
 	fTexCoord = vTexCoord;
 	fColor = vColor;

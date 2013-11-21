@@ -128,7 +128,7 @@ shared_ptr<vector<unsigned>> CubeGeometryFactory::get_indices() {
 		0, 2, 3
 	};
 	auto returned = initSmartArray<unsigned>();
-	returned->insert(returned->begin(), &indices[0], &indices[16]);
+	returned->insert(returned->begin(), &indices[0], &indices[36]);
 	return returned;
 }
 
