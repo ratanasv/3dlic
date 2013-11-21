@@ -57,9 +57,9 @@ public:
 
 void callback(int id);
 void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, 
-const SliderBundle& sb_in);
+	const SliderBundle& sb_in);
 void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
-struct CheckboxBundle& cb_in);
+	const CheckboxBundle& cb_in);
 
 class RadioBundle {
 public:
@@ -74,5 +74,5 @@ public:
 };
 
 extern std::map<SLIDER_ID, SliderBundle> BunchOfSliders;
-extern std::map<CHECKBOX_ID, struct CheckboxBundle> BunchOfCheckboxes;
+extern std::map<CHECKBOX_ID, CheckboxBundle> BunchOfCheckboxes;
 extern std::map<int, RadioBundle> Bunch_Of_Radios;

@@ -43,6 +43,18 @@ private:
 	const float _radius;
 };
 
+class PlaneGeometryFactory : public GeometryAbstractFactory {
+public:
+	PlaneGeometryFactory(const float radius = 1.0) : _radius(radius) {};
+
+	virtual shared_ptr<vector<vir::vec3>> get_vertices();
+	virtual shared_ptr<vector<vir::vec3>> get_normals();
+	virtual shared_ptr<vector<vir::vec3>> get_tex_coord();
+	virtual shared_ptr<vector<unsigned>> get_indices();
+private:
+	const float _radius;
+};
+
 class GeometryDelegatee {
 public:
 	virtual ~GeometryDelegatee() {};

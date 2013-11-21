@@ -40,7 +40,8 @@ void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, const SliderBundle& sb
 }
 
 void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
-struct CheckboxBundle& cb_in) {
+	const CheckboxBundle& cb_in) 
+{
 	BunchOfCheckboxes.insert(pair<CHECKBOX_ID, CheckboxBundle>(cb_in.id, cb_in));
 	auto& cb = BunchOfCheckboxes.at(cb_in.id);
 	cb.checkbox = main_glui->add_checkbox_to_panel(panel, name, &cb.val, 
