@@ -72,9 +72,9 @@ public:
 	virtual void render()=0;
 };
 
-class VAOGLSLDelegatee : public GeometryDelegatee {
+class VAODelegatee : public GeometryDelegatee {
 public:
-	VAOGLSLDelegatee(const shared_ptr<GeometryAbstractFactory>& factory,
+	VAODelegatee(const shared_ptr<GeometryAbstractFactory>& factory,
 		const shared_ptr<GLSLAttributeBinder>& glslBinder);
 	virtual void send_to_gpu();
 	virtual void pre_render();
@@ -86,22 +86,11 @@ private:
 	unsigned _num_indices;
 };
 
-class VAODelegatee:public GeometryDelegatee {
-public:
-	VAODelegatee(const shared_ptr<GeometryAbstractFactory>& factory);
-	virtual void send_to_gpu();
-	virtual void pre_render();
-	virtual void post_render();
-	virtual void render();
-private:
-	GLuint _vao;
-	unsigned _num_indices;
-};
-
 class VAOFreeableDelegatee : public VAODelegatee {
 public:
-	VAOFreeableDelegatee(const shared_ptr<GeometryAbstractFactory>& factory) :
-		VAODelegatee(factory) {};
+	VAOFreeableDelegatee(const shared_ptr<GeometryAbstractFactory>& factory,
+		const shared_ptr<GLSLAttributeBinder>& glslBinder) :
+		VAODelegatee(factory, glslBinder) {};
 	/**
 	 * When push comes to shove, free the host-side memory by releasing
 	 * ownership of the current geometry factory.

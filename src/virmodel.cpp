@@ -73,62 +73,6 @@ void OBJFactory::initIndices() {
 	}
 }
 
-void VAOFreeableDelegatee::freeCPUMemory() {
-	_factory.reset();
-}
-
-VAODelegatee::VAODelegatee( const shared_ptr<GeometryAbstractFactory>& factory ) :
-GeometryDelegatee(factory) {
-	_num_indices = factory->get_indices()->size();
-};
-
-void VAODelegatee::send_to_gpu() {
-	glGenVertexArrays( 1, &_vao );
-	glBindVertexArray( _vao );
-
-	GLuint v_buf, n_buf, vt_buf, in_buf;
-	glGenBuffers(1, &v_buf);
-	glBindBuffer(GL_ARRAY_BUFFER, v_buf);
-	auto verts = _factory->get_vertices();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*verts->size(), verts->data(), GL_STATIC_DRAW);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-
-	glGenBuffers(1, &n_buf);
-	glBindBuffer(GL_ARRAY_BUFFER, n_buf);
-	auto norms = _factory->get_normals();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*norms->size(), norms->data(), GL_STATIC_DRAW);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glNormalPointer(GL_FLOAT, 0, 0);
-
-	glGenBuffers(1, &vt_buf);
-	glBindBuffer(GL_ARRAY_BUFFER, vt_buf);
-	auto vts = _factory->get_tex_coord();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*vts->size(), vts->data(), GL_STATIC_DRAW);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glTexCoordPointer(3, GL_FLOAT, 0, 0);
-
-	glGenBuffers(1, &in_buf);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, in_buf);
-	auto ins = _factory->get_indices();
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*ins->size(), 
-		ins->data(), GL_STATIC_DRAW);
-
-	glBindVertexArray(0);
-}
-
-void VAODelegatee::pre_render() {
-	glBindVertexArray(_vao);
-}
-
-void VAODelegatee::post_render() {
-	glBindVertexArray(0);
-}
-
-void VAODelegatee::render() {
-	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, 0);
-}
-
 shared_ptr<vector<vir::vec3>> CubeGeometryFactory::get_vertices() {
 	auto returned = initSmartArray<vir::vec3>();
 	returned->push_back(_radius*vir::vec3(1.0f, -1.0f, -1.0f));
@@ -225,7 +169,7 @@ shared_ptr<vector<unsigned>> PlaneGeometryFactory::get_indices() {
 	return returned;
 }
 
-VAOGLSLDelegatee::VAOGLSLDelegatee( 
+VAODelegatee::VAODelegatee( 
 	const shared_ptr<GeometryAbstractFactory>& factory, 
 	const shared_ptr<GLSLAttributeBinder>& glslBinder ) :
 	GeometryDelegatee(factory), _glslBinder(glslBinder)
@@ -233,7 +177,7 @@ VAOGLSLDelegatee::VAOGLSLDelegatee(
 	_num_indices = factory->get_indices()->size();
 }
 
-void VAOGLSLDelegatee::send_to_gpu() {
+void VAODelegatee::send_to_gpu() {
 	glGenVertexArrays( 1, &_vao );
 	glBindVertexArray( _vao );
 
@@ -265,14 +209,14 @@ void VAOGLSLDelegatee::send_to_gpu() {
 	glBindVertexArray(0);
 }
 
-void VAOGLSLDelegatee::pre_render() {
+void VAODelegatee::pre_render() {
 	glBindVertexArray(_vao);
 }
 
-void VAOGLSLDelegatee::post_render() {
+void VAODelegatee::post_render() {
 	glBindVertexArray(0);
 }
 
-void VAOGLSLDelegatee::render() {
+void VAODelegatee::render() {
 	glDrawElements(GL_TRIANGLES, _num_indices, GL_UNSIGNED_INT, 0);
 }

@@ -8,9 +8,9 @@ using namespace vir;
 using std::string;
 namespace fs = boost::filesystem;
 
-static GLSLProgram* vir_shaders;
+static shared_ptr<GLSLProgram> vir_shaders;
 static shared_ptr<VirTex> SparseNoise;
-static shared_ptr<VirModel> XYSlicingPlane;
+static shared_ptr<VirModel> Cube;
 
 
 static void viTexCoord3f(float s, float t, float p){
@@ -65,19 +65,7 @@ void draw_terrain() {
 void draw6() {
 	vir_shaders->Use();
 	SparseNoise->pre_render();
-	vir_shaders->SetUniform("noise3d", 0);
-	float p = BunchOfSliders.at(ALPHA).vals.x;
-	vir_shaders->SetUniform("multiplier", p);
-	glBegin(GL_QUADS);
-	viTexCoord3f(0.0,0.0,p);
-	glVertex3f(-1.0,-1.0,0.0);
-	viTexCoord3f(1.0,0.0,p);
-	glVertex3f(1.0,-1.0,0.0);
-	viTexCoord3f(1.0,1.0,p);
-	glVertex3f(1.0,1.0,0.0);
-	viTexCoord3f(0.0,1.0,p);
-	glVertex3f(-1.0,1.0,0.0);
-	glEnd();
+	Cube->render();
 	SparseNoise->post_render();
 }
 
@@ -110,7 +98,7 @@ void init6() {
 	static fs::path VERTEX_SHADER_PATH(BASE_PATH + "/shader/vert.vert");
 	static fs::path FRAGMENT_SHADER_PATH(BASE_PATH + "/shader/frag.frag");
 	static fs::path NOISE_PATH(BASE_PATH + "/noise/noise-256-sparse");
-	vir_shaders = new GLSLProgram();
+	vir_shaders.reset(new GLSLProgram());
 	vir_shaders->Create(VERTEX_SHADER_PATH.string().c_str(),
 		FRAGMENT_SHADER_PATH.string().c_str());
 	vir_shaders->Use();
@@ -121,6 +109,6 @@ void init6() {
 	SparseNoise.reset(new VirTex(delegatee));
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
-	shared_ptr<GeometryDelegatee> vaoFreeable(new VAOFreeableDelegatee(cubeFactory));
-	XYSlicingPlane.reset(new VirModel(vaoFreeable));
+	shared_ptr<GeometryDelegatee> vaoFreeable(new VAODelegatee(cubeFactory, vir_shaders));
+	Cube.reset(new VirModel(vaoFreeable));
 }

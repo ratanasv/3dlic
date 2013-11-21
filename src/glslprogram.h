@@ -31,14 +31,21 @@ void	CheckGlErrors( const char* );
 class GLSLAttributeBinder {
 public:
 	virtual ~GLSLAttributeBinder() {};
-	virtual bool EnablePositionAttribute(const int vecLength = 4) = 0;
-	virtual bool EnableNormalAttribute(const int vecLength = 4) = 0;
-	virtual bool EnableColorAttribute(const int vecLength = 4) = 0;
-	virtual bool EnableTexCoordAttribute(const int vecLength = 4) = 0;
+	virtual void EnablePositionAttribute(const int vecLength = 4) = 0;
+	virtual void EnableNormalAttribute(const int vecLength = 4) = 0;
+	virtual void EnableColorAttribute(const int vecLength = 4) = 0;
+	virtual void EnableTexCoordAttribute(const int vecLength = 4) = 0;
 };
 
-class GLSLProgram
-{
+class DepracatedAttributeBinder : public GLSLAttributeBinder {
+public:
+	virtual void EnablePositionAttribute( const int vecLength = 4 );
+	virtual void EnableNormalAttribute( const int vecLength = 4 );
+	virtual void EnableColorAttribute( const int vecLength = 4 );
+	virtual void EnableTexCoordAttribute( const int vecLength = 4 );
+};
+
+class GLSLProgram : public GLSLAttributeBinder {
   private:
 	std::map<const string, int>	AttributeLocs;
 	char *			Cfile;
@@ -79,7 +86,7 @@ class GLSLProgram
 
   public:
 		GLSLProgram( );
-	int	GetAttributeLocation( const char * );
+	int	GetAttributeLocation( const string& );
 	bool	Create( const char*, const char* = NULL, const char* = NULL, const char* = NULL, const char* = NULL, const char* = NULL );
 	void	DispatchCompute( GLuint, GLuint = 1, GLuint = 1 );
 	bool	IsExtensionSupported( const char * );
@@ -102,7 +109,7 @@ class GLSLProgram
 #ifdef VERTEX_BUFFER_OBJECT_H
 	void	SetAttribute( char *, VertexBufferObject&, GLenum );
 #endif
-	void	EnableVertexAttribute(const char* name, const int vecLength = 4); 
+	void	EnableVertexAttribute(const string& name, const int vecLength = 4); 
 	void	SetGstap( bool );
 	void	SetInputTopology( GLenum );
 	void	SetOutputTopology( GLenum );
@@ -120,5 +127,12 @@ class GLSLProgram
 	void	Use( );
 	void	Use( GLuint );
 	void	UseFixedFunction( );
+
+	// inherit from GLSLAttributeBinder
+	virtual void EnablePositionAttribute( const int vecLength = 4 );
+	virtual void EnableNormalAttribute( const int vecLength = 4 );
+	virtual void EnableColorAttribute( const int vecLength = 4 );
+	virtual void EnableTexCoordAttribute( const int vecLength = 4 );
+
 };
 

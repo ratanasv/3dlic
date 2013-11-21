@@ -33,10 +33,12 @@ BinaryTypes [ ] =
 
 extern char *Gstap;		// set later
 
-static
-const char*
-GetExtension( const char *file )
-{
+static const string POSITION_ATTRIBUTE_VAR("vPosition");
+static const string NORMAL_ATTRIBUTE_VAR("vNormal");
+static const string COLOR_ATTRIBUTE_VAR("vColor");
+static const string TEXCOORD_ATTRIBUTE_VAR("vTexCoord");
+
+static const char* GetExtension( const char *file ) {
 	int n = (int)strlen(file) - 1;	// index of last non-null character
 
 	// look for a '.':
@@ -423,10 +425,10 @@ GLSLProgram::UseFixedFunction( )
 
 
 int
-GLSLProgram::GetAttributeLocation( const char *name ) {
+GLSLProgram::GetAttributeLocation( const string& name ) {
 	auto pos = AttributeLocs.find( name );
 	if (pos == AttributeLocs.end()) {
-		AttributeLocs[name] = glGetAttribLocation( this->Program, name );
+		AttributeLocs[name] = glGetAttribLocation( this->Program, name.c_str() );
 	}
 
 	return AttributeLocs[name];
@@ -775,7 +777,30 @@ GLSLProgram::LoadProgramBinary( const char * fileName, GLenum format )
 	}
 }
 
+void	GLSLProgram::EnableVertexAttribute(const string& name, const int vecLength /*=4*/) {
+	const int loc = GetAttributeLocation(name);
+	if (loc >= 0) {
+		this->Use();
+		glEnableVertexAttribArray( loc );
+		glVertexAttribPointer( loc, vecLength, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+	}
+}
 
+void GLSLProgram::EnablePositionAttribute( const int vecLength /*= 4 */ ) {
+	EnableVertexAttribute(POSITION_ATTRIBUTE_VAR, vecLength);
+}
+
+void GLSLProgram::EnableNormalAttribute( const int vecLength /*= 4 */ ) {
+	EnableVertexAttribute(NORMAL_ATTRIBUTE_VAR, vecLength);
+}
+
+void GLSLProgram::EnableColorAttribute( const int vecLength /*= 4 */ ) {
+	EnableVertexAttribute(COLOR_ATTRIBUTE_VAR, vecLength);
+}
+
+void GLSLProgram::EnableTexCoordAttribute( const int vecLength /*= 4 */ ) {
+	EnableVertexAttribute(TEXCOORD_ATTRIBUTE_VAR, vecLength);
+}
 
 void
 GLSLProgram::SetGstap( bool b )
@@ -832,11 +857,22 @@ GLchar *Gstap =
 \n"
 };
 
-void	GLSLProgram::EnableVertexAttribute(const char* name, const int vecLength /*=4*/) {
-	const int loc = GetAttributeLocation(name);
-	if (loc >= 0) {
-		this->Use();
-		glEnableVertexAttribArray( loc );
-		glVertexAttribPointer( loc, vecLength, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
-	}
+void DepracatedAttributeBinder::EnablePositionAttribute(const int vecLength /*= 4 */) {
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(vecLength, GL_FLOAT, 0, 0);
+}
+
+void DepracatedAttributeBinder::EnableNormalAttribute(const int vecLength /*= 4 */) {
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glVertexPointer(vecLength, GL_FLOAT, 0, 0);
+}
+
+void DepracatedAttributeBinder::EnableColorAttribute(const int vecLength /*= 4 */) {
+	glEnableClientState(GL_COLOR_ARRAY);
+	glVertexPointer(vecLength, GL_FLOAT, 0, 0);
+}
+
+void DepracatedAttributeBinder::EnableTexCoordAttribute(const int vecLength /*= 4 */) {
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glTexCoordPointer(vecLength, GL_FLOAT, 0, 0);
 }
