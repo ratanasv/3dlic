@@ -17,30 +17,6 @@ static void viTexCoord3f(float s, float t, float p){
 	vir_shaders->SetAttribute("TexCoord",s,t,p);
 }
 
-void init_light() {
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	GLfloat light_ambient0[] = { 0.3, 0.3, 0.3, 1.0 };
-	GLfloat light_diffuse0[] = { 0.7, 0.7, 0.7, 1.0 };
-	GLfloat light_specular0[] = { 0.0, 0.0, 0.0, 1.0 };
-	GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient0);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse0);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular0);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glShadeModel(GL_SMOOTH);
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-}
-
 
 void create_proj6_panel(GLUI* main_glui) {
 	GLUI_Panel* panel = main_glui->add_rollout("project6", 1);
@@ -84,13 +60,6 @@ void reset6() {
 void animate6(float t) {
 	
 }
-
-
-
-void disable_light() {
-	glDisable(GL_LIGHTING);
-}
-
 
 
 void init6() {

@@ -1,5 +1,9 @@
 #pragma once
-#include "StdAfx.h"
+#include <memory>
+#include <vector>
+#include "vec.h"
+#include "objload.h"
+
 using std::shared_ptr;
 using std::vector;
 
@@ -82,7 +86,7 @@ public:
 	virtual void render();
 private:
 	shared_ptr<GLSLAttributeBinder> _glslBinder;
-	GLuint _vao;
+	unsigned int _vao;
 	unsigned _num_indices;
 };
 
