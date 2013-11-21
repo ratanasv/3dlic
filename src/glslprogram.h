@@ -12,6 +12,9 @@
 #include "glut.h"
 #include <map>
 #include <stdarg.h>
+#include <cstring>
+
+using std::string;
 
 #define NVIDIA_SHADER_BINARY	0x00008e21		// nvidia binary enum
 
@@ -30,7 +33,7 @@ void	CheckGlErrors( const char* );
 class GLSLProgram
 {
   private:
-	std::map<char *, int>	AttributeLocs;
+	std::map<const string, int>	AttributeLocs;
 	char *			Cfile;
 	unsigned int		Cshader;
 	char *			Ffile;
@@ -69,7 +72,7 @@ class GLSLProgram
 
   public:
 		GLSLProgram( );
-	int	GetAttributeLocation( char * );
+	int	GetAttributeLocation( const char * );
 	bool	Create( const char*, const char* = NULL, const char* = NULL, const char* = NULL, const char* = NULL, const char* = NULL );
 	void	DispatchCompute( GLuint, GLuint = 1, GLuint = 1 );
 	bool	IsExtensionSupported( const char * );
@@ -92,6 +95,7 @@ class GLSLProgram
 #ifdef VERTEX_BUFFER_OBJECT_H
 	void	SetAttribute( char *, VertexBufferObject&, GLenum );
 #endif
+	void	EnableVertexAttribute(const char* name, const int vecLength = 4); 
 	void	SetGstap( bool );
 	void	SetInputTopology( GLenum );
 	void	SetOutputTopology( GLenum );

@@ -1,4 +1,4 @@
-#version 430 compatbility
+#version 430 compatibility
 
 uniform float xyCuttingPlaneZValue;
 attribute vec3 vPosition;

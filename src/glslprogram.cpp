@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "glslprogram.h"
 
+#define BUFFER_OFFSET( offset )   ((GLvoid*) (offset))
 
 struct GLshadertype
 {
@@ -422,13 +423,9 @@ GLSLProgram::UseFixedFunction( )
 
 
 int
-GLSLProgram::GetAttributeLocation( char *name )
-{
-	std::map<char *, int>::iterator pos;
-
-	pos = AttributeLocs.find( name );
-	if( pos == AttributeLocs.end() )
-	{
+GLSLProgram::GetAttributeLocation( const char *name ) {
+	auto pos = AttributeLocs.find( name );
+	if (pos == AttributeLocs.end()) {
 		AttributeLocs[name] = glGetAttribLocation( this->Program, name );
 	}
 
@@ -834,3 +831,12 @@ GLchar *Gstap =
 \n\
 \n"
 };
+
+void	GLSLProgram::EnableVertexAttribute(const char* name, const int vecLength /*=4*/) {
+	const int loc = GetAttributeLocation(name);
+	if (loc >= 0) {
+		this->Use();
+		glEnableVertexAttribArray( loc );
+		glVertexAttribPointer( loc, vecLength, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+	}
+}

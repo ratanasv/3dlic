@@ -1,4 +1,4 @@
-#version 430 compatbility
+#version 430 compatibility
 
 uniform sampler3D texToBeSliced;
 
@@ -7,5 +7,5 @@ in vec3 fColor;
 in vec3 fNormal;
 
 void main(void) {
-    gl_FragColor = Texture3D(texToBeSliced, fTexCoord.stp);
+    gl_FragColor = texture(texToBeSliced, fTexCoord.stp);
 }
