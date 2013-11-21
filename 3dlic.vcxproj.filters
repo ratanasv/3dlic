@@ -42,6 +42,9 @@
     <ClInclude Include="src\glui_utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\model_controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\virmodel.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\glui_utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

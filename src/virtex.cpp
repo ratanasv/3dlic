@@ -87,7 +87,6 @@ TextureAbstractFactory::NUM_CHANNEL ch) : _numChannel(ch) {
 	});
 	
 	fread(_texels.get(), sizeof(unsigned char), total, fp.get());
-	memset(_texels.get(), 240, sizeof(unsigned char)*total);
 }
 
 
@@ -118,7 +117,7 @@ void GLTextureDelegatee::send_to_gpu() {
 	});
 
 	glActiveTexture(GL_TEXTURE0 + _which_tex);
-	glEnable(_bind_site);
+	//glEnable(_bind_site);
 	glGenTextures(1, _tex_handle.get());
 	glBindTexture(_bind_site, *_tex_handle);
 	if(_bind_site == GL_TEXTURE_2D)
@@ -130,13 +129,13 @@ void GLTextureDelegatee::send_to_gpu() {
 
 void GLTextureDelegatee::pre_render() {
 	glActiveTexture(GL_TEXTURE0+_which_tex);
-	glEnable(_bind_site);
+	//glEnable(_bind_site);
 	glBindTexture(_bind_site, *_tex_handle);
 }
 
 void GLTextureDelegatee::post_render() {
 	glActiveTexture(GL_TEXTURE0+_which_tex);
-	glEnable(_bind_site);
+	//glEnable(_bind_site);
 	glBindTexture(_bind_site, 0);
 }
 
