@@ -134,14 +134,14 @@ void VAODelegatee::render()
 
 shared_ptr<vector<vir::vec3>> CubeGeometryFactory::get_vertices() {
 	auto returned = initSmartArray<vir::vec3>();
-	returned->push_back(vir::vec3(1.0f, -1.0f, -1.0f));
-	returned->push_back(vir::vec3(1.0f, -1.0f, 1.0f));
-	returned->push_back(vir::vec3(-1.0f, -1.0f, 1.0f));
-	returned->push_back(vir::vec3(-1.0f, -1.0f, -1.0f));
-	returned->push_back(vir::vec3(1.0f, 1.0f, -1.0f));
-	returned->push_back(vir::vec3(1.0f, 1.0f, 1.0f));
-	returned->push_back(vir::vec3(-1.0f, 1.0f, 1.0f));
-	returned->push_back(vir::vec3(-1.0f, 1.0f, -1.0f));
+	returned->push_back(_radius*vir::vec3(1.0f, -1.0f, -1.0f));
+	returned->push_back(_radius*vir::vec3(1.0f, -1.0f, 1.0f));
+	returned->push_back(_radius*vir::vec3(-1.0f, -1.0f, 1.0f));
+	returned->push_back(_radius*vir::vec3(-1.0f, -1.0f, -1.0f));
+	returned->push_back(_radius*vir::vec3(1.0f, 1.0f, -1.0f));
+	returned->push_back(_radius*vir::vec3(1.0f, 1.0f, 1.0f));
+	returned->push_back(_radius*vir::vec3(-1.0f, 1.0f, 1.0f));
+	returned->push_back(_radius*vir::vec3(-1.0f, 1.0f, -1.0f));
 	return returned;
 }
 
@@ -159,7 +159,16 @@ shared_ptr<vector<vir::vec3>> CubeGeometryFactory::get_normals() {
 }
 
 shared_ptr<vector<vir::vec3>> CubeGeometryFactory::get_tex_coord() {
-	throw std::exception("The method or operation is not implemented.");
+	auto returned = initSmartArray<vir::vec3>();
+	returned->push_back(vir::vec3(1.0, 0.0, 0.0));
+	returned->push_back(vir::vec3(1.0, 0.0, 1.0));
+	returned->push_back(vir::vec3(0.0, 0.0, 1.0));
+	returned->push_back(vir::vec3(0.0, 0.0, 0.0));
+	returned->push_back(vir::vec3(1.0, 1.0, 0.0));
+	returned->push_back(vir::vec3(1.0, 1.0, 1.0));
+	returned->push_back(vir::vec3(0.0, 1.0, 1.0));
+	returned->push_back(vir::vec3(0.0, 1.0, 0.0));
+	return returned;
 }
 
 shared_ptr<vector<unsigned>> CubeGeometryFactory::get_indices() {

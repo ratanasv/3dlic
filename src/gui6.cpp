@@ -7,8 +7,10 @@
 using namespace vir;
 using std::string;
 namespace fs = boost::filesystem;
+
 static GLSLProgram* vir_shaders;
 static shared_ptr<VirTex> SparseNoise;
+static shared_ptr<VirModel> XYSlicingPlane;
 
 
 static void viTexCoord3f(float s, float t, float p){
@@ -117,4 +119,8 @@ void init6() {
 	shared_ptr<TextureDelegatee> delegatee(new GLTexReplaceDelegatee(
 		factory));
 	SparseNoise.reset(new VirTex(delegatee));
+
+	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
+	shared_ptr<GeometryDelegatee> vaoFreeable(new VAOFreeableDelegatee(cubeFactory));
+	XYSlicingPlane.reset(new VirModel(vaoFreeable));
 }

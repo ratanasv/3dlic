@@ -1209,8 +1209,7 @@ HsvRgb( float hsv[3], float rgb[3] )
 	rgb[2] = b;
 }
 
-void apply_transformations()
-{
+void apply_transformations() {
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity( );
 

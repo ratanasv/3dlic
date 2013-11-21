@@ -33,12 +33,14 @@ private:
 
 class CubeGeometryFactory : public GeometryAbstractFactory {
 public:
-	CubeGeometryFactory(const float radius = 1.0);
+	CubeGeometryFactory(const float radius = 1.0) : _radius(radius) {};
 
 	virtual shared_ptr<vector<vir::vec3>> get_vertices();
 	virtual shared_ptr<vector<vir::vec3>> get_normals();
 	virtual shared_ptr<vector<vir::vec3>> get_tex_coord();
 	virtual shared_ptr<vector<unsigned>> get_indices();
+private:
+	const float _radius;
 };
 
 class GeometryDelegatee {
@@ -69,6 +71,8 @@ private:
 
 class VAOFreeableDelegatee : public VAODelegatee {
 public:
+	VAOFreeableDelegatee(const shared_ptr<GeometryAbstractFactory>& factory) :
+		VAODelegatee(factory) {};
 	/**
 	 * When push comes to shove, free the host-side memory by releasing
 	 * ownership of the current geometry factory.
