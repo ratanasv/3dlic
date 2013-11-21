@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "gui6.h"
-#include "gui_utility.h"
+#include "glui_utility.h"
 #include "virtex.h"
 #include "virmodel.h"
 

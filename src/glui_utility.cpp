@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "gui_utility.h"
+#include "glui_utility.h"
 
 using std::map;
 using std::pair;

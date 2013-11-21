@@ -22,7 +22,7 @@
     <ClInclude Include="src\abstract.h" />
     <ClInclude Include="src\glslprogram.h" />
     <ClInclude Include="src\gui6.h" />
-    <ClInclude Include="src\gui_utility.h" />
+    <ClInclude Include="src\glui_utility.h" />
     <ClInclude Include="src\objload.h" />
     <ClInclude Include="src\StdAfx.h" />
     <ClInclude Include="src\vec.h" />
@@ -33,7 +33,7 @@
     <ClCompile Include="src\abstract.cpp" />
     <ClCompile Include="src\glslprogram.cpp" />
     <ClCompile Include="src\gui6.cpp" />
-    <ClCompile Include="src\gui_utility.cpp" />
+    <ClCompile Include="src\glui_utility.cpp" />
     <ClCompile Include="src\sample.cpp" />
     <ClCompile Include="src\StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
