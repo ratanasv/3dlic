@@ -3,6 +3,9 @@
 using std::shared_ptr;
 using std::vector;
 
+class GLSLAttributeBinder;
+
+
 class GeometryAbstractFactory{
 public:
 	virtual ~GeometryAbstractFactory(){};
@@ -67,6 +70,20 @@ public:
 	virtual void pre_render()=0;
 	virtual void post_render()=0;
 	virtual void render()=0;
+};
+
+class VAOGLSLDelegatee : public GeometryDelegatee {
+public:
+	VAOGLSLDelegatee(const shared_ptr<GeometryAbstractFactory>& factory,
+		const shared_ptr<GLSLAttributeBinder>& glslBinder);
+	virtual void send_to_gpu();
+	virtual void pre_render();
+	virtual void post_render();
+	virtual void render();
+private:
+	shared_ptr<GLSLAttributeBinder> _glslBinder;
+	GLuint _vao;
+	unsigned _num_indices;
 };
 
 class VAODelegatee:public GeometryDelegatee {

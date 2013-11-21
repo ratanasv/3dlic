@@ -28,7 +28,14 @@ inline int GetOSU( int flag )
 
 void	CheckGlErrors( const char* );
 
-
+class GLSLAttributeBinder {
+public:
+	virtual ~GLSLAttributeBinder() {};
+	virtual bool EnablePositionAttribute(const int vecLength = 4) = 0;
+	virtual bool EnableNormalAttribute(const int vecLength = 4) = 0;
+	virtual bool EnableColorAttribute(const int vecLength = 4) = 0;
+	virtual bool EnableTexCoordAttribute(const int vecLength = 4) = 0;
+};
 
 class GLSLProgram
 {
