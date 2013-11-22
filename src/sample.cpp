@@ -216,6 +216,7 @@ float	Unit( float [3], float [3] );
 void	Axes( float );
 void	HsvRgb( float[3], float [3] );
 void apply_transformations();
+shared_ptr<GLSLCameraBinder> GLSLCameraBinderFactory();
 
 // which way is a surface facing:
 
@@ -391,8 +392,6 @@ Buttons( int id )
 
 }
 
-void apply_transformations();
-
 
 
 
@@ -420,12 +419,6 @@ Display( void )
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	glEnable( GL_DEPTH_TEST );
 
-
-	// specify shading to be flat:
-
-	glShadeModel( GL_FLAT );
-
-
 	// set the viewport to a square centered in the window:
 
 	GLsizei vx = glutGet( GLUT_WINDOW_WIDTH );
@@ -441,12 +434,12 @@ Display( void )
 	// given as DISTANCES IN FRONT OF THE EYE
 	// USE gluOrtho2D( ) IF YOU ARE DOING 2D !
 
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity( );
+	auto camera = GLSLCameraBinderFactory();
+	camera->ClearProjection();
 	if( WhichProjection == ORTHO )
-		glOrtho( -3., 3.,     -3., 3.,     0.1, 1000. );
+		camera->Ortho( -3., 3.,     -3., 3.,     0.1, 1000. );
 	else
-		gluPerspective( 90., 1.,	0.1, 100. );
+		camera->Perspective( 90., 1.,	0.1, 100. );
 
 
 	// place the objects into the scene:
@@ -1210,36 +1203,18 @@ HsvRgb( float hsv[3], float rgb[3] )
 }
 
 void apply_transformations() {
-	glMatrixMode( GL_MODELVIEW );
-	glLoadIdentity( );
-
-	// set the eye position, look-at position, and up-vector:
-	// IF DOING 2D, REMOVE THIS -- OTHERWISE ALL YOUR 2D WILL DISAPPEAR !
-
-	gluLookAt( 0., 0., 15.,     0., 0., 0.,     0., 1., 0. );
-
-
-	// translate the objects in the scene:
-	// note the minus sign on the z value
-	// this is to make the appearance of the glui z translate
-	// widget more intuitively match the translate behavior
-	// DO NOT TRANSLATE IN Z IF YOU ARE DOING 2D !
-
-	glTranslatef( (GLfloat)TransXYZ[0], (GLfloat)TransXYZ[1], -(GLfloat)TransXYZ[2] );
-
-
-	// rotate the scene:
-	// DO NOT ROTATE (EXCEPT ABOUT Z) IF YOU ARE DOING 2D !
-
-	glRotatef( (GLfloat)Yrot, 0., 1., 0. );
-	glRotatef( (GLfloat)Xrot, 1., 0., 0. );
-	// uniformly scale the scene:
-
-	glScalef( (GLfloat)Scale, (GLfloat)Scale, (GLfloat)Scale );
+	auto camera = GLSLCameraBinderFactory();
+	camera->ClearModelView();
+	camera->LookAt( vec3(0., 0., 15.), vec3(0., 0., 0.), vec3(0., 1., 0.));
+	camera->Translate(TransXYZ[0], TransXYZ[1], -1.0*TransXYZ[2]);
+	camera->Rotate(Xrot, Yrot, 0.0);
+	camera->Scale(Scale, Scale, Scale );
+	
 	GLfloat scale2 = 1. + Scale2;		// because glui translation starts at 0.
 	if( scale2 < MINSCALE )
 		scale2 = MINSCALE;
-	glScalef( (GLfloat)scale2, (GLfloat)scale2, (GLfloat)scale2 );
+	camera->Scale(scale2, scale2, scale2 );
+
 }
 
 float White[] = { 1.,1.,1.,1. }; 
@@ -1265,40 +1240,6 @@ float * MulArray3( float factor, float array0[3] )
 	return array; 
 } 
 
-void init_light2()
-{
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glMaterialfv( GL_BACK, GL_AMBIENT, MulArray3( .4, White ) ); 
-	glMaterialfv( GL_FRONT, GL_DIFFUSE, MulArray3( 1., White ) ); 
-	glMaterialfv( GL_BACK, GL_SPECULAR, Array3( 0., 0., 0. ) ); 
-	glMaterialf ( GL_BACK, GL_SHININESS, 5. ); 
-	glMaterialfv( GL_BACK, GL_EMISSION, Array3( 0., 0., 0. ) ); 
-	glMaterialfv( GL_FRONT, GL_EMISSION, Array3( 0., 0., 0. ) ); 
-	glLightModelfv( GL_LIGHT_MODEL_AMBIENT, MulArray3( .2, White ) ); 
-	glLightfv( GL_LIGHT0, GL_AMBIENT, Array3( 0., 0., 0. ) ); 
-	glShadeModel(GL_SMOOTH);
-	glLightf ( GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1. ); 
-	glLightf ( GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0. ); 
-	// this is here because we are going to do object 
-	// (and thus normal) scaling: 
-	glEnable( GL_NORMALIZE ); 
-	// these lighting calls need to be here since they 
-	// get changed via the pop-up menus: 
-	glLightModeli ( GL_LIGHT_MODEL_TWO_SIDE, false ); 
-	glLightf ( GL_LIGHT0, GL_LINEAR_ATTENUATION, 0. ); 
-	GLfloat light_diffuse0[] = { 0.7, 0.7, 0.7, 1.0 };
-	GLfloat light_specular0[] = { 0.0, 0.0, 0.0, 1.0 };
-	GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
-	glLightfv( GL_LIGHT0, GL_DIFFUSE, light_diffuse0 ); 
-	glLightfv( GL_LIGHT0, GL_SPECULAR, light_specular0 ); 
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glMaterialf ( GL_FRONT, GL_SHININESS, 2. ); 
-	glMaterialfv( GL_FRONT, GL_SPECULAR, MulArray3( .5, White ) ); 
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+shared_ptr<GLSLCameraBinder> GLSLCameraBinderFactory() {
+	return shared_ptr<GLSLCameraBinder>(VolumeTracingShader);
 }

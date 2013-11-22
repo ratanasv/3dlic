@@ -13,8 +13,12 @@
 #include <map>
 #include <stdarg.h>
 #include <cstring>
+#include "vec.h"
+#include "mat.h"
 
 using std::string;
+using Angel::vec3;
+using Angel::mat4;
 
 #define NVIDIA_SHADER_BINARY	0x00008e21		// nvidia binary enum
 
@@ -45,7 +49,37 @@ public:
 	virtual void EnableTexCoordAttribute( const int vecLength = 4 );
 };
 
-class GLSLProgram : public GLSLAttributeBinder {
+class GLSLCameraBinder {
+public:
+	virtual ~GLSLCameraBinder() {};
+	virtual void LookAt(const vec3& eye, const vec3& at, const vec3& up) = 0;
+	virtual void Ortho(float left, float right, float bottom, float top, 
+		float zNear, float zFar) = 0;
+	virtual void Perspective(float fovy, float ratio, float zNear, float zFar) = 0;
+	virtual void Rotate(float x, float y, float z) = 0;
+	virtual void Translate(float x, float y, float z) = 0;
+	virtual void Scale(float x, float y, float z) = 0;
+	virtual void ClearProjection() = 0;
+	virtual void ClearModelView() = 0;
+};
+
+class DeprecatedCameraBinder : public GLSLCameraBinder {
+public:
+	virtual void LookAt( const vec3& eye, const vec3& at, const vec3& up );
+	virtual void Ortho( float left, float right, float bottom, float top, 
+		float zNear, float zFar );
+	virtual void Perspective( float fovy, float ratio, float zNear, float zFar );
+	virtual void Rotate( float x, float y, float z );
+	virtual void Translate( float x, float y, float z );
+	virtual void Scale( float x, float y, float z );
+	virtual void ClearProjection();
+	virtual void ClearModelView();
+
+};
+
+
+
+class GLSLProgram : public GLSLAttributeBinder, public GLSLCameraBinder {
   private:
 	std::map<const string, int>	AttributeLocs;
 	char *			Cfile;
@@ -62,13 +96,16 @@ class GLSLProgram : public GLSLAttributeBinder {
 	GLuint			TCshader;
 	char *			TEfile;
 	GLuint			TEshader;
-	std::map<char *, int>	UniformLocs;
+	std::map<const string, int>	UniformLocs;
 	bool			Valid;
 	char *			Vfile;
 	GLuint			Vshader;
 	bool			Verbose;
 
 	static int		CurrentProgram;
+
+	mat4 _mvMatrix;
+	mat4 _projMatrix;
 
 	void	AttachShader( GLuint );
 	bool	CanDoBinaryFiles;
@@ -81,7 +118,7 @@ class GLSLProgram : public GLSLAttributeBinder {
 	int	CompileShader( GLuint );
 	bool	CreateHelper( const char *, ... );
 	
-	int	GetUniformLocation( char * );
+	int	GetUniformLocation( const char * );
 
 
   public:
@@ -108,6 +145,9 @@ class GLSLProgram : public GLSLAttributeBinder {
 #endif
 #ifdef VERTEX_BUFFER_OBJECT_H
 	void	SetAttribute( char *, VertexBufferObject&, GLenum );
+
+
+
 #endif
 	void	EnableVertexAttribute(const string& name, const int vecLength = 4); 
 	void	SetGstap( bool );
@@ -117,12 +157,6 @@ class GLSLProgram : public GLSLAttributeBinder {
 	void	SetUniform( char *, float );
 	void	SetUniform( char *, float, float, float );
 	void	SetUniform( char *, float[3] );
-#ifdef VEC3_H
-	void	SetUniform( char *, Vec3& );
-#endif
-#ifdef MATRIX4_H
-	void	SetUniform( char *, Matrix4& );
-#endif
 	void	SetVerbose( bool );
 	void	Use( );
 	void	Use( GLuint );
@@ -134,5 +168,19 @@ class GLSLProgram : public GLSLAttributeBinder {
 	virtual void EnableColorAttribute( const int vecLength = 4 );
 	virtual void EnableTexCoordAttribute( const int vecLength = 4 );
 
+	// inherit from GLSLCameraBinder
+	virtual void LookAt( const vec3& eye, const vec3& at, const vec3& up );
+	virtual void Ortho( float left, float right, float bottom, float top, 
+		float zNear, float zFar );
+	virtual void Perspective( float fovy, float ratio, float zNear, float zFar );
+	virtual void Rotate( float x, float y, float z );
+	virtual void Translate( float x, float y, float z );
+	virtual void Scale( float x, float y, float z );
+	virtual void ClearProjection();
+	virtual void ClearModelView();
+
+private:
+	void SendMVMatrix();
+	void SendProjMatrix();
 };
 

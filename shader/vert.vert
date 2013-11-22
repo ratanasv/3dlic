@@ -10,13 +10,17 @@ out vec3 fTexCoord;
 out vec3 fColor;
 out vec3 fNormal;
 
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
+
 void main(void) {
 	vec4 xyPlane = vec4(vPosition, 1.0);
 
 	fTexCoord = vTexCoord;
 	fColor = vColor;
 	fNormal = vNormal;
-    gl_Position = gl_ModelViewProjectionMatrix * xyPlane;
+    gl_Position = uProjectionMatrix * uModelViewMatrix * xyPlane;
+    //gl_Position = gl_ModelViewProjectionMatrix * xyPlane;
 }
 
 

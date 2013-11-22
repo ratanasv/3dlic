@@ -8,13 +8,13 @@ using namespace vir;
 using std::string;
 namespace fs = boost::filesystem;
 
-static shared_ptr<GLSLProgram> vir_shaders;
+shared_ptr<GLSLProgram> VolumeTracingShader;
 static shared_ptr<VirTex> SparseNoise;
 static shared_ptr<VirModel> Cube;
 
 
 static void viTexCoord3f(float s, float t, float p){
-	vir_shaders->SetAttribute("TexCoord",s,t,p);
+	VolumeTracingShader->SetAttribute("TexCoord",s,t,p);
 }
 
 
@@ -39,7 +39,7 @@ void draw_terrain() {
 
 
 void draw6() {
-	vir_shaders->Use();
+	VolumeTracingShader->Use();
 	SparseNoise->pre_render();
 	Cube->render();
 	SparseNoise->post_render();
@@ -67,10 +67,10 @@ void init6() {
 	static fs::path VERTEX_SHADER_PATH(BASE_PATH + "/shader/vert.vert");
 	static fs::path FRAGMENT_SHADER_PATH(BASE_PATH + "/shader/frag.frag");
 	static fs::path NOISE_PATH(BASE_PATH + "/noise/noise-256-sparse");
-	vir_shaders.reset(new GLSLProgram());
-	vir_shaders->Create(VERTEX_SHADER_PATH.string().c_str(),
+	VolumeTracingShader.reset(new GLSLProgram());
+	VolumeTracingShader->Create(VERTEX_SHADER_PATH.string().c_str(),
 		FRAGMENT_SHADER_PATH.string().c_str());
-	vir_shaders->Use();
+	VolumeTracingShader->Use();
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
 		NOISE_PATH.string().c_str(), TextureAbstractFactory::RED));
 	shared_ptr<TextureDelegatee> delegatee(new GLTexReplaceDelegatee(
@@ -78,6 +78,7 @@ void init6() {
 	SparseNoise.reset(new VirTex(delegatee));
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
-	shared_ptr<GeometryDelegatee> vaoFreeable(new VAODelegatee(cubeFactory, vir_shaders));
+	shared_ptr<GeometryDelegatee> vaoFreeable(new VAODelegatee(cubeFactory, 
+		VolumeTracingShader));
 	Cube.reset(new VirModel(vaoFreeable));
 }

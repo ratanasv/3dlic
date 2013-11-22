@@ -1,7 +1,9 @@
 #include "StdAfx.h"
 #include "glslprogram.h"
-
+#include "mat.h"
 #define BUFFER_OFFSET( offset )   ((GLvoid*) (offset))
+
+using Angel::vec4;
 
 struct GLshadertype
 {
@@ -37,6 +39,8 @@ static const string POSITION_ATTRIBUTE_VAR("vPosition");
 static const string NORMAL_ATTRIBUTE_VAR("vNormal");
 static const string COLOR_ATTRIBUTE_VAR("vColor");
 static const string TEXCOORD_ATTRIBUTE_VAR("vTexCoord");
+static const string MODELVIEW_MATRIX_VAR("uModelViewMatrix");
+static const string PROJECTION_MATRIX_VAR("uProjectionMatrix");
 
 static const char* GetExtension( const char *file ) {
 	int n = (int)strlen(file) - 1;	// index of last non-null character
@@ -484,6 +488,22 @@ GLSLProgram::SetAttribute( char* name, float vals[3] )
 	}
 };
 
+void GLSLProgram::SendMVMatrix() {
+	int loc = GetUniformLocation(MODELVIEW_MATRIX_VAR.c_str());
+	if (loc >= 0) {
+		this->Use();
+		glUniformMatrix4fv(loc, 1, GL_TRUE, _mvMatrix);
+	}
+}
+
+void GLSLProgram::SendProjMatrix() {
+	int loc = GetUniformLocation(PROJECTION_MATRIX_VAR.c_str());
+	if (loc >= 0) {
+		this->Use();
+		glUniformMatrix4fv(loc, 1, GL_TRUE, _projMatrix);
+	}
+}
+
 
 #ifdef VEC3_H
 void
@@ -531,13 +551,10 @@ GLSLProgram::SetAttribute( char *name, VertexBufferObject& vb, GLenum which )
 
 
 int
-GLSLProgram::GetUniformLocation( char *name )
+GLSLProgram::GetUniformLocation( const char* name )
 {
-	std::map<char *, int>::iterator pos;
-
-	pos = UniformLocs.find( name );
-	if( pos == UniformLocs.end() )
-	{
+	auto pos = UniformLocs.find( name );
+	if( pos == UniformLocs.end() ) {
 		UniformLocs[name] = glGetUniformLocation( this->Program, name );
 	}
 
@@ -591,38 +608,6 @@ GLSLProgram::SetUniform( char* name, float vals[3] )
 		glUniform3fv( loc, 3, vals );
 	}
 };
-
-
-#ifdef VEC3_H
-void
-GLSLProgram::SetUniform( char* name, Vec3& v );
-{
-	int loc;
-	if( ( loc = GetAttributeLocation( name ) )  >= 0 )
-	{
-		float vec[3];
-		v.GetVec3( vec );
-		this->Use();
-		glUniform3fv( loc, 3, vec );
-	}
-};
-#endif
-
-
-#ifdef MATRIX4_H
-void
-GLSLProgram::SetUniform( char* name, Matrix4& m )
-{
-	int loc;
-	if( ( loc = GetUniformLocation( name ) )  >= 0 )
-	{
-		float mat[4][4];
-		m.GetMatrix4( mat );
-		this->Use();
-		glUniformMatrix4fv( loc, 16, true, mat );
-	}
-};
-#endif
 
 
 void
@@ -802,6 +787,49 @@ void GLSLProgram::EnableTexCoordAttribute( const int vecLength /*= 4 */ ) {
 	EnableVertexAttribute(TEXCOORD_ATTRIBUTE_VAR, vecLength);
 }
 
+
+void GLSLProgram::LookAt( const vec3& eye, const vec3& at, const vec3& up ) {
+	_mvMatrix = _mvMatrix * Angel::LookAt(eye, at, up);
+	SendMVMatrix();
+}
+
+void GLSLProgram::Ortho( float left, float right, float bottom, float top, 
+float zNear, float zFar )
+{
+	_projMatrix = _projMatrix * Angel::Ortho(left, right, bottom, top, zNear, zFar);
+	SendProjMatrix();
+}
+
+void GLSLProgram::Perspective(float fovy, float ratio, float zNear, float zFar) {
+	_projMatrix = _projMatrix * Angel::Perspective(fovy, ratio, zNear, zFar);
+	SendProjMatrix();
+}
+
+
+void GLSLProgram::Rotate(float x, float y, float z) {
+	_mvMatrix = _mvMatrix * Angel::RotateZ(z) * Angel::RotateY(y) * Angel::RotateX(x);
+	SendMVMatrix();
+}
+
+void GLSLProgram::Translate( float x, float y, float z ) {
+	_mvMatrix = _mvMatrix * Angel::Translate(vec4(x,y,z));
+	SendMVMatrix();
+}
+
+void GLSLProgram::Scale( float x, float y, float z ) {
+	_mvMatrix = _mvMatrix * Angel::Scale(vec3(x,y,z));
+	SendMVMatrix();
+}
+
+void GLSLProgram::ClearProjection() {
+	_projMatrix = mat4();
+}
+
+void GLSLProgram::ClearModelView() {
+	_mvMatrix = mat4();
+}
+
+
 void
 GLSLProgram::SetGstap( bool b )
 {
@@ -875,4 +903,50 @@ void DepracatedAttributeBinder::EnableColorAttribute(const int vecLength /*= 4 *
 void DepracatedAttributeBinder::EnableTexCoordAttribute(const int vecLength /*= 4 */) {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glTexCoordPointer(vecLength, GL_FLOAT, 0, 0);
+}
+
+void DeprecatedCameraBinder::LookAt( const vec3& eye, const vec3& at, const vec3& up ) {
+	glMatrixMode( GL_MODELVIEW );
+	gluLookAt( eye.x, eye.y, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
+}
+
+void DeprecatedCameraBinder::Ortho( float left, float right, float bottom, 
+	float top, float zNear, float zFar ) 
+{
+	glMatrixMode( GL_PROJECTION );
+	glOrtho(left, right, bottom, top, zNear, zFar);
+}
+
+void DeprecatedCameraBinder::Perspective( float fovy, float ratio, float zNear, 
+ float zFar ) 
+{
+	glMatrixMode( GL_PROJECTION );
+	gluPerspective(fovy, ratio, zNear, zFar);
+}
+
+void DeprecatedCameraBinder::Rotate( float x, float y, float z ) {
+	glMatrixMode( GL_MODELVIEW );
+	glRotatef(z, 0.0, 0.0, 1.0);
+	glRotatef(y, 0.0, 1.0, 0.0);
+	glRotatef(x, 1.0, 0.0, 0.0);
+}
+
+void DeprecatedCameraBinder::Translate( float x, float y, float z ) {
+	glMatrixMode( GL_MODELVIEW );
+	glTranslatef(x, y, z);
+}
+
+void DeprecatedCameraBinder::Scale( float x, float y, float z ) {
+	glMatrixMode( GL_MODELVIEW );
+	glScalef(x,y,z);
+}
+
+void DeprecatedCameraBinder::ClearProjection() {
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity( );
+}
+
+void DeprecatedCameraBinder::ClearModelView() {
+	glMatrixMode( GL_MODELVIEW );
+	glLoadIdentity( );
 }
