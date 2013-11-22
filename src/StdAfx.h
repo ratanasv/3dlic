@@ -9,7 +9,6 @@
 #include <string>
 #include <sstream>
 #include <utility>
-#include "vec.h"
 #include "glew.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -17,7 +16,6 @@
 #include "glui.h"
 #include <omp.h>
 #include "abstract.h"
-#include "vec.h"
 #include "SOIL.h"
 #include <cstdio>
 #include <tuple>

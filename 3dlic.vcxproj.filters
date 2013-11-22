@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\vec.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\virmodel.h">
       <Filter>Header Files</Filter>
     </ClInclude>

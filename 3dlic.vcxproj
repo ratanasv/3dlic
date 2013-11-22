@@ -26,7 +26,6 @@
     <ClInclude Include="src\model_controller.h" />
     <ClInclude Include="src\objload.h" />
     <ClInclude Include="src\StdAfx.h" />
-    <ClInclude Include="src\vec.h" />
     <ClInclude Include="src\virmodel.h" />
     <ClInclude Include="src\virtex.h" />
   </ItemGroup>

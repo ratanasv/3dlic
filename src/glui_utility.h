@@ -1,23 +1,25 @@
 #pragma once
-#include "StdAfx.h"
+#include "vec.h"
 
 
 typedef enum {T_CLAMP, ALPHA} SLIDER_ID;
 typedef enum {UNUSED_CBOX} CHECKBOX_ID;
+using Angel::vec2;
+using Angel::vec3;
 
 
 class SliderBundle {
 public:
 	GLUI_HSlider* slider;
 	GLUI_StaticText* label;
-	vir::vec2 vals;
-	vir::vec2 def_vals;
-	vir::vec2 bounds;
+	vec2 vals;
+	vec2 def_vals;
+	vec2 bounds;
 	SLIDER_ID id;
 	const char* format;
 	bool two_sided;
-	SliderBundle(GLUI_HSlider* slider, GLUI_StaticText* label, vir::vec2 vals, 
-		vir::vec2 def_vals, vir::vec2 bounds, SLIDER_ID id, const char* format, 
+	SliderBundle(GLUI_HSlider* slider, GLUI_StaticText* label, vec2 vals, 
+		vec2 def_vals, vec2 bounds, SLIDER_ID id, const char* format, 
 		bool is_two_sided = false): slider(slider), 
 		label(label), vals(vals), def_vals(def_vals), bounds(bounds), 
 		id(id), format(format), two_sided(is_two_sided){};

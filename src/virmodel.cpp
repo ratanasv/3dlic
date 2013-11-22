@@ -27,15 +27,15 @@ OBJFactory::OBJFactory( const char* fn ) {
 
 
 
-shared_ptr<vector<vir::vec3>> OBJFactory::get_vertices() {
+shared_ptr<vector<vec3>> OBJFactory::get_vertices() {
 	return vertices;
 }
 
-shared_ptr<vector<vir::vec3>> OBJFactory::get_normals() {
+shared_ptr<vector<vec3>> OBJFactory::get_normals() {
 	return normals;
 }
 
-shared_ptr<vector<vir::vec3>> OBJFactory::get_tex_coord() {
+shared_ptr<vector<vec3>> OBJFactory::get_tex_coord() {
 	return texCoords;
 }
 
@@ -58,9 +58,9 @@ void OBJFactory::initNormals() {
 }
 
 void OBJFactory::initTexCoords() {
-	texCoords = initSmartArray<vir::vec3>();
+	texCoords = initSmartArray<vec3>();
 	for (int i=0; i<_model.texCoord.size(); i=i+2) {
-		texCoords->push_back(vir::vec3(_model.texCoord.at(i), 
+		texCoords->push_back(vec3(_model.texCoord.at(i), 
 			_model.texCoord.at(i+1),0.0f));
 	}
 }
@@ -73,42 +73,42 @@ void OBJFactory::initIndices() {
 	}
 }
 
-shared_ptr<vector<vir::vec3>> CubeGeometryFactory::get_vertices() {
-	auto returned = initSmartArray<vir::vec3>();
-	returned->push_back(_radius*vir::vec3(1.0f, -1.0f, -1.0f));
-	returned->push_back(_radius*vir::vec3(1.0f, -1.0f, 1.0f));
-	returned->push_back(_radius*vir::vec3(-1.0f, -1.0f, 1.0f));
-	returned->push_back(_radius*vir::vec3(-1.0f, -1.0f, -1.0f));
-	returned->push_back(_radius*vir::vec3(1.0f, 1.0f, -1.0f));
-	returned->push_back(_radius*vir::vec3(1.0f, 1.0f, 1.0f));
-	returned->push_back(_radius*vir::vec3(-1.0f, 1.0f, 1.0f));
-	returned->push_back(_radius*vir::vec3(-1.0f, 1.0f, -1.0f));
+shared_ptr<vector<vec3>> CubeGeometryFactory::get_vertices() {
+	auto returned = initSmartArray<vec3>();
+	returned->push_back(_radius*vec3(1.0f, -1.0f, -1.0f));
+	returned->push_back(_radius*vec3(1.0f, -1.0f, 1.0f));
+	returned->push_back(_radius*vec3(-1.0f, -1.0f, 1.0f));
+	returned->push_back(_radius*vec3(-1.0f, -1.0f, -1.0f));
+	returned->push_back(_radius*vec3(1.0f, 1.0f, -1.0f));
+	returned->push_back(_radius*vec3(1.0f, 1.0f, 1.0f));
+	returned->push_back(_radius*vec3(-1.0f, 1.0f, 1.0f));
+	returned->push_back(_radius*vec3(-1.0f, 1.0f, -1.0f));
 	return returned;
 }
 
-shared_ptr<vector<vir::vec3>> CubeGeometryFactory::get_normals() {
-	auto returned = initSmartArray<vir::vec3>();
-	returned->push_back(vir::vec3(0.408246f, -0.816492f, -0.408246f));
-	returned->push_back(vir::vec3(0.816492f, -0.408246f, 0.408246f));
-	returned->push_back(vir::vec3(-0.577349f, -0.577349f, 0.577349f));
-	returned->push_back(vir::vec3(-0.408246f, -0.408246f, -0.816492f));
-	returned->push_back(vir::vec3(0.666646f, 0.333323f, -0.666646f));
-	returned->push_back(vir::vec3(0.333323f, 0.666646f, 0.666646f));
-	returned->push_back(vir::vec3(-0.577349f, 0.577349f, 0.577349f));
-	returned->push_back(vir::vec3(-0.666646f, 0.666646f, -0.333323f));
+shared_ptr<vector<vec3>> CubeGeometryFactory::get_normals() {
+	auto returned = initSmartArray<vec3>();
+	returned->push_back(vec3(0.408246f, -0.816492f, -0.408246f));
+	returned->push_back(vec3(0.816492f, -0.408246f, 0.408246f));
+	returned->push_back(vec3(-0.577349f, -0.577349f, 0.577349f));
+	returned->push_back(vec3(-0.408246f, -0.408246f, -0.816492f));
+	returned->push_back(vec3(0.666646f, 0.333323f, -0.666646f));
+	returned->push_back(vec3(0.333323f, 0.666646f, 0.666646f));
+	returned->push_back(vec3(-0.577349f, 0.577349f, 0.577349f));
+	returned->push_back(vec3(-0.666646f, 0.666646f, -0.333323f));
 	return returned;
 }
 
-shared_ptr<vector<vir::vec3>> CubeGeometryFactory::get_tex_coord() {
-	auto returned = initSmartArray<vir::vec3>();
-	returned->push_back(vir::vec3(1.0, 0.0, 0.0));
-	returned->push_back(vir::vec3(1.0, 0.0, 1.0));
-	returned->push_back(vir::vec3(0.0, 0.0, 1.0));
-	returned->push_back(vir::vec3(0.0, 0.0, 0.0));
-	returned->push_back(vir::vec3(1.0, 1.0, 0.0));
-	returned->push_back(vir::vec3(1.0, 1.0, 1.0));
-	returned->push_back(vir::vec3(0.0, 1.0, 1.0));
-	returned->push_back(vir::vec3(0.0, 1.0, 0.0));
+shared_ptr<vector<vec3>> CubeGeometryFactory::get_tex_coord() {
+	auto returned = initSmartArray<vec3>();
+	returned->push_back(vec3(1.0, 0.0, 0.0));
+	returned->push_back(vec3(1.0, 0.0, 1.0));
+	returned->push_back(vec3(0.0, 0.0, 1.0));
+	returned->push_back(vec3(0.0, 0.0, 0.0));
+	returned->push_back(vec3(1.0, 1.0, 0.0));
+	returned->push_back(vec3(1.0, 1.0, 1.0));
+	returned->push_back(vec3(0.0, 1.0, 1.0));
+	returned->push_back(vec3(0.0, 1.0, 0.0));
 	return returned;
 }
 
@@ -132,30 +132,30 @@ shared_ptr<vector<unsigned>> CubeGeometryFactory::get_indices() {
 	return returned;
 }
 
-shared_ptr<vector<vir::vec3>> PlaneGeometryFactory::get_vertices() {
-	auto returned = initSmartArray<vir::vec3>();
-	returned->push_back(_radius*vir::vec3(-1.0f, -1.0f, 0.0f));
-	returned->push_back(_radius*vir::vec3(1.0f, -1.0f, 0.0f));
-	returned->push_back(_radius*vir::vec3(1.0f, 1.0f, 0.0f));
-	returned->push_back(_radius*vir::vec3(-1.0f, 1.0f, 0.0f));
+shared_ptr<vector<vec3>> PlaneGeometryFactory::get_vertices() {
+	auto returned = initSmartArray<vec3>();
+	returned->push_back(_radius*vec3(-1.0f, -1.0f, 0.0f));
+	returned->push_back(_radius*vec3(1.0f, -1.0f, 0.0f));
+	returned->push_back(_radius*vec3(1.0f, 1.0f, 0.0f));
+	returned->push_back(_radius*vec3(-1.0f, 1.0f, 0.0f));
 	return returned;
 }
 
-shared_ptr<vector<vir::vec3>> PlaneGeometryFactory::get_normals() {
-	auto returned = initSmartArray<vir::vec3>();
-	returned->push_back(_radius*vir::vec3(0.0, 0.0, 1.0));
-	returned->push_back(_radius*vir::vec3(0.0, 0.0, 1.0));
-	returned->push_back(_radius*vir::vec3(0.0, 0.0, 1.0));
-	returned->push_back(_radius*vir::vec3(0.0, 0.0, 1.0));
+shared_ptr<vector<vec3>> PlaneGeometryFactory::get_normals() {
+	auto returned = initSmartArray<vec3>();
+	returned->push_back(_radius*vec3(0.0, 0.0, 1.0));
+	returned->push_back(_radius*vec3(0.0, 0.0, 1.0));
+	returned->push_back(_radius*vec3(0.0, 0.0, 1.0));
+	returned->push_back(_radius*vec3(0.0, 0.0, 1.0));
 	return returned;
 }
 
-shared_ptr<vector<vir::vec3>> PlaneGeometryFactory::get_tex_coord() {
-	auto returned = initSmartArray<vir::vec3>();
-	returned->push_back(_radius*vir::vec3(0.0f, 0.0f, 0.0f));
-	returned->push_back(_radius*vir::vec3(1.0f, 0.0f, 0.0f));
-	returned->push_back(_radius*vir::vec3(1.0f, 1.0f, 0.0f));
-	returned->push_back(_radius*vir::vec3(0.0f, 1.0f, 0.0f));
+shared_ptr<vector<vec3>> PlaneGeometryFactory::get_tex_coord() {
+	auto returned = initSmartArray<vec3>();
+	returned->push_back(_radius*vec3(0.0f, 0.0f, 0.0f));
+	returned->push_back(_radius*vec3(1.0f, 0.0f, 0.0f));
+	returned->push_back(_radius*vec3(1.0f, 1.0f, 0.0f));
+	returned->push_back(_radius*vec3(0.0f, 1.0f, 0.0f));
 	return returned;
 }
 
