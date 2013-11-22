@@ -2,7 +2,7 @@
 #include "StdAfx.h"
 
 
-typedef enum {T_CLAMP, ALPHA} SLIDER_ID;
+typedef enum {T_CLAMP, BASE_ALPHA} SLIDER_ID;
 typedef enum {UNUSED_CBOX} CHECKBOX_ID;
 
 

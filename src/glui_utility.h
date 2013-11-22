@@ -2,7 +2,7 @@
 #include "vec.h"
 
 
-typedef enum {T_CLAMP, ALPHA} SLIDER_ID;
+typedef enum {NUM_STEPS, BASE_ALPHA} SLIDER_ID;
 typedef enum {UNUSED_CBOX} CHECKBOX_ID;
 using Angel::vec2;
 using Angel::vec3;
