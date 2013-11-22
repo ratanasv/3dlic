@@ -4,6 +4,7 @@
 #include "virtex.h"
 #include "virmodel.h"
 #include "texture6.h"
+#include "3dlic_model.h"
 
 using namespace vir;
 using std::string;
@@ -12,11 +13,6 @@ namespace fs = boost::filesystem;
 shared_ptr<GLSLProgram> VolumeTracingShader;
 static shared_ptr<VirTex> SparseNoise;
 static shared_ptr<VirModel> Cube;
-
-
-static void viTexCoord3f(float s, float t, float p){
-	VolumeTracingShader->SetAttribute("TexCoord",s,t,p);
-}
 
 static shared_ptr<TextureVisitor> TextureVisitorFactory() {
 	return shared_ptr<TextureVisitor>(new GLSLTextureSamplerBinder());

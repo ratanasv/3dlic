@@ -117,52 +117,6 @@ enum ButtonVals
 
 const float BACKCOLOR[ ] = { 0.5, 0.5, 0.5, 0.5 };
 
-
-// line width for the axes:
-
-const GLfloat AXES_WIDTH   = { 3. };
-
-
-// the color numbers:
-// this order must match the radio button order
-
-enum Colors
-{
-	RED,
-	YELLOW,
-	GREEN,
-	CYAN,
-	BLUE,
-	MAGENTA,
-	WHITE,
-	BLACK
-};
-
-
-// the color definitions:
-// this order must match the radio button order
-
-const GLfloat Colors[ ][3] = 
-{
-	{ 1., 0., 0. },		// red
-	{ 1., 1., 0. },		// yellow
-	{ 0., 1., 0. },		// green
-	{ 0., 1., 1. },		// cyan
-	{ 0., 0., 1. },		// blue
-	{ 1., 0., 1. },		// magenta
-	{ 1., 1., 1. },		// white
-	{ 0., 0., 0. },		// black
-};
-
-
-// fog parameters:
-
-const GLfloat FOGCOLOR[4] = { .0, .0, .0, 1. };
-const GLenum  FOGMODE     = { GL_LINEAR };
-const GLfloat FOGDENSITY  = { 0.30f };
-const GLfloat FOGSTART    = { 1.5 };
-const GLfloat FOGEND      = { 4. };
-
 const int PERIOD_MS = 10*1000;
 float Timer;
 

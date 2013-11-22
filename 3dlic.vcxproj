@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\3dlic_model.h" />
     <ClInclude Include="src\abstract.h" />
     <ClInclude Include="src\glslprogram.h" />
     <ClInclude Include="src\gui6.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="src\virtex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\3dlic_model.cpp" />
     <ClCompile Include="src\abstract.cpp" />
     <ClCompile Include="src\glslprogram.cpp" />
     <ClCompile Include="src\gui6.cpp" />

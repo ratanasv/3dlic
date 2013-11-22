@@ -45,6 +45,9 @@
     <ClInclude Include="src\texture6.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\3dlic_model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\virmodel.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\texture6.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3dlic_model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
