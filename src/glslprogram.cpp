@@ -551,11 +551,11 @@ GLSLProgram::SetAttribute( char *name, VertexBufferObject& vb, GLenum which )
 
 
 int
-GLSLProgram::GetUniformLocation( const char* name )
+GLSLProgram::GetUniformLocation(const string& name)
 {
 	auto pos = UniformLocs.find( name );
 	if( pos == UniformLocs.end() ) {
-		UniformLocs[name] = glGetUniformLocation( this->Program, name );
+		UniformLocs[name] = glGetUniformLocation( this->Program, name.c_str() );
 	}
 
 	return UniformLocs[name];
@@ -563,7 +563,7 @@ GLSLProgram::GetUniformLocation( const char* name )
 
 
 void
-GLSLProgram::SetUniform( char* name, int val )
+GLSLProgram::SetUniform(const string& name, int val )
 {
 	int loc;
 	if( ( loc = GetUniformLocation( name ) )  >= 0 )
@@ -575,7 +575,7 @@ GLSLProgram::SetUniform( char* name, int val )
 
 
 void
-GLSLProgram::SetUniform( char* name, float val )
+GLSLProgram::SetUniform(const string& name, float val )
 {
 	int loc;
 	if( ( loc = GetUniformLocation( name ) )  >= 0 )
@@ -587,7 +587,7 @@ GLSLProgram::SetUniform( char* name, float val )
 
 
 void
-GLSLProgram::SetUniform( char* name, float val0, float val1, float val2 )
+GLSLProgram::SetUniform(const string& name, float val0, float val1, float val2 )
 {
 	int loc;
 	if( ( loc = GetUniformLocation( name ) )  >= 0 )
@@ -599,7 +599,7 @@ GLSLProgram::SetUniform( char* name, float val0, float val1, float val2 )
 
 
 void
-GLSLProgram::SetUniform( char* name, float vals[3] )
+GLSLProgram::SetUniform(const string& name, float vals[3] )
 {
 	int loc;
 	if( ( loc = GetUniformLocation( name ) )  >= 0 )

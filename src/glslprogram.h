@@ -118,7 +118,7 @@ class GLSLProgram : public GLSLAttributeBinder, public GLSLCameraBinder {
 	int	CompileShader( GLuint );
 	bool	CreateHelper( const char *, ... );
 	
-	int	GetUniformLocation( const char * );
+	int	GetUniformLocation(const string& name);
 
 
   public:
@@ -153,10 +153,10 @@ class GLSLProgram : public GLSLAttributeBinder, public GLSLCameraBinder {
 	void	SetGstap( bool );
 	void	SetInputTopology( GLenum );
 	void	SetOutputTopology( GLenum );
-	void	SetUniform( char *, int );
-	void	SetUniform( char *, float );
-	void	SetUniform( char *, float, float, float );
-	void	SetUniform( char *, float[3] );
+	void	SetUniform(const string& name, int );
+	void	SetUniform(const string& name, float );
+	void	SetUniform(const string& name, float, float, float );
+	void	SetUniform(const string& name, float[3] );
 	void	SetVerbose( bool );
 	void	Use( );
 	void	Use( GLuint );

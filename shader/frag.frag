@@ -12,8 +12,48 @@ uniform float uBaseAlpha;
 
 const float SQRT3 = 1.732;
 
+vec3
+Rainbow( float t ) {
+	t = clamp( t, 0., 1. );
+
+	vec3 rgb;
+
+	// b -> c
+	rgb.r = 0.;
+	rgb.g = 4. * ( t - (0./4.) );
+	rgb.b = 1.;
+
+	// c -> g
+	if( t >= (1./4.) )
+	{
+		rgb.r = 0.;
+		rgb.g = 1.;
+		rgb.b = 1. - 4. * ( t - (1./4.) );
+	}
+
+	// g -> y
+	if( t >= (2./4.) )
+	{
+		rgb.r = 4. * ( t - (2./4.) );
+		rgb.g = 1.;
+		rgb.b = 0.;
+	}
+
+	// y -> r
+	if( t >= (3./4.) )
+	{
+		rgb.r = 1.;
+		rgb.g = 1. - 4. * ( t - (3./4.) );
+		rgb.b = 0.;
+	}
+
+	return rgb;
+}
+
 void main(void) {
-	vec3 dir = normalize((inverse(uModelViewMatrix)[3]).xyz);
+	vec3 geomPos = fTexCoord;
+	vec3 camera = (inverse(uModelViewMatrix)[3]).xyz;
+	vec3 dir = normalize(geomPos - camera);
 	dir = dir*(SQRT3/uNumSteps);
 
 	vec3 stp = fTexCoord;
@@ -30,7 +70,8 @@ void main(void) {
 			continue;
 		}
 		float texVal = texture(volume, stp).r;
-		cstar += astar * alpha * vec3(texVal, texVal, texVal);
+		vec3 rgb = Rainbow(texVal);
+		cstar += astar * alpha * rgb;
 		astar *= (1.0 - alpha);
 		stp += dir;
 	}

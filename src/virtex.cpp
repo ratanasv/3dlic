@@ -107,17 +107,18 @@ void GLTextureDelegatee::send_to_gpu() {
 	GLenum data_type = _factory->get_data_type();
 	void* data = _factory->get_data();
 	
-	if (_factory->get_depth() == 1)
+	if (_factory->get_depth() == 1) {
 		_bind_site = GL_TEXTURE_2D;
-	else
+	}
+	else {
 		_bind_site = GL_TEXTURE_3D;
+	}
 
 	_tex_handle = shared_ptr<unsigned>(new unsigned[1], [](unsigned* u) { 
 		delete[] u; glDeleteTextures(1, u);
 	});
 
 	glActiveTexture(GL_TEXTURE0 + _which_tex);
-	//glEnable(_bind_site);
 	glGenTextures(1, _tex_handle.get());
 	glBindTexture(_bind_site, *_tex_handle);
 	if(_bind_site == GL_TEXTURE_2D)
@@ -127,27 +128,22 @@ void GLTextureDelegatee::send_to_gpu() {
 	glBindTexture(_bind_site, 0);
 }
 
-void GLTextureDelegatee::pre_render() {
+void GLTextureDelegatee::pre_render(const shared_ptr<TextureVisitor>& visitor) {
 	glActiveTexture(GL_TEXTURE0+_which_tex);
-	//glEnable(_bind_site);
 	glBindTexture(_bind_site, *_tex_handle);
+	visitor->pre_render(_which_tex, _bind_site, _tex_handle);
 }
 
 void GLTextureDelegatee::post_render() {
 	glActiveTexture(GL_TEXTURE0+_which_tex);
-	//glEnable(_bind_site);
 	glBindTexture(_bind_site, 0);
 }
 
 
-GLTexReplaceDelegatee::GLTexReplaceDelegatee(const shared_ptr<TextureAbstractFactory>& factory) :
-	GLTextureDelegatee(factory) {};
+void VirTex::pre_render( const shared_ptr<TextureVisitor>& visitor ) {
+	_delegatee->pre_render(visitor);
+}
 
-void GLTexReplaceDelegatee::pre_render() {
-	glActiveTexture(GL_TEXTURE0+_which_tex);
-	glEnable(_bind_site);
-	glBindTexture(_bind_site, *_tex_handle);
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR ); 
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR ); 
-	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
+void VirTex::post_render() {
+	_delegatee->post_render();
 }

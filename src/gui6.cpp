@@ -3,6 +3,7 @@
 #include "glui_utility.h"
 #include "virtex.h"
 #include "virmodel.h"
+#include "texture6.h"
 
 using namespace vir;
 using std::string;
@@ -15,6 +16,10 @@ static shared_ptr<VirModel> Cube;
 
 static void viTexCoord3f(float s, float t, float p){
 	VolumeTracingShader->SetAttribute("TexCoord",s,t,p);
+}
+
+static shared_ptr<TextureVisitor> TextureVisitorFactory() {
+	return shared_ptr<TextureVisitor>(new GLSLTextureSamplerBinder());
 }
 
 
@@ -40,7 +45,7 @@ void draw_terrain() {
 
 void draw6() {
 	VolumeTracingShader->Use();
-	SparseNoise->pre_render();
+	SparseNoise->pre_render(TextureVisitorFactory());
 	VolumeTracingShader->SetUniform("uNumSteps", BunchOfSliders.at(NUM_STEPS).vals.x);
 	VolumeTracingShader->SetUniform("uBaseAlpha", BunchOfSliders.at(BASE_ALPHA).vals.x);
 	Cube->render();
@@ -75,8 +80,7 @@ void init6() {
 	VolumeTracingShader->Use();
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
 		NOISE_PATH.string().c_str(), TextureAbstractFactory::RED));
-	shared_ptr<TextureDelegatee> delegatee(new GLTexReplaceDelegatee(
-		factory));
+	shared_ptr<TextureDelegatee> delegatee(new GLTextureDelegatee(factory));
 	SparseNoise.reset(new VirTex(delegatee));
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
