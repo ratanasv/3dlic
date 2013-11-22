@@ -173,16 +173,12 @@ bool Paused = false;
 //
 
 int	ActiveButton;			// current button that is down
-GLuint	AxesList;			// list to hold the axes
-int	AxesOn;					// != 0 means to draw45 the axes
 int	DebugOn;				// != 0 means to print debugging info
-int	DepthCueOn;				// != 0 means to use intensity depth cueing
 GLUI *	Glui;				// instance of glui window
 int	GluiWindow;				// the glut id for the glui window
 int	LeftButton;				// either ROTATE or SCALE
 int	MainWindow;				// window id for main graphics window
 float	Scale, Scale2;		// scaling factors
-int	WhichColor;				// index into Colors[ ]
 int	WhichProjection;		// ORTHO or PERSP
 int	Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;			// rotation angles in degrees
@@ -201,7 +197,6 @@ void	DoStrokeString( float, float, float, float, char * );
 float	ElapsedSeconds( void );
 void	InitGlui( void );
 void	InitGraphics( void );
-void	InitLists( void );
 void	Keyboard( unsigned char, int, int );
 void	MouseButton( int, int, int, int );
 void	MouseMotion( int, int );
@@ -298,11 +293,6 @@ main( int argc, char *argv[ ] )
 	// setup all the graphics stuff:
 
 	InitGraphics( );
-
-
-	// create the display structures that will not change:
-
-	InitLists( );
 
 
 	// init all the global variables used by Display( ):
@@ -445,31 +435,6 @@ Display( void )
 	// place the objects into the scene:
 
 	apply_transformations();
-
-	
-	// set the fog parameters:
-	// DON'T NEED THIS IF DOING 2D !
-
-	if( DepthCueOn != 0 )
-	{
-		glFogi( GL_FOG_MODE, FOGMODE );
-		glFogfv( GL_FOG_COLOR, FOGCOLOR );
-		glFogf( GL_FOG_DENSITY, FOGDENSITY );
-		glFogf( GL_FOG_START, FOGSTART );
-		glFogf( GL_FOG_END, FOGEND );
-		glEnable( GL_FOG );
-	}
-	else
-	{
-		glDisable( GL_FOG );
-	}
-
-	
-	if( AxesOn != 0 )
-		{
-			glColor3fv( &Colors[WhichColor][0] );
-			glCallList( AxesList );
-		}
 	draw6();
 	glutSwapBuffers();
 	glFlush( );
@@ -555,22 +520,7 @@ InitGlui( void )
 	Glui->add_statictext( (char *) GLUITITLE );
 	Glui->add_separator( );
 
-	Glui->add_checkbox( "Axes", &AxesOn );
-
 	Glui->add_checkbox( "Perspective", &WhichProjection );
-
-	Glui->add_checkbox( "Intensity Depth Cue", &DepthCueOn );
-
-	panel = Glui->add_panel(  "Axes Color" );
-		group = Glui->add_radiogroup_to_panel( panel, &WhichColor );
-			Glui->add_radiobutton_to_group( group, "Red" );
-			Glui->add_radiobutton_to_group( group, "Yellow" );
-			Glui->add_radiobutton_to_group( group, "Green" );
-			Glui->add_radiobutton_to_group( group, "Cyan" );
-			Glui->add_radiobutton_to_group( group, "Blue" );
-			Glui->add_radiobutton_to_group( group, "Magenta" );
-			Glui->add_radiobutton_to_group( group, "White" );
-			Glui->add_radiobutton_to_group( group, "Black" );
 
 	panel = Glui->add_panel( "Object Transformation" );
 		Glui->add_column_to_panel( panel, GLUIFALSE );
@@ -689,28 +639,6 @@ InitGraphics( void )
 	if (glewInit() != GLEW_OK)
 		exit(EXIT_FAILURE);
 }
-
-
-// initialize the display lists that will not change:
-// (a display list is a way to store opengl commands in
-//  memory so that they can be played back efficiently at a later time
-//  with a call to glCallList( )
-
-
-
-void
-InitLists( void )
-{
-	// create the axes:
-
-	AxesList = glGenLists( 1 );
-	glNewList( AxesList, GL_COMPILE );
-		glLineWidth( AXES_WIDTH );
-			Axes( 1.5 );
-		glLineWidth( 1. );
-	glEndList( );
-}
-
 
 
 //
@@ -883,13 +811,10 @@ void
 Reset( void )
 {
 	ActiveButton = 0;
-	AxesOn = GLUITRUE;
 	DebugOn = GLUIFALSE;
-	DepthCueOn = GLUIFALSE;
 	LeftButton = ROTATE;
 	Scale  = 1.0;
 	Scale2 = 0.0;		// because we add 1. to it in Display( )
-	WhichColor = WHITE;
 	WhichProjection = PERSP;
 	Xrot = Yrot = 0.;
 	TransXYZ[0] = TransXYZ[1] = TransXYZ[2] = 0.;
@@ -1216,29 +1141,6 @@ void apply_transformations() {
 	camera->Scale(scale2, scale2, scale2 );
 
 }
-
-float White[] = { 1.,1.,1.,1. }; 
-float Red[] = {0.8,0.0,0.0,1.0};
-// utility to create an array from 3 separate values: 
-float * Array3( float a, float b, float c ) 
-{ 
-	static float array[4]; 
-	array[0] = a; 
-	array[1] = b; 
-	array[2] = c; 
-	array[3] = 1.; 
-	return array; 
-} 
-// utility to create an array from a multiplier and an array: 
-float * MulArray3( float factor, float array0[3] ) 
-{ 
-	static float array[4]; 
-	array[0] = factor * array0[0]; 
-	array[1] = factor * array0[1]; 
-	array[2] = factor * array0[2]; 
-	array[3] = 1.; 
-	return array; 
-} 
 
 shared_ptr<GLSLCameraBinder> GLSLCameraBinderFactory() {
 	return shared_ptr<GLSLCameraBinder>(VolumeTracingShader);

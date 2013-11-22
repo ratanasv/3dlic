@@ -812,7 +812,7 @@ void GLSLProgram::Rotate(float x, float y, float z) {
 }
 
 void GLSLProgram::Translate( float x, float y, float z ) {
-	_mvMatrix = _mvMatrix * Angel::Translate(vec4(x,y,z));
+	_mvMatrix = _mvMatrix * Angel::Translate(vec4(x,y,z,0.0));
 	SendMVMatrix();
 }
 
