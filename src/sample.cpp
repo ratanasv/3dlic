@@ -467,8 +467,8 @@ InitGraphics( void )
 
 	// open the window and set its title:
 
-	MainWindow = glutCreateWindow( WINDOWTITLE );
-	glutSetWindowTitle( WINDOWTITLE );
+	MainWindow = glutCreateWindow(GetStringProperty(WINDOW_TITLE).c_str());
+	glutSetWindowTitle(GetStringProperty(WINDOW_TITLE).c_str());
 	// setup the clear values:
 
 	glClearColor( BACKCOLOR[0], BACKCOLOR[1], BACKCOLOR[2], BACKCOLOR[3] );
