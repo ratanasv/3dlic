@@ -124,11 +124,11 @@ char** labels, int num_label, void (*callback)(int)) {
 void create_proj6_panel(GLUI* main_glui) {
 	GLUI_Panel* panel = main_glui->add_rollout("project6", 1);
 	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(100.0, 100.0), vec2(100.0,100.0), vec2(0.0, 2000.0),
+		vec2(500.0, 500.0), vec2(500.0,500.0), vec2(0.0, 2000.0),
 		THREEDLICParameters::NUM_STEPS, 
 		"NUM_STEPS = %3.2f", false));
 	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(0.2, 1.0), vec2(0.2,1.0), vec2(0.0,1.0),
+		vec2(0.1, 1.0), vec2(0.1,1.0), vec2(0.0,1.0),
 		THREEDLICParameters::BASE_ALPHA, 
 		"ALPHA = %0.4f", false));
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);

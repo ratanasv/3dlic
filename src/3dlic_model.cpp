@@ -21,7 +21,7 @@ FloatParam::FloatParam( float a, float b, float c ) {
 FloatParam::FloatParam() : _val(0.5), _minVal(0.0), _maxVal(1.0) {}
 
 void FloatParam::SetFloat(float in) {
-	if (in < _maxVal && in > _minVal) {
+	if (in <= _maxVal && in >= _minVal) {
 		_val = in;
 	} else {
 		throw invalid_argument("valid not within bound");
@@ -37,9 +37,10 @@ THREEDLICParameters::THREEDLICParameters() {
 	_floatParams[YTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
 	_floatParams[ZTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
 	_floatParams[SCALE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[NUM_STEPS] =  FloatParam(256.0, 0.0, 1000.0);
-	_floatParams[BASE_ALPHA] = FloatParam(1.0/200.0, 0.0, 1.0);
-
+	_floatParams[NUM_STEPS] =  FloatParam(500.0, 0.0, 1000.0);
+	_floatParams[BASE_ALPHA] = FloatParam(0.1, 0.0, 1.0);
+	_floatParams[CLAMP_VAL_MIN] = FloatParam(0.0, 0.0, 1.0);
+	_floatParams[CLAMP_VAL_MAX] = FloatParam(1.0, 0.0, 1.0);
 	_projection = PERSP;
 	_isPaused = false;
 }
