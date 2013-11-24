@@ -41,13 +41,6 @@ public:
 	virtual void EnableTexCoordAttribute(const int vecLength = 4) = 0;
 };
 
-class DepracatedAttributeBinder : public GLSLAttributeBinder {
-public:
-	virtual void EnablePositionAttribute( const int vecLength = 4 );
-	virtual void EnableNormalAttribute( const int vecLength = 4 );
-	virtual void EnableColorAttribute( const int vecLength = 4 );
-	virtual void EnableTexCoordAttribute( const int vecLength = 4 );
-};
 
 class GLSLCameraBinder {
 public:
@@ -61,6 +54,14 @@ public:
 	virtual void Scale(float x, float y, float z) = 0;
 	virtual void ClearProjection() = 0;
 	virtual void ClearModelView() = 0;
+};
+
+class DepracatedAttributeBinder : public GLSLAttributeBinder {
+public:
+	virtual void EnablePositionAttribute( const int vecLength = 4 );
+	virtual void EnableNormalAttribute( const int vecLength = 4 );
+	virtual void EnableColorAttribute( const int vecLength = 4 );
+	virtual void EnableTexCoordAttribute( const int vecLength = 4 );
 };
 
 class DeprecatedCameraBinder : public GLSLCameraBinder {

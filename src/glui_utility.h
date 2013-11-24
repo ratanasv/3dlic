@@ -1,10 +1,9 @@
 #pragma once
 #include "vec.h"
 #include "glui.h"
+#include "3dlic_model.h"
 
 
-typedef enum {NUM_STEPS, BASE_ALPHA} SLIDER_ID;
-typedef enum {UNUSED_CBOX} CHECKBOX_ID;
 using Angel::vec2;
 using Angel::vec3;
 
@@ -16,12 +15,12 @@ public:
 	vec2 vals;
 	vec2 def_vals;
 	vec2 bounds;
-	SLIDER_ID id;
+	THREEDLICParameters::FLOAT_PARAM id;
 	const char* format;
 	bool two_sided;
 	SliderBundle(GLUI_HSlider* slider, GLUI_StaticText* label, vec2 vals, 
-		vec2 def_vals, vec2 bounds, SLIDER_ID id, const char* format, 
-		bool is_two_sided = false): slider(slider), 
+		vec2 def_vals, vec2 bounds, THREEDLICParameters::FLOAT_PARAM id, 
+		const char* format, bool is_two_sided = false) : slider(slider), 
 		label(label), vals(vals), def_vals(def_vals), bounds(bounds), 
 		id(id), format(format), two_sided(is_two_sided){};
 
@@ -42,13 +41,15 @@ public:
 		refresh();
 	}
 };
+
 class CheckboxBundle {
 public:
 	GLUI_Checkbox* checkbox;
 	int val;
 	int def_val;
-	CHECKBOX_ID id;
-	CheckboxBundle(GLUI_Checkbox* checkbox, int val, int def_val, CHECKBOX_ID id ):
+	THREEDLICParameters::BOOL_PARAMETER id;
+	CheckboxBundle(GLUI_Checkbox* checkbox, int val, int def_val, 
+		THREEDLICParameters::BOOL_PARAMETER id ):
 		checkbox(checkbox), val(val), def_val(def_val), id(id) {};
 	void refresh() {
 
@@ -77,8 +78,7 @@ public:
 };
 
 void create_proj6_panel(GLUI* main_glui);
-void InitGlui();
 
-extern std::map<SLIDER_ID, SliderBundle> BunchOfSliders;
-extern std::map<CHECKBOX_ID, CheckboxBundle> BunchOfCheckboxes;
-extern std::map<int, RadioBundle> Bunch_Of_Radios;
+extern map<THREEDLICParameters::FLOAT_PARAM, SliderBundle> BunchOfSliders;
+extern map<THREEDLICParameters::BOOL_PARAMETER, CheckboxBundle> BunchOfCheckboxes;
+extern map<int, RadioBundle> Bunch_Of_Radios;

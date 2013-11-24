@@ -1,12 +1,13 @@
 #include "StdAfx.h"
 #include "glui_utility.h"
+#include "property.h"
 
 using std::map;
 using std::pair;
 using namespace vir;
 
-map<SLIDER_ID, SliderBundle> BunchOfSliders;
-map<CHECKBOX_ID, CheckboxBundle> BunchOfCheckboxes;
+map<THREEDLICParameters::FLOAT_PARAM, SliderBundle> BunchOfSliders;
+map<THREEDLICParameters::BOOL_PARAMETER, CheckboxBundle> BunchOfCheckboxes;
 map<int, RadioBundle> Bunch_Of_Radios;
 
 void callback(int id) {
@@ -24,7 +25,8 @@ void callback(int id) {
 }
 
 void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, const SliderBundle& sb_in) {
-	BunchOfSliders.insert(pair<SLIDER_ID, SliderBundle>(sb_in.id, sb_in));
+	BunchOfSliders.insert(pair<THREEDLICParameters::FLOAT_PARAM, SliderBundle>(
+		sb_in.id, sb_in));
 	SliderBundle& sb = BunchOfSliders.at(sb_in.id);
 	if(sb.two_sided)
 		sb.slider = main_glui->add_slider_to_panel(panel, 1, GLUI_HSLIDER_FLOAT, 
@@ -42,7 +44,9 @@ void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, const SliderBundle& sb
 void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
 	const CheckboxBundle& cb_in) 
 {
-	BunchOfCheckboxes.insert(pair<CHECKBOX_ID, CheckboxBundle>(cb_in.id, cb_in));
+	BunchOfCheckboxes.insert(
+		pair<THREEDLICParameters::BOOL_PARAMETER, CheckboxBundle>(
+		cb_in.id, cb_in));
 	auto& cb = BunchOfCheckboxes.at(cb_in.id);
 	cb.checkbox = main_glui->add_checkbox_to_panel(panel, name, &cb.val, 
 		cb.id, (GLUI_Update_CB)callback);
@@ -120,10 +124,12 @@ char** labels, int num_label, void (*callback)(int)) {
 void create_proj6_panel(GLUI* main_glui) {
 	GLUI_Panel* panel = main_glui->add_rollout("project6", 1);
 	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(100.0, 100.0), vec2(100.0,100.0), vec2(0.0, 2000.0), NUM_STEPS, 
+		vec2(100.0, 100.0), vec2(100.0,100.0), vec2(0.0, 2000.0),
+		THREEDLICParameters::NUM_STEPS, 
 		"NUM_STEPS = %3.2f", false));
 	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(0.2, 1.0), vec2(0.2,1.0), vec2(0.0,1.0), BASE_ALPHA, 
+		vec2(0.2, 1.0), vec2(0.2,1.0), vec2(0.0,1.0),
+		THREEDLICParameters::BASE_ALPHA, 
 		"ALPHA = %0.4f", false));
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);
 	// 	char* labels[] = {"texture enviroment","no texture", "modulate", "replace"};
@@ -133,58 +139,3 @@ void create_proj6_panel(GLUI* main_glui) {
 }
 
 static GLUI* Glui;				// instance of glui window
-
-void InitGlui( void ) {
-	/*
-	GLUI_Panel *panel;
-	GLUI_RadioGroup *group;
-	GLUI_Rotation *rot;
-	GLUI_Translation *trans, *scale;
-
-
-	// setup the glui window:
-
-	glutInitWindowPosition( INIT_WINDOW_SIZE + 50, 0 );
-	Glui = GLUI_Master.create_glui( (char *) GLUITITLE );
-
-
-	Glui->add_statictext( (char *) GLUITITLE );
-	Glui->add_separator( );
-
-	Glui->add_checkbox( "Perspective", &WhichProjection );
-
-	panel = Glui->add_panel( "Object Transformation" );
-	Glui->add_column_to_panel( panel, GLUIFALSE );
-	scale = Glui->add_translation_to_panel( panel, "Scale",  GLUI_TRANSLATION_Y , &Scale2 );
-	scale->set_speed( 0.005f );
-
-	Glui->add_column_to_panel( panel, GLUIFALSE );
-	trans = Glui->add_translation_to_panel( panel, "Trans XY", GLUI_TRANSLATION_XY, &TransXYZ[0] );
-	trans->set_speed( 0.05f );
-
-	Glui->add_column_to_panel( panel, GLUIFALSE );
-	trans = Glui->add_translation_to_panel( panel, "Trans Z",  GLUI_TRANSLATION_Z , &TransXYZ[2] );
-	trans->set_speed( 0.05f );
-
-	Glui->add_checkbox( "Debug", &DebugOn );
-
-
-	panel = Glui->add_panel( "", GLUIFALSE );
-
-	Glui->add_button_to_panel( panel, "Reset", RESET, (GLUI_Update_CB) Buttons );
-
-	Glui->add_column_to_panel( panel, GLUIFALSE );
-
-	Glui->add_button_to_panel( panel, "Quit", QUIT, (GLUI_Update_CB) Buttons );
-
-
-	// tell glui what graphics window it needs to post a redisplay to:
-
-	Glui->set_main_gfx_window( MainWindow );
-
-
-	// set the graphics window's idle function if needed:
-
-	GLUI_Master.set_glutIdleFunc( Animate );
-	create_proj6_panel(Glui);*/
-}

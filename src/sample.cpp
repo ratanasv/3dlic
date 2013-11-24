@@ -9,6 +9,12 @@
 #endif
 #include "gui6.h"
 #include "property.h"
+#include "3dlic_model.h"
+#include "glui_utility.h"
+
+#ifdef USE_GLUI
+#include "glui.h"
+#endif
 
 //
 //
@@ -33,8 +39,6 @@
 //
 
 // title of these windows:
-
-const char *WINDOWTITLE = { "Vir GLACIER NATIONAL PARK!!!" };
 const char *GLUITITLE   = { "Vir GLACIER NATIONAL PARK!!!" };
 
 
@@ -148,6 +152,7 @@ float	Unit( float [3], float [3] );
 void	Axes( float );
 void	HsvRgb( float[3], float [3] );
 void apply_transformations();
+void InitGlui();
 
 shared_ptr<GLSLCameraBinder> GLSLCameraBinderFactory();
 
@@ -243,8 +248,9 @@ main( int argc, char *argv[ ] )
 
 
 	// setup all the user interface stuff:
-
-	InitGlui( );
+#ifdef USE_GLUI
+	InitGlui();
+#endif
 	glutSetWindow(MainWindow);
 	init6();
 
@@ -362,7 +368,7 @@ Display( void )
 	// given as DISTANCES IN FRONT OF THE EYE
 	// USE gluOrtho2D( ) IF YOU ARE DOING 2D !
 
-	auto camera = GLSLCameraBinderFactory();
+	static auto camera = GLSLCameraBinderFactory();
 	camera->ClearProjection();
 	if( WhichProjection == ORTHO )
 		camera->Ortho( -3., 3.,     -3., 3.,     0.1, 1000. );
@@ -1007,8 +1013,64 @@ HsvRgb( float hsv[3], float rgb[3] )
 	rgb[2] = b;
 }
 
+void InitGlui( void ) {
+	GLUI_Panel *panel;
+	GLUI_RadioGroup *group;
+	GLUI_Rotation *rot;
+	GLUI_Translation *trans, *scale;
+
+
+	// setup the glui window:
+
+	glutInitWindowPosition( GetIntProperty(WINDOW_SIZE) + 50, 0 );
+	GLUI* Glui = GLUI_Master.create_glui( const_cast<char*>(
+		GetStringProperty(WINDOW_TITLE).c_str()) );
+
+
+	Glui->add_statictext(const_cast<char*>(
+		GetStringProperty(WINDOW_TITLE).c_str()));
+	Glui->add_separator( );
+
+	Glui->add_checkbox( "Perspective", &WhichProjection );
+
+	panel = Glui->add_panel( "Object Transformation" );
+	Glui->add_column_to_panel( panel, GLUIFALSE );
+	scale = Glui->add_translation_to_panel( panel, "Scale",  GLUI_TRANSLATION_Y , &Scale2 );
+	scale->set_speed( 0.005f );
+
+	Glui->add_column_to_panel( panel, GLUIFALSE );
+	trans = Glui->add_translation_to_panel( panel, "Trans XY", GLUI_TRANSLATION_XY, &TransXYZ[0] );
+	trans->set_speed( 0.05f );
+
+	Glui->add_column_to_panel( panel, GLUIFALSE );
+	trans = Glui->add_translation_to_panel( panel, "Trans Z",  GLUI_TRANSLATION_Z , &TransXYZ[2] );
+	trans->set_speed( 0.05f );
+
+	Glui->add_checkbox( "Debug", &DebugOn );
+
+
+	panel = Glui->add_panel( "", GLUIFALSE );
+
+	Glui->add_button_to_panel( panel, "Reset", RESET, (GLUI_Update_CB) Buttons );
+
+	Glui->add_column_to_panel( panel, GLUIFALSE );
+
+	Glui->add_button_to_panel( panel, "Quit", QUIT, (GLUI_Update_CB) Buttons );
+
+
+	// tell glui what graphics window it needs to post a redisplay to:
+
+	Glui->set_main_gfx_window( MainWindow );
+
+
+	// set the graphics window's idle function if needed:
+
+	GLUI_Master.set_glutIdleFunc( Animate );
+	create_proj6_panel(Glui);
+}
+
 void apply_transformations() {
-	auto camera = GLSLCameraBinderFactory();
+	static auto camera = GLSLCameraBinderFactory();
 	camera->ClearModelView();
 	camera->LookAt( vec3(0., 0., 15.), vec3(0., 0., 0.), vec3(0., 1., 0.));
 	camera->Translate(TransXYZ[0], TransXYZ[1], -1.0*TransXYZ[2]);

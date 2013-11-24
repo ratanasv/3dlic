@@ -20,8 +20,12 @@ static shared_ptr<TextureVisitor> TextureVisitorFactory() {
 }
 
 static void BindFloatUniform(const char* var, THREEDLICParameters::FLOAT_PARAM param) {
+#ifdef USE_GLUI
+	VolumeTracingShader->SetUniform(var, BunchOfSliders.at(param).vals.x);
+#else
 	VolumeTracingShader->SetUniform(var, LIC_PARAM->GetFloatParameter(
 		param));
+#endif
 }
 
 
