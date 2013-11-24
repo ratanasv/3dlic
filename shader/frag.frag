@@ -69,6 +69,7 @@ void main(void) {
 			continue;
 		}
 		float texVal = texture(volume, stp).r;
+		alpha = texVal * uBaseAlpha; //opacity according to the texel's magnitude.
 		vec3 rgb = Rainbow((texVal - uValMin)/(uValMax - uValMin));
 		cstar += astar * alpha * rgb;
 		astar *= ( 1. - alpha );
