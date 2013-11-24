@@ -49,11 +49,6 @@ const int GLUIFALSE = { false };
 #define ESCAPE		0x1b
 
 
-// initial window size:
-
-const int INIT_WINDOW_SIZE = { 900 };
-
-
 // multiplication factors for input interaction:
 //  (these are known from previous experience)
 
@@ -232,7 +227,6 @@ main( int argc, char *argv[ ] )
 
 	glutInit( &argc, argv );
 	InitProgramOptions(argc, argv);
-
 
 	// setup all the graphics stuff:
 
@@ -467,7 +461,8 @@ InitGraphics( void )
 	// set the initial window configuration:
 
 	glutInitWindowPosition( 0, 0 );
-	glutInitWindowSize( INIT_WINDOW_SIZE, INIT_WINDOW_SIZE );
+	const int windowSize = GetIntProperty(WINDOW_SIZE);
+	glutInitWindowSize( windowSize, windowSize );
 
 
 	// open the window and set its title:
