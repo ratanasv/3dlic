@@ -30,9 +30,9 @@ static void BindFloatUniform(const char* var, THREEDLICParameters::FLOAT_PARAM p
 
 
 void draw6() {
-	
+	static auto textureVisitor = TextureVisitorFactory();
 	VolumeTracingShader->Use();
-	SparseNoise->pre_render(TextureVisitorFactory());
+	SparseNoise->pre_render(textureVisitor);
 	BindFloatUniform("uNumSteps", THREEDLICParameters::NUM_STEPS);
 	BindFloatUniform("uBaseAlpha", THREEDLICParameters::BASE_ALPHA);
 	Cube->render();

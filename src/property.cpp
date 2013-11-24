@@ -45,16 +45,19 @@ void InitProgramOptions(int argc, char** argv) {
 		exit(EXIT_SUCCESS);
 	}
 
+	fs::path pathToConfig;
 	if (variable_map.count("config_file")) {
-		fs::path pathToConfig(variable_map["config_file"].as<string>());
-		try {
-			po::store(po::parse_config_file<char>(
-				pathToConfig.string().c_str(), desc), variable_map);
-		} catch (exception& e) {
-			throw logic_error(e.what());
-		}
-		po::notify(variable_map);    
+		pathToConfig = fs::path(variable_map["config_file"].as<string>());  
+	} else {
+		pathToConfig = fs::path("E:\\Vault\\3dlic\\config.cfg");
 	}
+	try {
+		po::store(po::parse_config_file<char>(
+			pathToConfig.string().c_str(), desc), variable_map);
+	} catch (exception& e) {
+		throw logic_error(e.what());
+	}
+	po::notify(variable_map);  
 }
 
 int GetIntProperty(Property prop) {

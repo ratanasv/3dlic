@@ -98,7 +98,7 @@ NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name,
 	_data_channel = toGLTexFormat(_numChannel);
 
 	_data_type = GL_UNSIGNED_BYTE;
-	unsigned total = _width*_height*_depth*_channel;
+	unsigned total = _width*_height*_depth*_numChannel;
 	_texels = shared_ptr<unsigned char>(new unsigned char[total], [](unsigned char* f) {
 		delete[] f;
 	});
