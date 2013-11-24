@@ -1,5 +1,6 @@
 #pragma once
 #include "vec.h"
+#include "glui.h"
 
 
 typedef enum {NUM_STEPS, BASE_ALPHA} SLIDER_ID;
@@ -74,6 +75,9 @@ public:
 	int _counter;
 	void (*_callback)(int);
 };
+
+void create_proj6_panel(GLUI* main_glui);
+void InitGlui();
 
 extern std::map<SLIDER_ID, SliderBundle> BunchOfSliders;
 extern std::map<CHECKBOX_ID, CheckboxBundle> BunchOfCheckboxes;

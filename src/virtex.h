@@ -17,12 +17,12 @@ class TextureAbstractFactory {
 protected:
 	int _width;
 	int _height;
-	int _channel;
+	GLenum _channel;
 	int _depth;
 	GLenum _data_channel;
 	GLenum _data_type;
 public:
-	int get_channel() {return _channel;}
+	GLenum get_channel() {return _channel;}
 	int get_width() {return _width;}
 	int get_height() {return _height;}
 	int get_depth() {return _depth;}
@@ -34,7 +34,7 @@ public:
 	typedef enum {RED = 1, RGB = 3, RGBA = 4} NUM_CHANNEL;
 };
 
-class ImageTex2DFactory: public TextureAbstractFactory{
+class ImageTex2DFactory: public TextureAbstractFactory {
 private:
 	shared_ptr<unsigned char> _texels;
 public:

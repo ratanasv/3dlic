@@ -5,10 +5,13 @@ uniform sampler3D volume;
 in vec3 fTexCoord;
 in vec3 fColor;
 in vec3 fNormal;
+in vec3 fDir;
 
 uniform mat4 uModelViewMatrix;
 uniform float uNumSteps;
 uniform float uBaseAlpha;
+uniform float uValMin;
+uniform float uValMax;
 
 const float SQRT3 = 1.732;
 
@@ -51,13 +54,9 @@ Rainbow( float t ) {
 }
 
 void main(void) {
-	vec3 geomPos = fTexCoord;
-	vec3 camera = (inverse(uModelViewMatrix)[3]).xyz;
-	vec3 dir = normalize(geomPos - camera);
-	dir = dir*(SQRT3/uNumSteps);
-
 	vec3 stp = fTexCoord;
-	float astar = 1.0;
+
+	float astar = 1.;
 	vec3 cstar = vec3(0.0, 0.0, 0.0);
 	for (int i=0; i<uNumSteps; i++) {
 		float alpha = uBaseAlpha;
@@ -70,10 +69,10 @@ void main(void) {
 			continue;
 		}
 		float texVal = texture(volume, stp).r;
-		vec3 rgb = Rainbow(texVal);
+		vec3 rgb = Rainbow((texVal - uValMin)/(uValMax - uValMin));
 		cstar += astar * alpha * rgb;
-		astar *= (1.0 - alpha);
-		stp += dir;
+		astar *= ( 1. - alpha );
+		stp += fDir;
 	}
 
     gl_FragColor = vec4(cstar, 1.0);

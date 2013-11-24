@@ -128,7 +128,7 @@ bool Paused = false;
 
 int	ActiveButton;			// current button that is down
 int	DebugOn;				// != 0 means to print debugging info
-GLUI *	Glui;				// instance of glui window
+
 int	GluiWindow;				// the glut id for the glui window
 int	LeftButton;				// either ROTATE or SCALE
 int	MainWindow;				// window id for main graphics window
@@ -312,7 +312,7 @@ Buttons( int id )
 	{
 		case RESET:
 			Reset( );
-			Glui->sync_live( );
+//			Glui->sync_live( );
 			glutSetWindow( MainWindow );
 			glutPostRedisplay( );
 			break;
@@ -323,7 +323,7 @@ Buttons( int id )
 			// gracefully close the graphics window:
 			// gracefully exit the program:
 
-			Glui->close( );
+//			Glui->close( );
 			glutSetWindow( MainWindow );
 			glFinish( );
 			glutDestroyWindow( MainWindow );
@@ -456,61 +456,7 @@ ElapsedSeconds( void )
 // initialize the glui window:
 //
 
-void
-InitGlui( void )
-{
-	GLUI_Panel *panel;
-	GLUI_RadioGroup *group;
-	GLUI_Rotation *rot;
-	GLUI_Translation *trans, *scale;
 
-
-	// setup the glui window:
-
-	glutInitWindowPosition( INIT_WINDOW_SIZE + 50, 0 );
-	Glui = GLUI_Master.create_glui( (char *) GLUITITLE );
-
-
-	Glui->add_statictext( (char *) GLUITITLE );
-	Glui->add_separator( );
-
-	Glui->add_checkbox( "Perspective", &WhichProjection );
-
-	panel = Glui->add_panel( "Object Transformation" );
-		Glui->add_column_to_panel( panel, GLUIFALSE );
-		scale = Glui->add_translation_to_panel( panel, "Scale",  GLUI_TRANSLATION_Y , &Scale2 );
-		scale->set_speed( 0.005f );
-
-		Glui->add_column_to_panel( panel, GLUIFALSE );
-		trans = Glui->add_translation_to_panel( panel, "Trans XY", GLUI_TRANSLATION_XY, &TransXYZ[0] );
-		trans->set_speed( 0.05f );
-
-		Glui->add_column_to_panel( panel, GLUIFALSE );
-		trans = Glui->add_translation_to_panel( panel, "Trans Z",  GLUI_TRANSLATION_Z , &TransXYZ[2] );
-		trans->set_speed( 0.05f );
-
-	Glui->add_checkbox( "Debug", &DebugOn );
-
-
-	panel = Glui->add_panel( "", GLUIFALSE );
-
-	Glui->add_button_to_panel( panel, "Reset", RESET, (GLUI_Update_CB) Buttons );
-
-	Glui->add_column_to_panel( panel, GLUIFALSE );
-
-	Glui->add_button_to_panel( panel, "Quit", QUIT, (GLUI_Update_CB) Buttons );
-
-
-	// tell glui what graphics window it needs to post a redisplay to:
-
-	Glui->set_main_gfx_window( MainWindow );
-
-
-	// set the graphics window's idle function if needed:
-
-	GLUI_Master.set_glutIdleFunc( Animate );
-	create_proj6_panel(Glui);
-}
 
 
 
@@ -586,7 +532,7 @@ InitGraphics( void )
 	glutMenuStateFunc( NULL );
 	glutTimerFunc( 0, NULL, 0 );
 	// DO NOT SET THE GLUT IDLE FUNCTION HERE !!
-	// glutIdleFunc( NULL );
+	glutIdleFunc( Display );
 	// let glui take care of it in InitGlui ( )
 
 	glutSetWindow( MainWindow );
@@ -599,8 +545,7 @@ InitGraphics( void )
 // the keyboard callback:
 //
 
-void
-Keyboard( unsigned char c, int x, int y )
+void Keyboard( unsigned char c, int x, int y )
 {
 	if( DebugOn != 0 )
 		fprintf( stderr, "Keyboard: '%c' (0x%0x)\n", c, c );
@@ -614,10 +559,10 @@ Keyboard( unsigned char c, int x, int y )
 
 		case 'p':
 			Paused = ! Paused;
-			if( Paused )
-				GLUI_Master.set_glutIdleFunc( NULL );
-			else
-				GLUI_Master.set_glutIdleFunc( Animate );
+// 			if( Paused )
+// 				GLUI_Master.set_glutIdleFunc( NULL );
+// 			else
+// 				GLUI_Master.set_glutIdleFunc( Animate );
 			break;
 		case 'P':
 			WhichProjection = PERSP;
@@ -646,7 +591,7 @@ Keyboard( unsigned char c, int x, int y )
 
 	// synchronize the GLUI display with the variables:
 
-	Glui->sync_live( );
+//	Glui->sync_live( );
 
 
 	// force a call to Display( ):
@@ -709,9 +654,7 @@ MouseButton( int button, int state, int x, int y )
 // called when the mouse moves while a button is down:
 //
 
-void
-MouseMotion( int x, int y )
-{
+void MouseMotion( int x, int y ) {
 	if( DebugOn != 0 )
 		fprintf( stderr, "MouseMotion: %d, %d\n", x, y );
 
@@ -719,8 +662,7 @@ MouseMotion( int x, int y )
 	int dx = x - Xmouse;		// change in mouse coords
 	int dy = y - Ymouse;
 
-	if( ( ActiveButton & LEFT ) != 0 )
-	{
+	if( ( ActiveButton & LEFT ) != 0 ) {
 		switch( LeftButton )
 		{
 			case ROTATE:
@@ -737,8 +679,7 @@ MouseMotion( int x, int y )
 	}
 
 
-	if( ( ActiveButton & MIDDLE ) != 0 )
-	{
+	if( ( ActiveButton & MIDDLE ) != 0 ) {
 		Scale += SCLFACT * (float) ( dx - dy );
 
 		// keep object from turning inside-out or disappearing:

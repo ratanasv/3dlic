@@ -15,7 +15,7 @@ static void validatePath(const string& fileName) {
 	}
 }
 
-GLenum convertToGLenum( TextureAbstractFactory::NUM_CHANNEL ch ) {
+GLenum toGLTexFormat( TextureAbstractFactory::NUM_CHANNEL ch ) {
 	switch(ch) {
 	case(TextureAbstractFactory::RED) :
 		return GL_RED;
@@ -24,14 +24,28 @@ GLenum convertToGLenum( TextureAbstractFactory::NUM_CHANNEL ch ) {
 	case(TextureAbstractFactory::RGBA) :
 		return GL_RGBA;
 	default:
-		throw invalid_argument("unsupported GL texture channel");
+		throw invalid_argument("unsupported GL texture format");
+	}
+}
+
+GLenum toGLTexInternalFormat(TextureAbstractFactory::NUM_CHANNEL ch) {
+	switch(ch) {
+	case(TextureAbstractFactory::RED) :
+		return GL_R8;
+	case(TextureAbstractFactory::RGB) :
+		return GL_RGB8;
+	case(TextureAbstractFactory::RGBA) :
+		return GL_RGBA8;
+	default:
+		throw invalid_argument("unsupported GL texture internal format");
 	}
 }
 
 ImageTex2DFactory::ImageTex2DFactory(const string& file_name) {
 	validatePath(file_name);
+	int numChannel;
 	unsigned char* tex_ptr = SOIL_load_image(file_name.c_str(),
-		&_width,&_height,&_channel,SOIL_LOAD_RGB);
+		&_width, &_height, &numChannel, SOIL_LOAD_RGB);
 	if (tex_ptr == NULL) {
 		throw runtime_error("SOIL_load_image failed");
 	}
@@ -39,6 +53,8 @@ ImageTex2DFactory::ImageTex2DFactory(const string& file_name) {
 		delete[] uc;
 	});
 	flip_vertically();
+	_channel = toGLTexInternalFormat(
+		static_cast<TextureAbstractFactory::NUM_CHANNEL>(numChannel));
 	_depth = 1;
 	_data_channel = GL_RGB;
 	_data_type = GL_UNSIGNED_BYTE;
@@ -64,7 +80,8 @@ void* ImageTex2DFactory::get_data() {
 }
 
 NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, 
-TextureAbstractFactory::NUM_CHANNEL ch) : _numChannel(ch) {
+	TextureAbstractFactory::NUM_CHANNEL ch) : _numChannel(ch) 
+{
 	shared_ptr<FILE> fp(fopen(file_name.c_str(), "rb"), [](FILE* f) {
 		fclose(f);
 	});
@@ -77,8 +94,8 @@ TextureAbstractFactory::NUM_CHANNEL ch) : _numChannel(ch) {
 	fread(&_width, sizeof(int), 1, fp.get());
 	fread(&_height, sizeof(int), 1, fp.get());
 	fread(&_depth, sizeof(int), 1, fp.get());
-	_channel = static_cast<int>(_numChannel);
-	_data_channel = convertToGLenum(_numChannel);
+	_channel = toGLTexInternalFormat(_numChannel);
+	_data_channel = toGLTexFormat(_numChannel);
 
 	_data_type = GL_UNSIGNED_BYTE;
 	unsigned total = _width*_height*_depth*_channel;
@@ -99,7 +116,7 @@ GLTextureDelegatee::GLTextureDelegatee(const shared_ptr<TextureAbstractFactory>&
 	TextureDelegatee(factory), _which_tex(0) {};
 
 void GLTextureDelegatee::send_to_gpu() {
-	int ch = _factory->get_channel();
+	GLenum ch = _factory->get_channel();
 	int width = _factory->get_width();
 	int height = _factory->get_height();
 	int depth = _factory->get_depth();
@@ -121,10 +138,12 @@ void GLTextureDelegatee::send_to_gpu() {
 	glActiveTexture(GL_TEXTURE0 + _which_tex);
 	glGenTextures(1, _tex_handle.get());
 	glBindTexture(_bind_site, *_tex_handle);
-	if(_bind_site == GL_TEXTURE_2D)
+	if (_bind_site == GL_TEXTURE_2D) {
 		glTexImage2D(_bind_site, 0, ch, width, height, 0, data_ch, data_type, data);
-	else
+	}
+	else {
 		glTexImage3D(_bind_site, 0, ch, width, height, depth, 0, data_ch, data_type, data);
+	}
 	glBindTexture(_bind_site, 0);
 }
 

@@ -11,6 +11,7 @@ public:
 	FloatParam();
 	FloatParam(float a, float b, float c);
 	operator float();
+	operator const float() const;
 	void SetFloat(float in);
 private:
 	float _val;
@@ -20,9 +21,8 @@ private:
 
 
 class THREEDLICParameters : public Observable {
-protected:
-	THREEDLICParameters();;
 private:
+	THREEDLICParameters();
 	THREEDLICParameters(const THREEDLICParameters& other);
 public:
 	typedef enum {ORTHO, PERSP} PROJ_TYPE;
@@ -34,12 +34,12 @@ private:
 	bool _isPaused;
 	map<FLOAT_PARAM, FloatParam> _floatParams;
 public:
-	PROJ_TYPE GetProjection();
-	bool GetIsPaused();
+	PROJ_TYPE GetProjection() const;
+	bool GetIsPaused() const;
 	void SetTranslate(const vec3& in);
 	void SetProjection(PROJ_TYPE in);
 	void SetIsPaused(bool in);
-	float GetFloatParameter(FLOAT_PARAM param);
+	float GetFloatParameter(FLOAT_PARAM param) const;
 	void SetFloatParameter(FLOAT_PARAM param, float in);
 
 	static shared_ptr<THREEDLICParameters> GetInstance();

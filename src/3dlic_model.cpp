@@ -8,6 +8,10 @@ FloatParam::operator float() {
 	return _val;
 }
 
+FloatParam::operator const float() const {
+	return _val;
+}
+
 FloatParam::FloatParam( float a, float b, float c ) {
 	_minVal = b;
 	_maxVal = c;
@@ -33,18 +37,18 @@ THREEDLICParameters::THREEDLICParameters() {
 	_floatParams[YTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
 	_floatParams[ZTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
 	_floatParams[SCALE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[NUM_STEPS] =  FloatParam(100.0, 0.0, 1000.0);
-	_floatParams[BASE_ALPHA] = FloatParam(0.2, 0.0, 1.0);
+	_floatParams[NUM_STEPS] =  FloatParam(256.0, 0.0, 1000.0);
+	_floatParams[BASE_ALPHA] = FloatParam(1.0/200.0, 0.0, 1.0);
 
 	_projection = PERSP;
 	_isPaused = false;
 }
 
-THREEDLICParameters::PROJ_TYPE THREEDLICParameters::GetProjection() {
+THREEDLICParameters::PROJ_TYPE THREEDLICParameters::GetProjection() const {
 	return _projection;
 }
 
-bool THREEDLICParameters::GetIsPaused() {
+bool THREEDLICParameters::GetIsPaused() const {
 	return _isPaused;
 }
 
@@ -60,14 +64,13 @@ void THREEDLICParameters::SetIsPaused( bool in ) {
 }
 
 
-float THREEDLICParameters::GetFloatParameter( FLOAT_PARAM param ) {
+float THREEDLICParameters::GetFloatParameter( FLOAT_PARAM param ) const {
 	return _floatParams.at(param);
 }
 
 void THREEDLICParameters::SetFloatParameter( FLOAT_PARAM param, float in ) {
 	_floatParams.at(param).SetFloat(in);
 }
-
 
 
 shared_ptr<THREEDLICParameters> THREEDLICParameters::GetInstance() {

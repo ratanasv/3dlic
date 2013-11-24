@@ -13,7 +13,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "glut.h"
-#include "glui.h"
 #include <omp.h>
 #include "abstract.h"
 #include "SOIL.h"
