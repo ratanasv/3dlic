@@ -135,7 +135,8 @@ void create_proj6_panel(GLUI* main_glui) {
 static GLUI* Glui;				// instance of glui window
 
 void InitGlui( void ) {
-	/*GLUI_Panel *panel;
+	/*
+	GLUI_Panel *panel;
 	GLUI_RadioGroup *group;
 	GLUI_Rotation *rot;
 	GLUI_Translation *trans, *scale;

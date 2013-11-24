@@ -27,5 +27,7 @@
 #include "windows.h"
 #include "boost/filesystem.hpp"
 #include <algorithm>
+#include <boost/program_options.hpp>
+#include <iostream>
 
 #pragma message("Compiling PCH")

@@ -26,6 +26,7 @@
     <ClInclude Include="src\glui_utility.h" />
     <ClInclude Include="src\model_controller.h" />
     <ClInclude Include="src\objload.h" />
+    <ClInclude Include="src\property.h" />
     <ClInclude Include="src\StdAfx.h" />
     <ClInclude Include="src\texture6.h" />
     <ClInclude Include="src\virmodel.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="src\gui6.cpp" />
     <ClCompile Include="src\glui_utility.cpp" />
     <ClCompile Include="src\model_controller.cpp" />
+    <ClCompile Include="src\property.cpp" />
     <ClCompile Include="src\sample.cpp" />
     <ClCompile Include="src\StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

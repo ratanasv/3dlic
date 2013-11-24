@@ -8,6 +8,7 @@
 #pragma warning(disable:4996)
 #endif
 #include "gui6.h"
+#include "property.h"
 
 //
 //
@@ -30,19 +31,6 @@
 //
 //  Latest update:	March 27, 2013
 //
-
-
-//
-// constants:
-//
-// NOTE: There are a bunch of good reasons to use const variables instead
-// of #define's.  However, Visual C++ does not allow a const variable
-// to be used as an array size or as the case in a switch( ) statement.  So in
-// the following, all constants are const variables except those which need to
-// be array sizes or cases in switch( ) statements.  Those are #defines.
-//
-//
-
 
 // title of these windows:
 
@@ -165,6 +153,7 @@ float	Unit( float [3], float [3] );
 void	Axes( float );
 void	HsvRgb( float[3], float [3] );
 void apply_transformations();
+
 shared_ptr<GLSLCameraBinder> GLSLCameraBinderFactory();
 
 // which way is a surface facing:
@@ -242,6 +231,7 @@ main( int argc, char *argv[ ] )
 	// pull some command line arguments out)
 
 	glutInit( &argc, argv );
+	InitProgramOptions(argc, argv);
 
 
 	// setup all the graphics stuff:
@@ -1040,3 +1030,4 @@ void apply_transformations() {
 shared_ptr<GLSLCameraBinder> GLSLCameraBinderFactory() {
 	return shared_ptr<GLSLCameraBinder>(VolumeTracingShader);
 }
+
