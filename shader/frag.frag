@@ -15,8 +15,7 @@ uniform float uValMax;
 
 const float SQRT3 = 1.732;
 
-vec3
-Rainbow( float t ) {
+vec3 Rainbow( float t ) {
 	t = clamp( t, 0., 1. );
 
 	vec3 rgb;
@@ -53,8 +52,24 @@ Rainbow( float t ) {
 	return rgb;
 }
 
+vec3 GetForwardDir() {
+	return fDir;
+}
+
+vec3 GetForwardDirAlternate() {
+	vec4 cameraPos = inverse(uModelViewMatrix)[3];
+	vec3 adjustedTexCoord = (fTexCoord-0.5)*2.0;
+	vec3 dir = adjustedTexCoord - cameraPos.xyz;
+	dir = normalize(dir);
+	dir = SQRT3*dir/uNumSteps;
+	return dir;
+}
+
 void main(void) {
 	vec3 stp = fTexCoord;
+	vec3 forwardDir = GetForwardDir();
+	vec3 stpAlternate = fTexCoord;
+	vec3 forwardDirAlternate = GetForwardDirAlternate();
 
 	float astar = 1.;
 	vec3 cstar = vec3(0.0, 0.0, 0.0);
@@ -73,7 +88,11 @@ void main(void) {
 		vec3 rgb = Rainbow((texVal - uValMin)/(uValMax - uValMin));
 		cstar += astar * alpha * rgb;
 		astar *= ( 1. - alpha );
-		stp += fDir;
+		stp += forwardDir; // doing front-to-back composition
+		stpAlternate += forwardDirAlternate;
+		if ( astar == 0.0 ) {
+			break;
+		}
 	}
 
     gl_FragColor = vec4(cstar, 1.0);

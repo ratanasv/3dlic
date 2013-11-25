@@ -131,6 +131,10 @@ void create_proj6_panel(GLUI* main_glui) {
 		vec2(0.1, 1.0), vec2(0.1,1.0), vec2(0.0,1.0),
 		THREEDLICParameters::BASE_ALPHA, 
 		"ALPHA = %0.4f", false));
+	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
+		vec2(0.0, 1.0), vec2(0.0,1.0), vec2(0.0,1.0),
+		THREEDLICParameters::CLAMP_VAL_MIN, 
+		"clamp = %0.4f - %0.4f", true));
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);
 	// 	char* labels[] = {"texture enviroment","no texture", "modulate", "replace"};
 	// 	RadioBundle(main_glui, panel, TEX_ENV, labels, 4, &env_radio_callback);

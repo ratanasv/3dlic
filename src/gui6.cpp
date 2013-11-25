@@ -19,9 +19,14 @@ static shared_ptr<TextureVisitor> TextureVisitorFactory() {
 	return shared_ptr<TextureVisitor>(new GLSLTextureSamplerBinder());
 }
 
-static void BindFloatUniform(const char* var, THREEDLICParameters::FLOAT_PARAM param) {
+static void BindFloatUniform(const char* var, THREEDLICParameters::FLOAT_PARAM param, 
+	const char* anotherVar = "") {
 #ifdef USE_GLUI
+	auto slider = BunchOfSliders.at(param);
 	VolumeTracingShader->SetUniform(var, BunchOfSliders.at(param).vals.x);
+	if (slider.two_sided) {
+		VolumeTracingShader->SetUniform(var, BunchOfSliders.at(param).vals.x);
+	}
 #else
 	VolumeTracingShader->SetUniform(var, LIC_PARAM->GetFloatParameter(
 		param));
@@ -35,6 +40,7 @@ void draw6() {
 	SparseNoise->pre_render(textureVisitor);
 	BindFloatUniform("uNumSteps", THREEDLICParameters::NUM_STEPS);
 	BindFloatUniform("uBaseAlpha", THREEDLICParameters::BASE_ALPHA);
+	BindFloatUniform("uValMin", THREEDLICParameters::CLAMP_VAL_MIN, "uValMax");
 	Cube->render();
 	SparseNoise->post_render();
 }
