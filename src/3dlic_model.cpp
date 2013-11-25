@@ -41,6 +41,9 @@ THREEDLICParameters::THREEDLICParameters() {
 	_floatParams[BASE_ALPHA] = FloatParam(0.1, 0.0, 1.0);
 	_floatParams[CLAMP_VAL_MIN] = FloatParam(0.01, 0.0, 1.0);
 	_floatParams[CLAMP_VAL_MAX] = FloatParam(1.0, 0.0, 1.0);
+	_floatParams[NUM_STEPS_LIC] = FloatParam(20.0, 0.0, 100.0);
+	_floatParams[VELOCITY_SCALE] = FloatParam(0.05, 0.0, 2.0);
+	_floatParams[DT] = FloatParam(0.05, 0.0001, 0.3);
 	_projection = PERSP;
 	_isPaused = false;
 }

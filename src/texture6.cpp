@@ -5,7 +5,7 @@
 
 using std::string;
 
-static const string VOLUME_SAMPLER("volume");
+static const string VOLUME_SAMPLER("uSparseNoiseSampler");
 
 
 void GLSLTextureSamplerBinder::pre_render( const unsigned int whichTex, 

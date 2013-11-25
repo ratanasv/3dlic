@@ -1,6 +1,6 @@
 #version 430 compatibility
 
-uniform sampler3D volume;
+uniform sampler3D uSparseNoiseSampler;
 
 in vec3 fTexCoord;
 in vec3 fColor;
@@ -13,7 +13,19 @@ uniform float uBaseAlpha;
 uniform float uValMin;
 uniform float uValMax;
 
+uniform float uNumStepsLIC;
+uniform float uVelocityScale;
+uniform float uDT;
+
 const float SQRT3 = 1.732;
+
+vec3 GetScaledVelocityData(vec3 stp) {
+	vec3 returned;
+	returned.x = -3.0 + 6.0*stp.s - 4.0*stp.s*(stp.t+1.0) - 4.0*stp.p;
+	returned.y = 12.0*stp.s - 4.0*stp.s*stp.s - 12.0*stp.p + 4.0*stp.p*stp.p;
+	returned.z = 3.0 + 4.0*stp.s - 4.0*stp.s*(stp.t+1.0) + 6.0*stp.p + 4.0*(stp.t+1.0)*stp.p;
+	return returned*uVelocityScale;
+}
 
 vec3 Rainbow( float t ) {
 	t = clamp( t, 0., 1. );
@@ -66,11 +78,42 @@ vec3 GetForwardDirAlternate() {
 	return dir;
 }
 
+vec3 SolveAdvectionEqn(vec3 pos, vec3 vel) {
+	return pos + vel*uDT;
+}
+
+float FetchSparseNoise(vec3 stp) {
+	return texture(uSparseNoiseSampler, stp).r;
+}
+
+float ComputeLIC(vec3 stp) {
+	float accumulated = FetchSparseNoise(stp);
+	vec3 stpIterator = stp;
+	for (int i=0; i<uNumStepsLIC; i++) {
+		vec3 velocity = GetScaledVelocityData(stpIterator);
+		stpIterator = SolveAdvectionEqn(stpIterator, velocity);
+		accumulated += FetchSparseNoise(stpIterator);
+	}
+	for (int i=0; i<uNumStepsLIC; i++) {
+		vec3 velocity = GetScaledVelocityData(stpIterator);
+		stpIterator = SolveAdvectionEqn(stpIterator, -1.0*velocity);
+		accumulated += FetchSparseNoise(stpIterator);
+	}
+	return accumulated/(2.0*uNumStepsLIC);
+}
+
+
+/**
+ * Clamps, and also converts it to rainbow color.
+ */
+vec3 ClampRainbow(float t, float smin, float smax) {
+	return Rainbow((t - smin)/(smax - smin));
+}
+
 
 void main(void) {
 	vec3 stp = fTexCoord;
 	vec3 forwardDir = GetForwardDirAlternate();
-
 
 
 	float astar = 1.;
@@ -85,9 +128,9 @@ void main(void) {
 			alpha = 0.;
 			continue;
 		}
-		float texVal = texture(volume, stp).r;
-		alpha = texVal * uBaseAlpha; //opacity according to the texel's magnitude.
-		vec3 rgb = Rainbow((texVal - uValMin)/(uValMax - uValMin));
+		float accumulated = ComputeLIC(stp);
+		alpha = accumulated * uBaseAlpha; //opacity according to the texel's magnitude.
+		vec3 rgb = ClampRainbow(accumulated, uValMin, uValMax);
 		cstar += astar * alpha * rgb;
 		astar *= ( 1. - alpha );
 		stp += forwardDir; // doing front-to-back composition

@@ -41,6 +41,9 @@ void draw6() {
 	BindFloatUniform("uNumSteps", THREEDLICParameters::NUM_STEPS);
 	BindFloatUniform("uBaseAlpha", THREEDLICParameters::BASE_ALPHA);
 	BindFloatUniform("uValMin", THREEDLICParameters::CLAMP_VAL_MIN, "uValMax");
+	BindFloatUniform("uNumStepsLIC", THREEDLICParameters::NUM_STEPS_LIC);
+	BindFloatUniform("uVelocityScale", THREEDLICParameters::VELOCITY_SCALE);
+	BindFloatUniform("uDT", THREEDLICParameters::DT);
 	Cube->render();
 	SparseNoise->post_render();
 }
