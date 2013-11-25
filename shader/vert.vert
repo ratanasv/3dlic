@@ -31,7 +31,6 @@ void main(void) {
 	fDir = SQRT3 * normalize( ( inverse(uModelViewMatrix) * worldSpaceCoord ).stp ) / float(uNumSteps);
 
     gl_Position = uProjectionMatrix * uModelViewMatrix * modelSpaceCoord;
-
 }
 
 

@@ -65,11 +65,12 @@ vec3 GetForwardDirAlternate() {
 	return dir;
 }
 
+
 void main(void) {
 	vec3 stp = fTexCoord;
-	vec3 forwardDir = GetForwardDir();
-	vec3 stpAlternate = fTexCoord;
-	vec3 forwardDirAlternate = GetForwardDirAlternate();
+	vec3 forwardDir = GetForwardDirAlternate();
+
+
 
 	float astar = 1.;
 	vec3 cstar = vec3(0.0, 0.0, 0.0);
@@ -89,11 +90,11 @@ void main(void) {
 		cstar += astar * alpha * rgb;
 		astar *= ( 1. - alpha );
 		stp += forwardDir; // doing front-to-back composition
-		stpAlternate += forwardDirAlternate;
 		if ( astar == 0.0 ) {
 			break;
 		}
 	}
 
     gl_FragColor = vec4(cstar, 1.0);
+
 }

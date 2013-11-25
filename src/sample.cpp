@@ -119,7 +119,6 @@ int	DebugOn;				// != 0 means to print debugging info
 int	GluiWindow;				// the glut id for the glui window
 int	LeftButton;				// either ROTATE or SCALE
 int	MainWindow;				// window id for main graphics window
-float	Scale, Scale2;		// scaling factors
 int	WhichProjection;		// ORTHO or PERSP
 int	Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;			// rotation angles in degrees
@@ -662,21 +661,14 @@ void MouseMotion( int x, int y ) {
 				break;
 
 			case SCALE:
-				Scale += SCLFACT * (float) ( dx - dy );
-				if( Scale < MINSCALE )
-					Scale = MINSCALE;
+
 				break;
 		}
 	}
 
 
 	if( ( ActiveButton & MIDDLE ) != 0 ) {
-		Scale += SCLFACT * (float) ( dx - dy );
-
-		// keep object from turning inside-out or disappearing:
-
-		if( Scale < MINSCALE )
-			Scale = MINSCALE;
+		TransXYZ[2] += SCLFACT*dy;
 	}
 
 	Xmouse = x;			// new current position
@@ -699,8 +691,6 @@ Reset( void )
 	ActiveButton = 0;
 	DebugOn = GLUIFALSE;
 	LeftButton = ROTATE;
-	Scale  = 1.0;
-	Scale2 = 0.0;		// because we add 1. to it in Display( )
 	WhichProjection = PERSP;
 	Xrot = Yrot = 0.;
 	TransXYZ[0] = TransXYZ[1] = TransXYZ[2] = 0.;
@@ -1017,7 +1007,7 @@ void InitGlui( void ) {
 	GLUI_Panel *panel;
 	GLUI_RadioGroup *group;
 	GLUI_Rotation *rot;
-	GLUI_Translation *trans, *scale;
+	GLUI_Translation *trans;
 
 
 	// setup the glui window:
@@ -1035,8 +1025,6 @@ void InitGlui( void ) {
 
 	panel = Glui->add_panel( "Object Transformation" );
 	Glui->add_column_to_panel( panel, GLUIFALSE );
-	scale = Glui->add_translation_to_panel( panel, "Scale",  GLUI_TRANSLATION_Y , &Scale2 );
-	scale->set_speed( 0.005f );
 
 	Glui->add_column_to_panel( panel, GLUIFALSE );
 	trans = Glui->add_translation_to_panel( panel, "Trans XY", GLUI_TRANSLATION_XY, &TransXYZ[0] );
@@ -1075,12 +1063,6 @@ void apply_transformations() {
 	camera->LookAt( vec3(0., 0., 15.), vec3(0., 0., 0.), vec3(0., 1., 0.));
 	camera->Translate(TransXYZ[0], TransXYZ[1], -1.0*TransXYZ[2]);
 	camera->Rotate(Xrot, Yrot, 0.0);
-	camera->Scale(Scale, Scale, Scale );
-	
-	GLfloat scale2 = 1. + Scale2;		// because glui translation starts at 0.
-	if( scale2 < MINSCALE )
-		scale2 = MINSCALE;
-	camera->Scale(scale2, scale2, scale2 );
 
 }
 
