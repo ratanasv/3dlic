@@ -51,6 +51,9 @@
     <ClInclude Include="src\property.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\reader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\virmodel.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\property.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
