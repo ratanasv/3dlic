@@ -39,7 +39,7 @@ THREEDLICParameters::THREEDLICParameters() {
 	_floatParams[SCALE] = FloatParam(0.0, -1000.0, 1000.0);
 	_floatParams[NUM_STEPS] =  FloatParam(500.0, 0.0, 1000.0);
 	_floatParams[BASE_ALPHA] = FloatParam(0.1, 0.0, 1.0);
-	_floatParams[CLAMP_VAL_MIN] = FloatParam(0.0, 0.0, 1.0);
+	_floatParams[CLAMP_VAL_MIN] = FloatParam(0.01, 0.0, 1.0);
 	_floatParams[CLAMP_VAL_MAX] = FloatParam(1.0, 0.0, 1.0);
 	_projection = PERSP;
 	_isPaused = false;

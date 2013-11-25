@@ -15,26 +15,26 @@ static void validatePath(const string& fileName) {
 	}
 }
 
-GLenum toGLTexFormat( TextureAbstractFactory::NUM_CHANNEL ch ) {
+static GLenum toGLTexFormat( const int ch ) {
 	switch(ch) {
-	case(TextureAbstractFactory::RED) :
+	case(1) :
 		return GL_RED;
-	case(TextureAbstractFactory::RGB) :
+	case(3) :
 		return GL_RGB;
-	case(TextureAbstractFactory::RGBA) :
+	case(4) :
 		return GL_RGBA;
 	default:
 		throw invalid_argument("unsupported GL texture format");
 	}
 }
 
-GLenum toGLTexInternalFormat(TextureAbstractFactory::NUM_CHANNEL ch) {
+static GLenum toGLTexInternalFormat(const int ch) {
 	switch(ch) {
-	case(TextureAbstractFactory::RED) :
+	case(1) :
 		return GL_R8;
-	case(TextureAbstractFactory::RGB) :
+	case(3) :
 		return GL_RGB8;
-	case(TextureAbstractFactory::RGBA) :
+	case(4) :
 		return GL_RGBA8;
 	default:
 		throw invalid_argument("unsupported GL texture internal format");
@@ -53,8 +53,7 @@ ImageTex2DFactory::ImageTex2DFactory(const string& file_name) {
 		delete[] uc;
 	});
 	flip_vertically();
-	_channel = toGLTexInternalFormat(
-		static_cast<TextureAbstractFactory::NUM_CHANNEL>(numChannel));
+	_channel = toGLTexInternalFormat(numChannel);
 	_depth = 1;
 	_data_channel = GL_RGB;
 	_data_type = GL_UNSIGNED_BYTE;
@@ -79,8 +78,8 @@ void* ImageTex2DFactory::get_data() {
 	return (void*)_texels.get();
 }
 
-NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, 
-	TextureAbstractFactory::NUM_CHANNEL ch) : _numChannel(ch) 
+NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) : 
+	_numChannel(ch) 
 {
 	shared_ptr<FILE> fp(fopen(file_name.c_str(), "rb"), [](FILE* f) {
 		fclose(f);

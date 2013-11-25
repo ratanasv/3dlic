@@ -31,7 +31,6 @@ public:
 	virtual void* get_data() = 0;
 
 	virtual ~TextureAbstractFactory() {};
-	typedef enum {RED = 1, RGB = 3, RGBA = 4} NUM_CHANNEL;
 };
 
 class ImageTex2DFactory: public TextureAbstractFactory {
@@ -49,9 +48,9 @@ public:
 class NoiseTex3DFactory: public TextureAbstractFactory {
 private:
 	shared_ptr<unsigned char> _texels;
-	const TextureAbstractFactory::NUM_CHANNEL _numChannel;
+	const int _numChannel;
 public:
-	NoiseTex3DFactory(const string& file_name, TextureAbstractFactory::NUM_CHANNEL ch);
+	NoiseTex3DFactory(const string& file_name, const int ch);
 public:
 	virtual void* get_data();
 };

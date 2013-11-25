@@ -72,7 +72,7 @@ void init6() {
 		FRAGMENT_SHADER_PATH.string().c_str());
 	VolumeTracingShader->Use();
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
-		NOISE_PATH.string().c_str(), TextureAbstractFactory::RED));
+		NOISE_PATH.string().c_str(), 1));
 	shared_ptr<TextureDelegatee> delegatee(new GLTextureDelegatee(factory));
 	SparseNoise.reset(new VirTex(delegatee));
 

@@ -17,6 +17,7 @@ const float SQRT3 = 1.732;
 
 vec3 Rainbow( float t ) {
 	t = clamp( t, 0., 1. );
+	t = 1.0 - t;
 
 	vec3 rgb;
 
