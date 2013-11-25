@@ -51,10 +51,10 @@ private:
 	const int _numChannel;
 	int _width;
 	int _height;
-	GLenum _internalFormat;
+	const GLenum _internalFormat;
+	const GLenum _format;
+	const GLenum _type;
 	int _depth;
-	GLenum _format;
-	GLenum _type;
 public:
 	NoiseTex3DFactory(const string& file_name, const int ch);
 public:

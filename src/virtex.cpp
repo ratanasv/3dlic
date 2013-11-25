@@ -79,7 +79,8 @@ void* ImageTex2DFactory::get_data() {
 }
 
 NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) : 
-	_numChannel(ch) 
+	_numChannel(ch), _internalFormat(toGLTexInternalFormat(ch)), 
+	_format(toGLTexFormat(ch)), _type(GL_UNSIGNED_BYTE)
 {
 	shared_ptr<FILE> fp(fopen(file_name.c_str(), "rb"), [](FILE* f) {
 		fclose(f);
@@ -93,10 +94,7 @@ NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) :
 	fread(&_width, sizeof(int), 1, fp.get());
 	fread(&_height, sizeof(int), 1, fp.get());
 	fread(&_depth, sizeof(int), 1, fp.get());
-	_internalFormat = toGLTexInternalFormat(_numChannel);
-	_format = toGLTexFormat(_numChannel);
 
-	_type = GL_UNSIGNED_BYTE;
 	const unsigned total = _width*_height*_depth*_numChannel;
 	_texels = shared_ptr<unsigned char>(new unsigned char[total], 
 		[](unsigned char* f) {
