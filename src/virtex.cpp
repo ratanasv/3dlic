@@ -15,7 +15,7 @@ static void validatePath(const string& fileName) {
 	}
 }
 
-static GLenum toGLTexFormat( const int ch ) {
+static GLenum toGLTexFormat(const int ch) {
 	switch(ch) {
 	case(1) :
 		return GL_RED;
@@ -31,11 +31,11 @@ static GLenum toGLTexFormat( const int ch ) {
 static GLenum toGLTexInternalFormat(const int ch) {
 	switch(ch) {
 	case(1) :
-		return GL_R8;
+		return GL_RED;
 	case(3) :
-		return GL_RGB8;
+		return GL_RGB;
 	case(4) :
-		return GL_RGBA8;
+		return GL_RGBA;
 	default:
 		throw invalid_argument("unsupported GL texture internal format");
 	}
@@ -53,21 +53,21 @@ ImageTex2DFactory::ImageTex2DFactory(const string& file_name) {
 		delete[] uc;
 	});
 	flip_vertically();
-	_channel = toGLTexInternalFormat(numChannel);
+	_internalFormat = toGLTexInternalFormat(numChannel);
 	_depth = 1;
-	_data_channel = GL_RGB;
-	_data_type = GL_UNSIGNED_BYTE;
+	_format = GL_RGB;
+	_type = GL_UNSIGNED_BYTE;
 }
 
 void ImageTex2DFactory::flip_vertically() {
-	shared_ptr<unsigned char> flipped(new unsigned char[_width*_height*_channel],
+	shared_ptr<unsigned char> flipped(new unsigned char[_width*_height*_internalFormat],
 		[] (unsigned char* uc){delete[] uc;});
 	unsigned char* upside_down = _texels.get();
 	for (int i =0; i<_width; i++) {
 		for (int j= 0 ;j<_height; j++) {
-			for (int k =0; k<_channel; k++) {
-				flipped.get()[(_width-1-i)*_height*_channel+j*_channel+k] = 
-					(upside_down[_height*i*_channel+j*_channel+k]);
+			for (int k =0; k<_internalFormat; k++) {
+				flipped.get()[(_width-1-i)*_height*_internalFormat+j*_internalFormat+k] = 
+					(upside_down[_height*i*_internalFormat+j*_internalFormat+k]);
 			}
 		}
 	}
@@ -93,14 +93,15 @@ NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) :
 	fread(&_width, sizeof(int), 1, fp.get());
 	fread(&_height, sizeof(int), 1, fp.get());
 	fread(&_depth, sizeof(int), 1, fp.get());
-	_channel = toGLTexInternalFormat(_numChannel);
-	_data_channel = toGLTexFormat(_numChannel);
+	_internalFormat = toGLTexInternalFormat(_numChannel);
+	_format = toGLTexFormat(_numChannel);
 
-	_data_type = GL_UNSIGNED_BYTE;
-	unsigned total = _width*_height*_depth*_numChannel;
-	_texels = shared_ptr<unsigned char>(new unsigned char[total], [](unsigned char* f) {
-		delete[] f;
-	});
+	_type = GL_UNSIGNED_BYTE;
+	const unsigned total = _width*_height*_depth*_numChannel;
+	_texels = shared_ptr<unsigned char>(new unsigned char[total], 
+		[](unsigned char* f) {
+			delete[] f;
+		});
 	
 	fread(_texels.get(), sizeof(unsigned char), total, fp.get());
 }
@@ -110,20 +111,44 @@ void* NoiseTex3DFactory::get_data() {
 	return _texels.get();
 }
 
+GLenum NoiseTex3DFactory::getInternalFormat() {
+	return _internalFormat;
+}
+
+int NoiseTex3DFactory::getWidth() {
+	return _width;
+}
+
+int NoiseTex3DFactory::getHeight() {
+	return _height;
+}
+
+int NoiseTex3DFactory::getDepth() {
+	return _depth;
+}
+
+GLenum NoiseTex3DFactory::getFormat() {
+	return _format;
+}
+
+GLenum NoiseTex3DFactory::getType() {
+	return _type;
+}
+
 
 GLTextureDelegatee::GLTextureDelegatee(const shared_ptr<TextureAbstractFactory>& factory) :
 	TextureDelegatee(factory), _which_tex(0) {};
 
 void GLTextureDelegatee::send_to_gpu() {
-	GLenum ch = _factory->get_channel();
-	int width = _factory->get_width();
-	int height = _factory->get_height();
-	int depth = _factory->get_depth();
-	GLenum data_ch = _factory->get_data_channel();
-	GLenum data_type = _factory->get_data_type();
+	GLenum ch = _factory->getInternalFormat();
+	int width = _factory->getWidth();
+	int height = _factory->getHeight();
+	int depth = _factory->getDepth();
+	GLenum data_ch = _factory->getFormat();
+	GLenum data_type = _factory->getType();
 	void* data = _factory->get_data();
 	
-	if (_factory->get_depth() == 1) {
+	if (_factory->getDepth() == 1) {
 		_bind_site = GL_TEXTURE_2D;
 	}
 	else {

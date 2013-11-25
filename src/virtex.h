@@ -14,20 +14,14 @@ public:
 
 //--------START OF FACTORY----------
 class TextureAbstractFactory {
-protected:
-	int _width;
-	int _height;
-	GLenum _channel;
-	int _depth;
-	GLenum _data_channel;
-	GLenum _data_type;
+
 public:
-	GLenum get_channel() {return _channel;}
-	int get_width() {return _width;}
-	int get_height() {return _height;}
-	int get_depth() {return _depth;}
-	GLenum get_data_channel() {return _data_channel;}
-	GLenum get_data_type() {return _data_type;}
+	virtual GLenum getInternalFormat() = 0;
+	virtual int getWidth() = 0;
+	virtual int getHeight() = 0;
+	virtual int getDepth() = 0;
+	virtual GLenum getFormat() = 0;
+	virtual GLenum getType() = 0;
 	virtual void* get_data() = 0;
 
 	virtual ~TextureAbstractFactory() {};
@@ -36,6 +30,12 @@ public:
 class ImageTex2DFactory: public TextureAbstractFactory {
 private:
 	shared_ptr<unsigned char> _texels;
+	int _width;
+	int _height;
+	GLenum _internalFormat;
+	int _depth;
+	GLenum _format;
+	GLenum _type;
 public:
 	ImageTex2DFactory(const string& file_name);
 private:
@@ -49,10 +49,22 @@ class NoiseTex3DFactory: public TextureAbstractFactory {
 private:
 	shared_ptr<unsigned char> _texels;
 	const int _numChannel;
+	int _width;
+	int _height;
+	GLenum _internalFormat;
+	int _depth;
+	GLenum _format;
+	GLenum _type;
 public:
 	NoiseTex3DFactory(const string& file_name, const int ch);
 public:
 	virtual void* get_data();
+	virtual GLenum getInternalFormat();
+	virtual int getWidth();
+	virtual int getHeight();
+	virtual int getDepth();
+	virtual GLenum getFormat();
+	virtual GLenum getType();
 };
 //-------END OF FACTORY----------
 
