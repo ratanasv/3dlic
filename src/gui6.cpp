@@ -25,7 +25,7 @@ static void BindFloatUniform(const char* var, THREEDLICParameters::FLOAT_PARAM p
 	auto slider = BunchOfSliders.at(param);
 	VolumeTracingShader->SetUniform(var, BunchOfSliders.at(param).vals.x);
 	if (slider.two_sided) {
-		VolumeTracingShader->SetUniform(var, BunchOfSliders.at(param).vals.x);
+		VolumeTracingShader->SetUniform(anotherVar, BunchOfSliders.at(param).vals.y);
 	}
 #else
 	VolumeTracingShader->SetUniform(var, LIC_PARAM->GetFloatParameter(
@@ -41,6 +41,9 @@ void draw6() {
 	BindFloatUniform("uNumSteps", THREEDLICParameters::NUM_STEPS);
 	BindFloatUniform("uBaseAlpha", THREEDLICParameters::BASE_ALPHA);
 	BindFloatUniform("uValMin", THREEDLICParameters::CLAMP_VAL_MIN, "uValMax");
+#ifndef USE_GLUI
+	BindFloatUniform("uValMax", THREEDLICParameters::CLAMP_VAL_MAX);
+#endif
 	BindFloatUniform("uNumStepsLIC", THREEDLICParameters::NUM_STEPS_LIC);
 	BindFloatUniform("uVelocityScale", THREEDLICParameters::VELOCITY_SCALE);
 	BindFloatUniform("uDT", THREEDLICParameters::DT);
