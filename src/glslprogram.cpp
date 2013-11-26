@@ -807,7 +807,7 @@ void GLSLProgram::Perspective(float fovy, float ratio, float zNear, float zFar) 
 
 
 void GLSLProgram::Rotate(float x, float y, float z) {
-	_mvMatrix = _mvMatrix * Angel::RotateZ(z) * Angel::RotateY(y) * Angel::RotateX(x);
+	_mvMatrix = _mvMatrix *  Angel::RotateX(x) * Angel::RotateY(y) * Angel::RotateZ(z);
 	SendMVMatrix();
 }
 

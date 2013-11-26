@@ -43,7 +43,7 @@ public:
 	float GetFloatParameter(FLOAT_PARAM param) const;
 	void SetFloatParameter(FLOAT_PARAM param, float in);
 
-	static shared_ptr<THREEDLICParameters> GetInstance();
+	static shared_ptr<THREEDLICParameters>& GetInstance();
 };
 
 

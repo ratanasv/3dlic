@@ -102,7 +102,7 @@ enum ButtonVals
 
 // window background color (rgba):
 
-const float BACKCOLOR[ ] = { 0.5, 0.5, 0.5, 0.5 };
+const float BACKCOLOR[ ] = { 1.0, 1.0, 1.0, 1.0 };
 
 const int PERIOD_MS = 10*1000;
 float Timer;
@@ -122,7 +122,6 @@ int	MainWindow;				// window id for main graphics window
 int	WhichProjection;		// ORTHO or PERSP
 int	Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;			// rotation angles in degrees
-float	TransXYZ[3];		// set by glui translation widgets
 
 
 //
@@ -151,7 +150,6 @@ float	Unit( float [3], float [3] );
 void	Axes( float );
 void	HsvRgb( float[3], float [3] );
 void apply_transformations();
-void InitGlui();
 
 shared_ptr<GLSLCameraBinder> GLSLCameraBinderFactory();
 
@@ -170,61 +168,11 @@ const int PLUS  = { 1 };
 int    Major;			// X, Y, or Z
 int    Xside, Yside, Zside;	// which side is visible, PLUS or MINUS
 
-
-	//
-	// determine which sides of the cube are facing the user
-	//
-	// this assumes that the rotation is being done by:
-	//
-	//    glRotatef( Yrot, 0., 1., 0. );
-	//    glRotatef( Xrot, 1., 0., 0. );
-	//
-	// If you are rotating some other way, then this DetermineVisibility( ) won't work!
-
-
-	void
-	DetermineVisibility( )
-{
-
-	float xr = Xrot * ( M_PI/180. );
-	float yr = Yrot * ( M_PI/180. );
-
-	float cx = cos( xr );
-	float sx = sin( xr );
-	float cy = cos( yr );
-	float sy = sin( yr );
-
-	// z component of normal for x side, y side, and z side:
-
-	float nzx = -sy;
-	float nzy =  sx * cy;
-	float nzz =  cx * cy;
-
-
-	// which sides of the cube are showing:
-	// MINUS or PLUS tells us which side is facing the viewer
-
-	Xside = ( nzx > 0.  ?  PLUS  :  MINUS );
-	Yside = ( nzy > 0.  ?  PLUS  :  MINUS );
-	Zside = ( nzz > 0.  ?  PLUS  :  MINUS );
-
-
-	// which direction needs to be composited:
-
-	if( fabs(nzx) > fabs(nzy)  &&  fabs(nzx) > fabs(nzz)  )
-		Major = X;
-	else if( fabs(nzy) > fabs(nzx)  &&  fabs(nzy) > fabs(nzz)  )
-		Major = Y;
-	else
-		Major = Z;
-}
 //
 // main program:
 //
 
-int
-main( int argc, char *argv[ ] )
-{
+int main( int argc, char *argv[ ] ) {
 	// turn on the glut package:
 	// (do this before checking argc and argv since it might
 	// pull some command line arguments out)
@@ -668,7 +616,10 @@ void MouseMotion( int x, int y ) {
 
 
 	if( ( ActiveButton & MIDDLE ) != 0 ) {
-		TransXYZ[2] += SCLFACT*dy;
+		const float zTranslate = THREEDLICParameters::GetInstance()->GetFloatParameter(
+			THREEDLICParameters::ZTRANSLATE);
+		THREEDLICParameters::GetInstance()->SetFloatParameter(
+			THREEDLICParameters::ZTRANSLATE, zTranslate + SCLFACT*dy);
 	}
 
 	Xmouse = x;			// new current position
@@ -685,16 +636,18 @@ void MouseMotion( int x, int y ) {
 // this only sets the global variables --
 // the glut main loop is responsible for redrawing the scene
 
-void
-Reset( void )
-{
+void Reset( void ) {
 	ActiveButton = 0;
 	DebugOn = GLUIFALSE;
 	LeftButton = ROTATE;
 	WhichProjection = PERSP;
 	Xrot = Yrot = 0.;
-	TransXYZ[0] = TransXYZ[1] = TransXYZ[2] = 0.;
-
+	THREEDLICParameters::GetInstance()->SetFloatParameter(
+		THREEDLICParameters::XTRANSLATE, 0.0);
+	THREEDLICParameters::GetInstance()->SetFloatParameter(
+		THREEDLICParameters::YTRANSLATE, 0.0);
+	THREEDLICParameters::GetInstance()->SetFloatParameter(
+		THREEDLICParameters::ZTRANSLATE, 0.0);
 	reset6();
 }
 
@@ -1023,17 +976,6 @@ void InitGlui( void ) {
 
 	Glui->add_checkbox( "Perspective", &WhichProjection );
 
-	panel = Glui->add_panel( "Object Transformation" );
-	Glui->add_column_to_panel( panel, GLUIFALSE );
-
-	Glui->add_column_to_panel( panel, GLUIFALSE );
-	trans = Glui->add_translation_to_panel( panel, "Trans XY", GLUI_TRANSLATION_XY, &TransXYZ[0] );
-	trans->set_speed( 0.05f );
-
-	Glui->add_column_to_panel( panel, GLUIFALSE );
-	trans = Glui->add_translation_to_panel( panel, "Trans Z",  GLUI_TRANSLATION_Z , &TransXYZ[2] );
-	trans->set_speed( 0.05f );
-
 	Glui->add_checkbox( "Debug", &DebugOn );
 
 
@@ -1061,7 +1003,15 @@ void apply_transformations() {
 	static auto camera = GLSLCameraBinderFactory();
 	camera->ClearModelView();
 	camera->LookAt( vec3(0., 0., 15.), vec3(0., 0., 0.), vec3(0., 1., 0.));
-	camera->Translate(TransXYZ[0], TransXYZ[1], -1.0*TransXYZ[2]);
+	
+	camera->Translate(
+		THREEDLICParameters::GetInstance()->GetFloatParameter(
+			THREEDLICParameters::XTRANSLATE), 
+		THREEDLICParameters::GetInstance()->GetFloatParameter(
+			THREEDLICParameters::YTRANSLATE),
+		THREEDLICParameters::GetInstance()->GetFloatParameter(
+			THREEDLICParameters::ZTRANSLATE)
+	);
 	camera->Rotate(Xrot, Yrot, 0.0);
 
 }

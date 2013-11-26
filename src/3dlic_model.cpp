@@ -76,7 +76,7 @@ void THREEDLICParameters::SetFloatParameter( FLOAT_PARAM param, float in ) {
 }
 
 
-shared_ptr<THREEDLICParameters> THREEDLICParameters::GetInstance() {
+shared_ptr<THREEDLICParameters>& THREEDLICParameters::GetInstance() {
 	static shared_ptr<THREEDLICParameters> INSTANCE(new THREEDLICParameters());
 	return INSTANCE;
 }

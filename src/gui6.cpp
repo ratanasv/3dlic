@@ -13,7 +13,6 @@ namespace fs = boost::filesystem;
 shared_ptr<GLSLProgram> VolumeTracingShader;
 static shared_ptr<VirTex> SparseNoise;
 static shared_ptr<VirModel> Cube;
-auto LIC_PARAM(THREEDLICParameters::GetInstance());
 
 static shared_ptr<TextureVisitor> TextureVisitorFactory() {
 	return shared_ptr<TextureVisitor>(new GLSLTextureSamplerBinder());
@@ -28,8 +27,8 @@ static void BindFloatUniform(const char* var, THREEDLICParameters::FLOAT_PARAM p
 		VolumeTracingShader->SetUniform(anotherVar, BunchOfSliders.at(param).vals.y);
 	}
 #else
-	VolumeTracingShader->SetUniform(var, LIC_PARAM->GetFloatParameter(
-		param));
+	VolumeTracingShader->SetUniform(var, THREEDLICParameters::GetInstance()
+		->GetFloatParameter(param));
 #endif
 }
 

@@ -28,7 +28,7 @@ vec3 GetScaledVelocityData(vec3 stp) {
 }
 
 vec3 Rainbow( float t ) {
-	t = clamp( t, 0., 1. );
+	//t = clamp( t, 0., 1. );
 	t = 1.0 - t;
 
 	vec3 rgb;
@@ -139,6 +139,6 @@ void main(void) {
 		}
 	}
 
-    gl_FragColor = vec4(cstar, 1.0);
+    gl_FragColor = vec4(1.0 - cstar, 1.0);
 
 }
