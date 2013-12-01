@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "virmodel.h"
+#include <cassert>
 
 using namespace vir;
 using std::transform;
@@ -171,13 +172,16 @@ shared_ptr<vector<unsigned>> PlaneGeometryFactory::get_indices() {
 
 VAODelegatee::VAODelegatee( 
 	const shared_ptr<GeometryAbstractFactory>& factory, 
-	const shared_ptr<GLSLAttributeBinder>& glslBinder ) :
+	const weak_ptr<GLSLAttributeBinder>& glslBinder ) :
 	GeometryDelegatee(factory), _glslBinder(glslBinder)
 {
 	_num_indices = factory->get_indices()->size();
 }
 
 void VAODelegatee::send_to_gpu() {
+	auto validGLSLBinder = _glslBinder.lock();
+	assert(validGLSLBinder);
+
 	glGenVertexArrays( 1, &_vao );
 	glBindVertexArray( _vao );
 
@@ -186,19 +190,19 @@ void VAODelegatee::send_to_gpu() {
 	glBindBuffer(GL_ARRAY_BUFFER, v_buf);
 	auto verts = _factory->get_vertices();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*verts->size(), verts->data(), GL_STATIC_DRAW);
-	_glslBinder->EnablePositionAttribute(3);
+	validGLSLBinder->EnablePositionAttribute(3);
 
 	glGenBuffers(1, &n_buf);
 	glBindBuffer(GL_ARRAY_BUFFER, n_buf);
 	auto norms = _factory->get_normals();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*norms->size(), norms->data(), GL_STATIC_DRAW);
-	_glslBinder->EnableNormalAttribute(3);
+	validGLSLBinder->EnableNormalAttribute(3);
 
 	glGenBuffers(1, &vt_buf);
 	glBindBuffer(GL_ARRAY_BUFFER, vt_buf);
 	auto vts = _factory->get_tex_coord();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*vts->size(), vts->data(), GL_STATIC_DRAW);
-	_glslBinder->EnableTexCoordAttribute(3);
+	validGLSLBinder->EnableTexCoordAttribute(3);
 
 	glGenBuffers(1, &in_buf);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, in_buf);

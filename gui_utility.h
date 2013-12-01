@@ -20,7 +20,7 @@ public:
 		vir::vec2 def_vals, vir::vec2 bounds, SLIDER_ID id, const char* format, 
 		bool is_two_sided = false): slider(slider), 
 		label(label), vals(vals), def_vals(def_vals), bounds(bounds), 
-		id(id), format(format), two_sided(is_two_sided){};
+		id(id), format(format), two_sided(is_two_sided) {};
 
 	void refresh() {
 		char string[128];

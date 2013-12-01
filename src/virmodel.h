@@ -6,6 +6,7 @@
 #include "Angel.h"
 
 using std::shared_ptr;
+using std::weak_ptr;
 using std::vector;
 using Angel::vec3;
 
@@ -81,13 +82,13 @@ public:
 class VAODelegatee : public GeometryDelegatee {
 public:
 	VAODelegatee(const shared_ptr<GeometryAbstractFactory>& factory,
-		const shared_ptr<GLSLAttributeBinder>& glslBinder);
+		const weak_ptr<GLSLAttributeBinder>& glslBinder);
 	virtual void send_to_gpu();
 	virtual void pre_render();
 	virtual void post_render();
 	virtual void render();
 private:
-	shared_ptr<GLSLAttributeBinder> _glslBinder;
+	weak_ptr<GLSLAttributeBinder> _glslBinder;
 	unsigned int _vao;
 	unsigned _num_indices;
 };
