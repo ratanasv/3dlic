@@ -91,5 +91,6 @@ FloatParam THREEDLICParameters::GetFloatParameter( LICFloatParam param ) const {
 
 void THREEDLICParameters::SetFloatParameter( LICFloatParam param, float in ) {
 	_floatParams.at(param).SetFloat(in);
+	NotifyObservers();
 }
 

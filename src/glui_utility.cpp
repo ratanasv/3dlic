@@ -12,37 +12,38 @@ map<LICBoolParam, CheckboxBundle> BunchOfCheckboxes;
 map<int, RadioBundle> Bunch_Of_Radios;
 
 SliderBundle::SliderBundle(GLUI* main_glui, GLUI_Panel* panel, vec2 def_vals,
-	vec2 bounds, int id, const char* format, bool is_two_sided /*= false*/) : 
-	slider(main_glui->add_slider_to_panel(panel, is_two_sided, GLUI_HSLIDER_FLOAT,
-		_vals, id, (GLUI_Update_CB)callback)),
+	vec2 bounds, int id, const string format, void (*callback)(int id),
+	bool isDual /*= false*/) : 
+	slider(main_glui->add_slider_to_panel(panel, isDual, GLUI_HSLIDER_FLOAT,
+		_vals, id, callback)),
 	_label(main_glui->add_statictext_to_panel(panel, "bbbb")),
 	_vals(_defVals), 
 	_defVals(def_vals), 
 	_bounds(bounds), 
 	_callbackID(id), 
 	_format(format), 
-	_twoSided(is_two_sided)
+	_twoSided(isDual)
 {
 	slider->set_w(200.0);
 	slider->set_float_limits(bounds.x, bounds.y);
-	refresh();
+	Refresh();
 }
 
 void SliderBundle::Update(const Observable* const observable) {
 	auto lic = dynamic_cast<const THREEDLICParameters* const>(observable);
 	if (lic) {
-		refresh();
+		Refresh();
 	}
 }
 
-void SliderBundle::refresh() {
+void SliderBundle::Refresh() {
 	char string[128];
 	if (_twoSided) {
-		sprintf( string, _format, _vals.x, _vals.y);
+		sprintf( string, _format.c_str(), _vals.x, _vals.y);
 		_label->set_text(string);
 		slider->set_slider_val(_vals.x, _vals.y);
 	} else {
-		sprintf( string, _format, _vals.x);
+		sprintf( string, _format.c_str(), _vals.x);
 		_label->set_text(string);
 		slider->set_slider_val(_vals.x);
 	}
@@ -50,35 +51,31 @@ void SliderBundle::refresh() {
 	dummy = slider->float_high;
 }
 
-void SliderBundle::reset() {
+void SliderBundle::Reset() {
 	_vals = _defVals;
-	refresh();
+	Refresh();
 }
 
-void callback(int id) {
-	
-	for (auto it : BunchOfCheckboxes) {
-		it.second.refresh();
-	}
-	for (auto it : Bunch_Of_Radios) {
-		it.second.refresh();
-	}
-	glutPostRedisplay( );//post redisplay
+bool SliderBundle::IsDual() const {
+	return _twoSided;
 }
 
-
-void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
-	const CheckboxBundle& cb_in) 
-{
-	const int irrelavent = 0;
-	BunchOfCheckboxes.insert(
-		pair<LICBoolParam, CheckboxBundle>(
-		cb_in.id, cb_in));
-	auto& cb = BunchOfCheckboxes.at(cb_in.id);
-	cb.checkbox = main_glui->add_checkbox_to_panel(panel, name, &cb.val, 
-		irrelavent, (GLUI_Update_CB)callback);
-	cb.refresh();
+vec2 SliderBundle::GetValue() const {
+	return _vals;
 }
+
+// void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
+// 	const CheckboxBundle& cb_in) 
+// {
+// 	const int irrelavent = 0;
+// 	BunchOfCheckboxes.insert(
+// 		pair<LICBoolParam, CheckboxBundle>(
+// 		cb_in.id, cb_in));
+// 	auto& cb = BunchOfCheckboxes.at(cb_in.id);
+// 	cb.checkbox = main_glui->add_checkbox_to_panel(panel, name, &cb.val, 
+// 		irrelavent, (GLUI_Update_CB)callback);
+// 	cb.refresh();
+// }
 
 void hsv_to_rgb(float hsv[3], float rgb[3])
 {

@@ -18,8 +18,7 @@ static shared_ptr<TextureVisitor> TextureVisitorFactory() {
 	return shared_ptr<TextureVisitor>(new GLSLTextureSamplerBinder());
 }
 
-static void BindFloatUniform(const char* var, LICFloatParam param) 
-{
+static void BindFloatUniform(const char* var, LICFloatParam param) {
 	VolumeTracingShader->SetUniform(var, THREEDLICParameters::INSTANCE
 		->GetFloatParameter(param));
 }
