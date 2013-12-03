@@ -133,9 +133,10 @@ GLenum NoiseTex3DFactory::getType() {
 	return _type;
 }
 
+atomic_uint GLTextureDelegatee::OGLActiveTextureCounter;
 
 GLTextureDelegatee::GLTextureDelegatee(const shared_ptr<TextureAbstractFactory>& factory) :
-	TextureDelegatee(factory), _which_tex(0) {};
+	TextureDelegatee(factory), _which_tex(OGLActiveTextureCounter++) {};
 
 void GLTextureDelegatee::send_to_gpu() {
 	GLenum ch = _factory->getInternalFormat();

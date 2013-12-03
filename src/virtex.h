@@ -1,8 +1,12 @@
 #pragma once
-#include "StdAfx.h"
+#include <memory>
+#include <cstring>
+#include "glew.h"
+#include <atomic>
 
 using std::shared_ptr;
 using std::string;
+using std::atomic_uint;
 
 class TextureVisitor {
 public:
@@ -92,6 +96,8 @@ protected:
 	shared_ptr<unsigned> _tex_handle;
 	const unsigned _which_tex;
 	GLenum _bind_site;
+private:
+	static atomic_uint OGLActiveTextureCounter;
 };
 
 //------END OF DELEGATEE------
