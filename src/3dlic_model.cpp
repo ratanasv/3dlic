@@ -4,6 +4,18 @@
 
 using std::invalid_argument;
 
+THREEDLICParameters* THREEDLICParameters::INSTANCE = new THREEDLICParameters();
+
+FloatParam::FloatParam() : _defaultVal(0.5), _minVal(0.0), _maxVal(1.0), 
+	_val(_defaultVal) {};
+
+FloatParam::FloatParam( float a, float b, float c ) {
+	_minVal = b;
+	_maxVal = c;
+	_defaultVal = a;
+	SetFloat(_defaultVal);
+}
+
 FloatParam::operator float() {
 	return _val;
 }
@@ -11,14 +23,6 @@ FloatParam::operator float() {
 FloatParam::operator const float() const {
 	return _val;
 }
-
-FloatParam::FloatParam( float a, float b, float c ) {
-	_minVal = b;
-	_maxVal = c;
-	SetFloat(a);
-}
-
-FloatParam::FloatParam() : _val(0.5), _minVal(0.0), _maxVal(1.0) {}
 
 void FloatParam::SetFloat(float in) {
 	if (in <= _maxVal && in >= _minVal) {
@@ -28,21 +32,35 @@ void FloatParam::SetFloat(float in) {
 	}
 }
 
+float FloatParam::GetMinVal() const {
+	return _minVal;
+}
 
+float FloatParam::GetMaxVal() const {
+	return _maxVal;
+}
+
+float FloatParam::GetDefaultVal() const {
+	return _defaultVal;
+}
+
+void FloatParam::Reset() {
+	_val = _defaultVal;
+}
 
 THREEDLICParameters::THREEDLICParameters() {
-	_floatParams[XROT] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[YROT] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[XTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[YTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[ZTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[NUM_STEPS] =  FloatParam(256.0, 0.0, 1000.0);
-	_floatParams[BASE_ALPHA] = FloatParam(0.7, 0.0, 1.0);
-	_floatParams[CLAMP_VAL_MIN] = FloatParam(0.1, 0.0, 1.0);
-	_floatParams[CLAMP_VAL_MAX] = FloatParam(0.3, 0.0, 1.0);
-	_floatParams[NUM_STEPS_LIC] = FloatParam(20.0, 0.0, 100.0);
-	_floatParams[VELOCITY_SCALE] = FloatParam(0.01, 0.001, 1.0);
-	_floatParams[DT] = FloatParam(0.05, 0.0001, 0.3);
+	_floatParams[LICFloatParam::XROT] = FloatParam(0.0, -1000.0, 1000.0);
+	_floatParams[LICFloatParam::YROT] = FloatParam(0.0, -1000.0, 1000.0);
+	_floatParams[LICFloatParam::XTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
+	_floatParams[LICFloatParam::YTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
+	_floatParams[LICFloatParam::ZTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
+	_floatParams[LICFloatParam::NUM_STEPS] =  FloatParam(256.0, 0.0, 1000.0);
+	_floatParams[LICFloatParam::BASE_ALPHA] = FloatParam(0.7, 0.0, 1.0);
+	_floatParams[LICFloatParam::CLAMP_VAL_MIN] = FloatParam(0.1, 0.0, 1.0);
+	_floatParams[LICFloatParam::CLAMP_VAL_MAX] = FloatParam(0.3, 0.0, 1.0);
+	_floatParams[LICFloatParam::NUM_STEPS_LIC] = FloatParam(20.0, 0.0, 100.0);
+	_floatParams[LICFloatParam::VELOCITY_SCALE] = FloatParam(0.01, 0.001, 1.0);
+	_floatParams[LICFloatParam::DT] = FloatParam(0.05, 0.0001, 0.3);
 	_projection = PERSP;
 	_isPaused = false;
 }
@@ -67,17 +85,41 @@ void THREEDLICParameters::SetIsPaused( bool in ) {
 }
 
 
-float THREEDLICParameters::GetFloatParameter( FLOAT_PARAM param ) const {
+FloatParam THREEDLICParameters::GetFloatParameter( LICFloatParam param ) const {
 	return _floatParams.at(param);
 }
 
-void THREEDLICParameters::SetFloatParameter( FLOAT_PARAM param, float in ) {
+void THREEDLICParameters::SetFloatParameter( LICFloatParam param, float in ) {
 	_floatParams.at(param).SetFloat(in);
 }
 
+GLUIPresentationLayer* GLUIPresentationLayer::INSTANCE = new GLUIPresentationLayer();
 
-shared_ptr<THREEDLICParameters>& THREEDLICParameters::GetInstance() {
-	static shared_ptr<THREEDLICParameters> INSTANCE(new THREEDLICParameters());
-	return INSTANCE;
+void GLUIPresentationLayer::InsertSlider(GLUI* main_glui, GLUI_Panel* panel, 
+	LICFloatParam param, const string& label) 
+{
+	const int callbackID = static_cast<int>(param);
+	const FloatParam floatParam = THREEDLICParameters::INSTANCE->GetFloatParameter(param);
+	vec2 val(floatParam.GetDefaultVal(), floatParam.GetDefaultVal());
+	vec2 bounds(floatParam.GetMinVal(), floatParam.GetMaxVal());
+
+	shared_ptr<SliderBundle> sliderBundle(new SliderBundle(main_glui, panel,
+		val, bounds, callbackID, label.c_str(), false));
+	blah[param] = sliderBundle;
 }
 
+void GLUIPresentationLayer::InsertDualSlider( GLUI* main_glui, GLUI_Panel* panel, 
+	LICFloatParam paramOne, LICFloatParam paramTwo, const string& label )
+{
+	const int callbackID = static_cast<int>(paramOne);
+	const FloatParam floatParamOne = THREEDLICParameters::INSTANCE->
+		GetFloatParameter(paramOne);
+	const FloatParam floatParamTwo = THREEDLICParameters::INSTANCE->
+		GetFloatParameter(paramTwo);
+	vec2 val(floatParamOne.GetDefaultVal(), floatParamTwo.GetDefaultVal());
+	vec2 bounds(floatParamOne.GetMinVal(), floatParamOne.GetMaxVal());
+
+	shared_ptr<SliderBundle> sliderBundle(new SliderBundle(main_glui, panel,
+		val, bounds, callbackID, label.c_str(), false));
+	blah[paramOne] = sliderBundle;
+}

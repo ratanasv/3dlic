@@ -18,18 +18,10 @@ static shared_ptr<TextureVisitor> TextureVisitorFactory() {
 	return shared_ptr<TextureVisitor>(new GLSLTextureSamplerBinder());
 }
 
-static void BindFloatUniform(const char* var, THREEDLICParameters::FLOAT_PARAM param, 
-	const char* anotherVar = "") {
-#ifdef USE_GLUI
-	auto slider = BunchOfSliders.at(param);
-	VolumeTracingShader->SetUniform(var, BunchOfSliders.at(param).vals.x);
-	if (slider.two_sided) {
-		VolumeTracingShader->SetUniform(anotherVar, BunchOfSliders.at(param).vals.y);
-	}
-#else
-	VolumeTracingShader->SetUniform(var, THREEDLICParameters::GetInstance()
+static void BindFloatUniform(const char* var, LICFloatParam param) 
+{
+	VolumeTracingShader->SetUniform(var, THREEDLICParameters::INSTANCE
 		->GetFloatParameter(param));
-#endif
 }
 
 
@@ -37,29 +29,24 @@ void draw6() {
 	static auto textureVisitor = TextureVisitorFactory();
 	VolumeTracingShader->Use();
 	SparseNoise->pre_render(textureVisitor);
-	BindFloatUniform("uNumSteps", THREEDLICParameters::NUM_STEPS);
-	BindFloatUniform("uBaseAlpha", THREEDLICParameters::BASE_ALPHA);
-	BindFloatUniform("uValMin", THREEDLICParameters::CLAMP_VAL_MIN, "uValMax");
-#ifndef USE_GLUI
-	BindFloatUniform("uValMax", THREEDLICParameters::CLAMP_VAL_MAX);
-#endif
-	BindFloatUniform("uNumStepsLIC", THREEDLICParameters::NUM_STEPS_LIC);
-	BindFloatUniform("uVelocityScale", THREEDLICParameters::VELOCITY_SCALE);
-	BindFloatUniform("uDT", THREEDLICParameters::DT);
+	BindFloatUniform("uNumSteps", LICFloatParam::NUM_STEPS);
+	BindFloatUniform("uBaseAlpha", LICFloatParam::BASE_ALPHA);
+	BindFloatUniform("uValMin", LICFloatParam::CLAMP_VAL_MIN);
+	BindFloatUniform("uValMax", LICFloatParam::CLAMP_VAL_MAX);
+	BindFloatUniform("uNumStepsLIC", LICFloatParam::NUM_STEPS_LIC);
+	BindFloatUniform("uVelocityScale", LICFloatParam::VELOCITY_SCALE);
+	BindFloatUniform("uDT", LICFloatParam::DT);
 	Cube->render();
 	SparseNoise->post_render();
 }
 
 void reset6() {
-	for (auto it : BunchOfSliders) {
-		it.second.reset();
-	}
-	for (auto it : BunchOfCheckboxes) {
-		it.second.reset();
-	}
-	for (auto it : Bunch_Of_Radios) {
-		it.second.reset();
-	}
+// 	for (auto it : BunchOfSliders) {
+// 		it.second.reset();
+// 	}
+// 	for (auto it : BunchOfCheckboxes) {
+// 		it.second.reset();
+// 	}
 }
 
 void animate6(float t) {

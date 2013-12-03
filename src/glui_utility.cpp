@@ -1,20 +1,61 @@
 #include "StdAfx.h"
 #include "glui_utility.h"
 #include "property.h"
+#include "3dlic_model.h"
 
 using std::map;
 using std::pair;
 using namespace vir;
 
-map<THREEDLICParameters::FLOAT_PARAM, SliderBundle> BunchOfSliders;
-map<THREEDLICParameters::BOOL_PARAMETER, CheckboxBundle> BunchOfCheckboxes;
+map<LICBoolParam, CheckboxBundle> BunchOfCheckboxes;
 map<int, RadioBundle> Bunch_Of_Radios;
+
+SliderBundle::SliderBundle(GLUI* main_glui, GLUI_Panel* panel, vec2 def_vals,
+	vec2 bounds, int id, const char* format, bool is_two_sided /*= false*/) : 
+	slider(main_glui->add_slider_to_panel(panel, is_two_sided, GLUI_HSLIDER_FLOAT,
+		_vals, id, (GLUI_Update_CB)callback)),
+	_label(main_glui->add_statictext_to_panel(panel, "bbbb")),
+	_vals(_defVals), 
+	_defVals(def_vals), 
+	_bounds(bounds), 
+	_callbackID(id), 
+	_format(format), 
+	_twoSided(is_two_sided)
+{
+	slider->set_w(200.0);
+	slider->set_float_limits(bounds.x, bounds.y);
+	refresh();
+}
+
+void SliderBundle::Update(const Observable* const observable) {
+	auto lic = dynamic_cast<const THREEDLICParameters* const>(observable);
+	if (lic) {
+		refresh();
+	}
+}
+
+void SliderBundle::refresh() {
+	char string[128];
+	if (_twoSided) {
+		sprintf( string, _format, _vals.x, _vals.y);
+		_label->set_text(string);
+		slider->set_slider_val(_vals.x, _vals.y);
+	} else {
+		sprintf( string, _format, _vals.x);
+		_label->set_text(string);
+		slider->set_slider_val(_vals.x);
+	}
+	float dummy = slider->float_low;
+	dummy = slider->float_high;
+}
+
+void SliderBundle::reset() {
+	_vals = _defVals;
+	refresh();
+}
 
 void callback(int id) {
 	
-	for (auto it : BunchOfSliders) {
-		it.second.refresh();
-	}
 	for (auto it : BunchOfCheckboxes) {
 		it.second.refresh();
 	}
@@ -24,32 +65,17 @@ void callback(int id) {
 	glutPostRedisplay( );//post redisplay
 }
 
-void slider45_factory(GLUI* main_glui, GLUI_Panel* panel, const SliderBundle& sb_in) {
-	BunchOfSliders.insert(pair<THREEDLICParameters::FLOAT_PARAM, SliderBundle>(
-		sb_in.id, sb_in));
-	SliderBundle& sb = BunchOfSliders.at(sb_in.id);
-	if(sb.two_sided)
-		sb.slider = main_glui->add_slider_to_panel(panel, 1, GLUI_HSLIDER_FLOAT, 
-			sb.vals, sb.id, (GLUI_Update_CB)callback);
-	else
-		sb.slider = main_glui->add_slider_to_panel(panel, 0, GLUI_HSLIDER_FLOAT, 
-			sb.vals, sb.id, (GLUI_Update_CB)callback);
-	sb.slider->set_w(200.0);
-	sb.slider->set_float_limits(sb.bounds[0],sb.bounds[1]);
-	sb.label = main_glui->add_statictext_to_panel(panel, "bbbb");
-	sb.refresh();
-	
-}
 
 void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
 	const CheckboxBundle& cb_in) 
 {
+	const int irrelavent = 0;
 	BunchOfCheckboxes.insert(
-		pair<THREEDLICParameters::BOOL_PARAMETER, CheckboxBundle>(
+		pair<LICBoolParam, CheckboxBundle>(
 		cb_in.id, cb_in));
 	auto& cb = BunchOfCheckboxes.at(cb_in.id);
 	cb.checkbox = main_glui->add_checkbox_to_panel(panel, name, &cb.val, 
-		cb.id, (GLUI_Update_CB)callback);
+		irrelavent, (GLUI_Update_CB)callback);
 	cb.refresh();
 }
 
@@ -122,31 +148,21 @@ char** labels, int num_label, void (*callback)(int)) {
 
 
 void create_proj6_panel(GLUI* main_glui) {
-	GLUI_Panel* panel = main_glui->add_rollout("project6", 1);
-	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(256.0, 256.0), vec2(256.0,256.0), vec2(0.0, 1000.0),
-		THREEDLICParameters::NUM_STEPS, 
-		"NUM_STEPS = %3.2f", false));
-	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(0.7, 0.7), vec2(0.7,0.7), vec2(0.0,1.0),
-		THREEDLICParameters::BASE_ALPHA, 
-		"ALPHA = %0.4f", false));
-	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(0.1, 0.3), vec2(0.1,0.3), vec2(0.0,1.0),
-		THREEDLICParameters::CLAMP_VAL_MIN, 
-		"clamp = %0.4f - %0.4f", true));
-	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(20.0, 20.0), vec2(20.0, 20.0), vec2(0.0, 100.0),
-		THREEDLICParameters::NUM_STEPS_LIC, 
-		"num_steps_lic = %3.1f", false));
-	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(0.01, 0.01), vec2(0.01, 0.01), vec2(0.001, 1.0),
-		THREEDLICParameters::VELOCITY_SCALE, 
-		"velocity_scale = %0.4f", false));
-	slider45_factory(main_glui, panel, SliderBundle(NULL, NULL, 
-		vec2(0.05, 0.05), vec2(0.05, 0.05), vec2(0.0001, 0.3),
-		THREEDLICParameters::DT, 
-		"dt = %0.4f", false));
+	GLUI_Panel* panel = main_glui->add_rollout("vir's project", 1);
+	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
+		LICFloatParam::NUM_STEPS, "NUM_STEPS = %3.2f");
+	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
+		LICFloatParam::BASE_ALPHA, "ALPHA = %0.4f");
+	GLUIPresentationLayer::INSTANCE->InsertDualSlider(main_glui, panel, 
+		LICFloatParam::CLAMP_VAL_MIN, LICFloatParam::CLAMP_VAL_MAX,
+		"clamp = %0.4f - %0.4f");
+	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
+		LICFloatParam::NUM_STEPS_LIC, "num_steps_lic = %3.1f");
+	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
+		LICFloatParam::VELOCITY_SCALE, "velocity_scale = %0.4f");
+	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
+		LICFloatParam::DT, "dt = %0.4f");
+		
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);
 	// 	char* labels[] = {"texture enviroment","no texture", "modulate", "replace"};
 	// 	RadioBundle(main_glui, panel, TEX_ENV, labels, 4, &env_radio_callback);

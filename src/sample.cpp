@@ -616,10 +616,10 @@ void MouseMotion( int x, int y ) {
 
 
 	if( ( ActiveButton & MIDDLE ) != 0 ) {
-		const float zTranslate = THREEDLICParameters::GetInstance()->GetFloatParameter(
-			THREEDLICParameters::ZTRANSLATE);
-		THREEDLICParameters::GetInstance()->SetFloatParameter(
-			THREEDLICParameters::ZTRANSLATE, zTranslate + SCLFACT*dy);
+		const float zTranslate = THREEDLICParameters::INSTANCE->GetFloatParameter(
+			LICFloatParam::ZTRANSLATE);
+		THREEDLICParameters::INSTANCE->SetFloatParameter(
+			LICFloatParam::ZTRANSLATE, zTranslate + SCLFACT*dy);
 	}
 
 	Xmouse = x;			// new current position
@@ -642,12 +642,12 @@ void Reset( void ) {
 	LeftButton = ROTATE;
 	WhichProjection = PERSP;
 	Xrot = Yrot = 0.;
-	THREEDLICParameters::GetInstance()->SetFloatParameter(
-		THREEDLICParameters::XTRANSLATE, 0.0);
-	THREEDLICParameters::GetInstance()->SetFloatParameter(
-		THREEDLICParameters::YTRANSLATE, 0.0);
-	THREEDLICParameters::GetInstance()->SetFloatParameter(
-		THREEDLICParameters::ZTRANSLATE, 0.0);
+	THREEDLICParameters::INSTANCE->SetFloatParameter(
+		LICFloatParam::XTRANSLATE, 0.0);
+	THREEDLICParameters::INSTANCE->SetFloatParameter(
+		LICFloatParam::YTRANSLATE, 0.0);
+	THREEDLICParameters::INSTANCE->SetFloatParameter(
+		LICFloatParam::ZTRANSLATE, 0.0);
 	reset6();
 }
 
@@ -1005,12 +1005,12 @@ void apply_transformations() {
 	camera->LookAt( vec3(0., 0., 15.), vec3(0., 0., 0.), vec3(0., 1., 0.));
 	
 	camera->Translate(
-		THREEDLICParameters::GetInstance()->GetFloatParameter(
-			THREEDLICParameters::XTRANSLATE), 
-		THREEDLICParameters::GetInstance()->GetFloatParameter(
-			THREEDLICParameters::YTRANSLATE),
-		THREEDLICParameters::GetInstance()->GetFloatParameter(
-			THREEDLICParameters::ZTRANSLATE)
+		THREEDLICParameters::INSTANCE->GetFloatParameter(
+			LICFloatParam::XTRANSLATE), 
+		THREEDLICParameters::INSTANCE->GetFloatParameter(
+			LICFloatParam::YTRANSLATE),
+		THREEDLICParameters::INSTANCE->GetFloatParameter(
+			LICFloatParam::ZTRANSLATE)
 	);
 	camera->Rotate(Xrot, Yrot, 0.0);
 
