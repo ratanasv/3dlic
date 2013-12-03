@@ -13,14 +13,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\mvc">
+      <UniqueIdentifier>{4d3ee4b2-4574-4bc1-96b6-a118ce73b1b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mvc">
+      <UniqueIdentifier>{9ba065b2-363a-4d0c-86ae-91c9ce068f65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\datareader">
+      <UniqueIdentifier>{56bf0bc5-d149-4362-a244-4abf711f6826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\datareader">
+      <UniqueIdentifier>{7b09e52d-229d-444d-bbe7-5306005ffa89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\virmodel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\virtex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\abstract.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -30,41 +36,44 @@
     <ClInclude Include="src\gui6.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\objload.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\StdAfx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\glui_utility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\model_controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\texture6.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\3dlic_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\property.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\reader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\3dlic_model.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glui_presentation_layer.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glui_utility.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model_controller.h">
+      <Filter>Header Files\mvc</Filter>
     </ClInclude>
     <ClInclude Include="src\mfalk_reader_wrapper.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objload.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reader.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture6.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\virmodel.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\virtex.h">
+      <Filter>Header Files\datareader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\virmodel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\virtex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\abstract.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -80,26 +89,35 @@
     <ClCompile Include="src\StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\glui_utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\model_controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\texture6.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\3dlic_model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\property.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\reader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\3dlic_model.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glui_presentation_layer.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_controller.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glui_utility.cpp">
+      <Filter>Source Files\mvc</Filter>
     </ClCompile>
     <ClCompile Include="src\mfalk_reader_wrapper.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\datareader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reader.cpp">
+      <Filter>Source Files\datareader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\virmodel.cpp">
+      <Filter>Source Files\datareader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\virtex.cpp">
+      <Filter>Source Files\datareader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture6.cpp">
+      <Filter>Source Files\datareader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

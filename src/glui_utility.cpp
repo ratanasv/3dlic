@@ -2,6 +2,7 @@
 #include "glui_utility.h"
 #include "property.h"
 #include "3dlic_model.h"
+#include "glui_presentation_layer.h"
 
 using std::map;
 using std::pair;

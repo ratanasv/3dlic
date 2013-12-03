@@ -22,6 +22,7 @@
     <ClInclude Include="src\3dlic_model.h" />
     <ClInclude Include="src\abstract.h" />
     <ClInclude Include="src\glslprogram.h" />
+    <ClInclude Include="src\glui_presentation_layer.h" />
     <ClInclude Include="src\gui6.h" />
     <ClInclude Include="src\glui_utility.h" />
     <ClInclude Include="src\mfalk_reader_wrapper.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="src\3dlic_model.cpp" />
     <ClCompile Include="src\abstract.cpp" />
     <ClCompile Include="src\glslprogram.cpp" />
+    <ClCompile Include="src\glui_presentation_layer.cpp" />
     <ClCompile Include="src\gui6.cpp" />
     <ClCompile Include="src\glui_utility.cpp" />
     <ClCompile Include="src\mfalk_reader_wrapper.cpp" />

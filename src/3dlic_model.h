@@ -1,7 +1,6 @@
 #pragma once
 #include "model_controller.h"
 #include "abstract.h"
-#include "glui_utility.h"
 #include <map>
 
 using std::map;
@@ -58,20 +57,4 @@ public:
 	void SetFloatParameter(LICFloatParam param, float in);
 
 	static THREEDLICParameters* INSTANCE;
-};
-
-// class for dealing with GLUI since it writes directly to memory.
-class GLUIPresentationLayer {
-private:
-	map<LICFloatParam, shared_ptr<SliderBundle>> blah;
-private:
-	GLUIPresentationLayer() {};
-	GLUIPresentationLayer(const GLUIPresentationLayer& other);
-public:
-	void InsertSlider(GLUI* main_glui, GLUI_Panel* panel, LICFloatParam param, 
-		const string& label);
-	void InsertDualSlider(GLUI* main_glui, GLUI_Panel* panel, 
-		LICFloatParam paramOne, LICFloatParam paramTwo, const string& label);
-
-	static GLUIPresentationLayer* INSTANCE;
 };
