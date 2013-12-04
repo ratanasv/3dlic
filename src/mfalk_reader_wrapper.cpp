@@ -14,10 +14,7 @@ MFalkDataTex3DFactory::MFalkDataTex3DFactory(const string& fileName) {
 
 
 GLenum MFalkDataTex3DFactory::getInternalFormat() {
-	if (_datFile.getDataDimension() != 3) {
-		throw runtime_error("texture dat file dimension is not 3");
-	}
-	return GL_RGB;
+	return GL_RGBA;
 }
 
 int MFalkDataTex3DFactory::getWidth() {
@@ -33,10 +30,7 @@ int MFalkDataTex3DFactory::getDepth() {
 }
 
 GLenum MFalkDataTex3DFactory::getFormat() {
-	if (_datFile.getDataDimension() != 3) {
-		throw runtime_error("texture dat file dimension is not 3");
-	}
-	return GL_RGB;
+	return GL_RGBA;
 }
 
 GLenum MFalkDataTex3DFactory::getType() {
@@ -50,7 +44,28 @@ GLenum MFalkDataTex3DFactory::getType() {
 	}
 }
 
+template<class T> void* MFalkDataTex3DFactory::getNormalizedData() {
+	shared_ptr<T> rawData((T*)_datFile.readRawData(_datFile.getTimeStepBegin()), 
+		[](T* ptr) {
+			delete[] ptr;
+		}
+	);
+	const int dataSize = getWidth()*getHeight()*getDepth()*4;
+	shared_ptr<T> scaledData(new T[dataSize], [](T* ptr) {
+		delete[] ptr;
+	});
+
+	return NULL;
+}
+
 void* MFalkDataTex3DFactory::get_data() {
-	return _datFile.readRawData();
+	auto dataType = _datFile.getDataType();
+	if (dataType == DATRAW_UCHAR)  {
+		return getNormalizedData<unsigned char>();
+	} else if (dataType == DATRAW_FLOAT) {
+		return getNormalizedData<float>();
+	} else {
+		throw runtime_error("texture datatype is not supported");
+	}
 }
 

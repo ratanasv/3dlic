@@ -99,7 +99,8 @@ NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) :
 	_texels = shared_ptr<unsigned char>(new unsigned char[total], 
 		[](unsigned char* f) {
 			delete[] f;
-		});
+		}
+	);
 	
 	fread(_texels.get(), sizeof(unsigned char), total, fp.get());
 }

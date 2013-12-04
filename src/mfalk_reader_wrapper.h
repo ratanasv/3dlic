@@ -7,9 +7,17 @@
 #include "reader.h"
 #include "virtex.h"
 #include <cstring>
+#include <memory>
 
+using std::weak_ptr;
 using std::string;
 
+class PipelineVisitor;
+class PipelineElement {
+public:
+	virtual ~PipelineElement() {};
+	virtual void Accept(weak_ptr<PipelineVisitor> visitor) = 0;
+};
 
 class MFalkDataTex3DFactory : public TextureAbstractFactory {
 private:
@@ -23,5 +31,6 @@ public:
 	virtual GLenum getFormat();
 	virtual GLenum getType();
 	virtual void* get_data();
-
+private:
+	template<class T> void* getNormalizedData();
 };

@@ -5,6 +5,7 @@
 #include "virmodel.h"
 #include "texture6.h"
 #include "3dlic_model.h"
+#include "mfalk_reader_wrapper.h"
 
 using namespace vir;
 using std::string;
@@ -59,6 +60,7 @@ void init6() {
 	static fs::path VERTEX_SHADER_PATH(BASE_PATH + "/shader/vert.vert");
 	static fs::path FRAGMENT_SHADER_PATH(BASE_PATH + "/shader/frag.frag");
 	static fs::path NOISE_PATH(BASE_PATH + "/noise/noise-256-sparse");
+	static fs::path DATA_PATH(BASE_PATH + "/data/helix_float.dat");
 
 	VolumeTracingShader.reset(new GLSLProgram());
 	VolumeTracingShader->Create(VERTEX_SHADER_PATH.string().c_str(),
@@ -70,7 +72,9 @@ void init6() {
 	shared_ptr<TextureDelegatee> delegatee(new GLTextureDelegatee(factory));
 	SparseNoise.reset(new VirTex(delegatee));
 
-
+	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.string().c_str()));
+	delegatee.reset(new GLTextureDelegatee(factory));
+	VectorDataTexture.reset(new VirTex(delegatee));
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
 	shared_ptr<GeometryDelegatee> vaoFreeable(new VAODelegatee(cubeFactory, 
