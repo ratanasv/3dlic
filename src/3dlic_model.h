@@ -50,7 +50,7 @@ private:
 public:
 	PROJ_TYPE GetProjection() const;
 	bool GetIsPaused() const;
-	void SetTranslate(const vec3& in);
+	void SetTranslate(const vec3<>& in);
 	void SetProjection(PROJ_TYPE in);
 	void SetIsPaused(bool in);
 	FloatParam GetFloatParameter(LICFloatParam param) const;

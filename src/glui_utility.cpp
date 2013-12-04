@@ -11,8 +11,8 @@ using namespace vir;
 map<LICBoolParam, CheckboxBundle> BunchOfCheckboxes;
 map<int, RadioBundle> Bunch_Of_Radios;
 
-SliderBundle::SliderBundle(GLUI* main_glui, GLUI_Panel* panel, vec2 def_vals,
-	vec2 bounds, int id, const string format, void (*callback)(int id),
+SliderBundle::SliderBundle(GLUI* main_glui, GLUI_Panel* panel, vec2<> def_vals,
+	vec2<> bounds, int id, const string format, void (*callback)(int id),
 	bool isDual /*= false*/) : 
 	slider(main_glui->add_slider_to_panel(panel, isDual, GLUI_HSLIDER_FLOAT,
 		_vals, id, callback)),
@@ -60,7 +60,7 @@ bool SliderBundle::IsDual() const {
 	return _twoSided;
 }
 
-vec2 SliderBundle::GetValue() const {
+vec2<> SliderBundle::GetValue() const {
 	return _vals;
 }
 

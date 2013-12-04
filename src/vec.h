@@ -12,20 +12,20 @@ namespace Angel {
 //
 //  vec2.h - 2D vector
 //
-
+template <class T = GLfloat>
 struct vec2 {
 
-    GLfloat  x;
-    GLfloat  y;
+    T  x;
+    T  y;
 
     //
     //  --- Constructors and Destructors ---
     //
 
-    vec2( GLfloat s = GLfloat(0.0) ) :
+    vec2( T s = T(0.0) ) :
 	x(s), y(s) {}
 
-    vec2( GLfloat x, GLfloat y ) :
+    vec2( T x, T y ) :
 	x(x), y(y) {}
 
     vec2( const vec2& v )
@@ -35,8 +35,8 @@ struct vec2 {
     //  --- Indexing Operator ---
     //
 
-    GLfloat& operator [] ( int i ) { return *(&x + i); }
-    const GLfloat operator [] ( int i ) const { return *(&x + i); }
+    T& operator [] ( int i ) { return *(&x + i); }
+    const T operator [] ( int i ) const { return *(&x + i); }
 
     //
     //  --- (non-modifying) Arithematic Operators ---
@@ -51,16 +51,16 @@ struct vec2 {
     vec2 operator - ( const vec2& v ) const
 	{ return vec2( x - v.x, y - v.y ); }
 
-    vec2 operator * ( const GLfloat s ) const
+    vec2 operator * ( const T s ) const
 	{ return vec2( s*x, s*y ); }
 
     vec2 operator * ( const vec2& v ) const
 	{ return vec2( x*v.x, y*v.y ); }
 
-    friend vec2 operator * ( const GLfloat s, const vec2& v )
+    friend vec2 operator * ( const T s, const vec2& v )
 	{ return v * s; }
 
-    vec2 operator / ( const GLfloat s ) const {
+    vec2 operator / ( const T s ) const {
 #ifdef DEBUG
 	if ( std::fabs(s) < DivideByZeroTolerance ) {
 	    std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
@@ -69,7 +69,7 @@ struct vec2 {
 	}
 #endif // DEBUG
 
-	GLfloat r = GLfloat(1.0) / s;
+	T r = T(1.0) / s;
 	return *this * r;
     }
 
@@ -83,13 +83,13 @@ struct vec2 {
     vec2& operator -= ( const vec2& v )
 	{ x -= v.x;  y -= v.y;  return *this; }
 
-    vec2& operator *= ( const GLfloat s )
+    vec2& operator *= ( const T s )
 	{ x *= s;  y *= s;   return *this; }
 
     vec2& operator *= ( const vec2& v )
 	{ x *= v.x;  y *= v.y; return *this; }
 
-    vec2& operator /= ( const GLfloat s ) {
+    vec2& operator /= ( const T s ) {
 #ifdef DEBUG
 	if ( std::fabs(s) < DivideByZeroTolerance ) {
 	    std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
@@ -97,7 +97,7 @@ struct vec2 {
 	}
 #endif // DEBUG
 
-	GLfloat r = GLfloat(1.0) / s;
+	T r = T(1.0) / s;
 	*this *= r;
 
 	return *this;
@@ -130,18 +130,18 @@ struct vec2 {
 //  Non-class vec2 Methods
 //
 
-inline
-GLfloat dot( const vec2& u, const vec2& v ) {
+template <class T> inline
+T dot( const vec2<T>& u, const vec2<T>& v ) {
     return u.x * v.x + u.y * v.y;
 }
 
-inline
-GLfloat length( const vec2& v ) {
+template <class T> inline
+T length( const vec2<T>& v ) {
     return std::sqrt( dot(v,v) );
 }
 
-inline
-vec2 normalize( const vec2& v ) {
+template <class T> inline
+vec2<T> normalize( const vec2<T>& v ) {
     return v / length(v);
 }
 
@@ -150,26 +150,26 @@ vec2 normalize( const vec2& v ) {
 //  vec3.h - 3D vector
 //
 //////////////////////////////////////////////////////////////////////////////
-
+template <class T = GLfloat>
 struct vec3 {
 
-    GLfloat  x;
-    GLfloat  y;
-    GLfloat  z;
+    T  x;
+    T  y;
+    T  z;
 
     //
     //  --- Constructors and Destructors ---
     //
 
-    vec3( GLfloat s = GLfloat(0.0) ) :
+    vec3( T s = T(0.0) ) :
 	x(s), y(s), z(s) {}
 
-    vec3( GLfloat x, GLfloat y, GLfloat z ) :
+    vec3( T x, T y, T z ) :
 	x(x), y(y), z(z) {}
 
     vec3( const vec3& v ) { x = v.x;  y = v.y;  z = v.z; }
 
-    vec3( const vec2& v, const float f ) { x = v.x;  y = v.y;  z = f; }
+    vec3( const vec2<T>& v, const float f ) { x = v.x;  y = v.y;  z = f; }
 
     //
     //  --- Indexing Operator ---
@@ -270,25 +270,25 @@ struct vec3 {
 //  Non-class vec3 Methods
 //
 
-inline
-GLfloat dot( const vec3& u, const vec3& v ) {
+template <class T> inline
+T dot( const vec3<T>& u, const vec3<T>& v ) {
     return u.x*v.x + u.y*v.y + u.z*v.z ;
 }
 
-inline
-GLfloat length( const vec3& v ) {
+template <class T> inline
+T length( const vec3<T>& v ) {
     return std::sqrt( dot(v,v) );
 }
 
-inline
-vec3 normalize( const vec3& v ) {
+template <class T> inline
+vec3<T> normalize( const vec3<T>& v ) {
     return v / length(v);
 }
 
-inline
-vec3 cross(const vec3& a, const vec3& b )
+template <class T> inline
+vec3<T> cross(const vec3<T>& a, const vec3<T>& b )
 {
-    return vec3( a.y * b.z - a.z * b.y,
+    return vec3<T>( a.y * b.z - a.z * b.y,
 		 a.z * b.x - a.x * b.z,
 		 a.x * b.y - a.y * b.x );
 }
@@ -299,38 +299,38 @@ vec3 cross(const vec3& a, const vec3& b )
 //  vec4 - 4D vector
 //
 //////////////////////////////////////////////////////////////////////////////
-
+template <class T = GLfloat>
 struct vec4 {
 
-    GLfloat  x;
-    GLfloat  y;
-    GLfloat  z;
-    GLfloat  w;
+    T  x;
+    T  y;
+    T  z;
+    T  w;
 
     //
     //  --- Constructors and Destructors ---
     //
 
-    vec4( GLfloat s = GLfloat(0.0) ) :
+    vec4( T s = T(0.0) ) :
 	x(s), y(s), z(s), w(s) {}
 
-    vec4( GLfloat x, GLfloat y, GLfloat z, GLfloat w ) :
+    vec4( T x, T y, T z, T w ) :
 	x(x), y(y), z(z), w(w) {}
 
     vec4( const vec4& v ) { x = v.x;  y = v.y;  z = v.z;  w = v.w; }
 
-    vec4( const vec3& v, const float w = 1.0 ) : w(w)
+    vec4( const vec3<>& v, const float w = 1.0 ) : w(w)
 	{ x = v.x;  y = v.y;  z = v.z; }
 
-    vec4( const vec2& v, const float z, const float w ) : z(z), w(w)
+    vec4( const vec2<>& v, const float z, const float w ) : z(z), w(w)
 	{ x = v.x;  y = v.y; }
 
     //
     //  --- Indexing Operator ---
     //
 
-    GLfloat& operator [] ( int i ) { return *(&x + i); }
-    const GLfloat operator [] ( int i ) const { return *(&x + i); }
+    T& operator [] ( int i ) { return *(&x + i); }
+    const T operator [] ( int i ) const { return *(&x + i); }
 
     //
     //  --- (non-modifying) Arithematic Operators ---
@@ -345,16 +345,16 @@ struct vec4 {
     vec4 operator - ( const vec4& v ) const
 	{ return vec4( x - v.x, y - v.y, z - v.z, w - v.w ); }
 
-    vec4 operator * ( const GLfloat s ) const
+    vec4 operator * ( const T s ) const
 	{ return vec4( s*x, s*y, s*z, s*w ); }
 
     vec4 operator * ( const vec4& v ) const
 	{ return vec4( x*v.x, y*v.y, z*v.z, w*v.z ); }
 
-    friend vec4 operator * ( const GLfloat s, const vec4& v )
+    friend vec4 operator * ( const T s, const vec4& v )
 	{ return v * s; }
 
-    vec4 operator / ( const GLfloat s ) const {
+    vec4 operator / ( const T s ) const {
 #ifdef DEBUG
 	if ( std::fabs(s) < DivideByZeroTolerance ) {
 	    std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
@@ -363,7 +363,7 @@ struct vec4 {
 	}
 #endif // DEBUG
 
-	GLfloat r = GLfloat(1.0) / s;
+	T r = T(1.0) / s;
 	return *this * r;
     }
 
@@ -377,13 +377,13 @@ struct vec4 {
     vec4& operator -= ( const vec4& v )
 	{ x -= v.x;  y -= v.y;  z -= v.z;  w -= v.w;  return *this; }
 
-    vec4& operator *= ( const GLfloat s )
+    vec4& operator *= ( const T s )
 	{ x *= s;  y *= s;  z *= s;  w *= s;  return *this; }
 
     vec4& operator *= ( const vec4& v )
 	{ x *= v.x, y *= v.y, z *= v.z, w *= v.w;  return *this; }
 
-    vec4& operator /= ( const GLfloat s ) {
+    vec4& operator /= ( const T s ) {
 #ifdef DEBUG
 	if ( std::fabs(s) < DivideByZeroTolerance ) {
 	    std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
@@ -391,7 +391,7 @@ struct vec4 {
 	}
 #endif // DEBUG
 
-	GLfloat r = GLfloat(1.0) / s;
+	T r = T(1.0) / s;
 	*this *= r;
 
 	return *this;
@@ -413,11 +413,11 @@ struct vec4 {
     //  --- Conversion Operators ---
     //
 
-    operator const GLfloat* () const
-	{ return static_cast<const GLfloat*>( &x ); }
+    operator const T* () const
+	{ return static_cast<const T*>( &x ); }
 
-    operator GLfloat* ()
-	{ return static_cast<GLfloat*>( &x ); }
+    operator T* ()
+	{ return static_cast<T*>( &x ); }
 };
 
 //----------------------------------------------------------------------------
@@ -425,25 +425,25 @@ struct vec4 {
 //  Non-class vec4 Methods
 //
 
-inline
-GLfloat dot( const vec4& u, const vec4& v ) {
+template <class T> inline
+GLfloat dot( const vec4<T>& u, const vec4<T>& v ) {
     return u.x*v.x + u.y*v.y + u.z*v.z + u.w+v.w;
 }
 
-inline
-GLfloat length( const vec4& v ) {
+template <class T> inline
+T length( const vec4<T>& v ) {
     return std::sqrt( dot(v,v) );
 }
 
-inline
-vec4 normalize( const vec4& v ) {
+template <class T> inline
+vec4<T> normalize( const vec4<T>& v ) {
     return v / length(v);
 }
 
-inline
-vec3 cross(const vec4& a, const vec4& b )
+template <class T> inline
+vec3<T> cross(const vec4<T>& a, const vec4<T>& b )
 {
-    return vec3( a.y * b.z - a.z * b.y,
+    return vec3<T>( a.y * b.z - a.z * b.y,
 		 a.z * b.x - a.x * b.z,
 		 a.x * b.y - a.y * b.x );
 }

@@ -788,7 +788,7 @@ void GLSLProgram::EnableTexCoordAttribute( const int vecLength /*= 4 */ ) {
 }
 
 
-void GLSLProgram::LookAt( const vec3& eye, const vec3& at, const vec3& up ) {
+void GLSLProgram::LookAt( const vec3<>& eye, const vec3<>& at, const vec3<>& up ) {
 	_mvMatrix = _mvMatrix * Angel::LookAt(eye, at, up);
 	SendMVMatrix();
 }
@@ -812,12 +812,12 @@ void GLSLProgram::Rotate(float x, float y, float z) {
 }
 
 void GLSLProgram::Translate( float x, float y, float z ) {
-	_mvMatrix = _mvMatrix * Angel::Translate(vec4(x,y,z,0.0));
+	_mvMatrix = _mvMatrix * Angel::Translate(vec4<>(x,y,z,0.0));
 	SendMVMatrix();
 }
 
 void GLSLProgram::Scale( float x, float y, float z ) {
-	_mvMatrix = _mvMatrix * Angel::Scale(vec3(x,y,z));
+	_mvMatrix = _mvMatrix * Angel::Scale(vec3<>(x,y,z));
 	SendMVMatrix();
 }
 
@@ -905,7 +905,7 @@ void DepracatedAttributeBinder::EnableTexCoordAttribute(const int vecLength /*= 
 	glTexCoordPointer(vecLength, GL_FLOAT, 0, 0);
 }
 
-void DeprecatedCameraBinder::LookAt( const vec3& eye, const vec3& at, const vec3& up ) {
+void DeprecatedCameraBinder::LookAt( const vec3<>& eye, const vec3<>& at, const vec3<>& up ) {
 	glMatrixMode( GL_MODELVIEW );
 	gluLookAt( eye.x, eye.y, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
 }

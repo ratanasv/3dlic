@@ -16,18 +16,18 @@ class GLSLAttributeBinder;
 class GeometryAbstractFactory{
 public:
 	virtual ~GeometryAbstractFactory(){};
-	virtual shared_ptr<vector<vec3>> get_vertices()=0;
-	virtual shared_ptr<vector<vec3>> get_normals()=0;
-	virtual shared_ptr<vector<vec3>> get_tex_coord()=0;
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_vertices()=0;
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_normals()=0;
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_tex_coord()=0;
 	virtual shared_ptr<vector<unsigned>> get_indices()=0;
 };
 
 class OBJFactory: public GeometryAbstractFactory {
 public:
 	OBJFactory(const char* fn);
-	virtual shared_ptr<vector<vec3>> get_vertices();
-	virtual shared_ptr<vector<vec3>> get_normals();
-	virtual shared_ptr<vector<vec3>> get_tex_coord();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_vertices();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_normals();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_tex_coord();
 	virtual shared_ptr<vector<unsigned>> get_indices();
 private:
 	void initVertices();
@@ -35,9 +35,9 @@ private:
 	void initTexCoords();
 	void initIndices();
 	obj::ObjModel _model;
-	shared_ptr<vector<vec3>> vertices;
-	shared_ptr<vector<vec3>> normals;
-	shared_ptr<vector<vec3>> texCoords;
+	shared_ptr<vector<vec3<GLfloat>>> vertices;
+	shared_ptr<vector<vec3<GLfloat>>> normals;
+	shared_ptr<vector<vec3<GLfloat>>> texCoords;
 	shared_ptr<vector<unsigned>> indices;
 };
 
@@ -45,9 +45,9 @@ class CubeGeometryFactory : public GeometryAbstractFactory {
 public:
 	CubeGeometryFactory(const float radius = 1.0) : _radius(radius) {};
 
-	virtual shared_ptr<vector<vec3>> get_vertices();
-	virtual shared_ptr<vector<vec3>> get_normals();
-	virtual shared_ptr<vector<vec3>> get_tex_coord();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_vertices();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_normals();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_tex_coord();
 	virtual shared_ptr<vector<unsigned>> get_indices();
 private:
 	const float _radius;
@@ -57,9 +57,9 @@ class PlaneGeometryFactory : public GeometryAbstractFactory {
 public:
 	PlaneGeometryFactory(const float radius = 1.0) : _radius(radius) {};
 
-	virtual shared_ptr<vector<vec3>> get_vertices();
-	virtual shared_ptr<vector<vec3>> get_normals();
-	virtual shared_ptr<vector<vec3>> get_tex_coord();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_vertices();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_normals();
+	virtual shared_ptr<vector<vec3<GLfloat>>> get_tex_coord();
 	virtual shared_ptr<vector<unsigned>> get_indices();
 private:
 	const float _radius;

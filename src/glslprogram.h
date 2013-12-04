@@ -45,7 +45,7 @@ public:
 class GLSLCameraBinder {
 public:
 	virtual ~GLSLCameraBinder() {};
-	virtual void LookAt(const vec3& eye, const vec3& at, const vec3& up) = 0;
+	virtual void LookAt(const vec3<>& eye, const vec3<>& at, const vec3<>& up) = 0;
 	virtual void Ortho(float left, float right, float bottom, float top, 
 		float zNear, float zFar) = 0;
 	virtual void Perspective(float fovy, float ratio, float zNear, float zFar) = 0;
@@ -66,7 +66,7 @@ public:
 
 class DeprecatedCameraBinder : public GLSLCameraBinder {
 public:
-	virtual void LookAt( const vec3& eye, const vec3& at, const vec3& up );
+	virtual void LookAt( const vec3<>& eye, const vec3<>& at, const vec3<>& up );
 	virtual void Ortho( float left, float right, float bottom, float top, 
 		float zNear, float zFar );
 	virtual void Perspective( float fovy, float ratio, float zNear, float zFar );
@@ -170,7 +170,7 @@ class GLSLProgram : public GLSLAttributeBinder, public GLSLCameraBinder {
 	virtual void EnableTexCoordAttribute( const int vecLength = 4 );
 
 	// inherit from GLSLCameraBinder
-	virtual void LookAt( const vec3& eye, const vec3& at, const vec3& up );
+	virtual void LookAt( const vec3<>& eye, const vec3<>& at, const vec3<>& up );
 	virtual void Ortho( float left, float right, float bottom, float top, 
 		float zNear, float zFar );
 	virtual void Perspective( float fovy, float ratio, float zNear, float zFar );

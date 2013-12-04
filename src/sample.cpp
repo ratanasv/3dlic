@@ -1002,7 +1002,7 @@ void InitGlui( void ) {
 void apply_transformations() {
 	static auto camera = GLSLCameraBinderFactory();
 	camera->ClearModelView();
-	camera->LookAt( vec3(0., 0., 15.), vec3(0., 0., 0.), vec3(0., 1., 0.));
+	camera->LookAt( vec3<>(0., 0., 15.), vec3<>(0., 0., 0.), vec3<>(0., 1., 0.));
 	
 	camera->Translate(
 		THREEDLICParameters::INSTANCE->GetFloatParameter(

@@ -28,15 +28,15 @@ OBJFactory::OBJFactory( const char* fn ) {
 
 
 
-shared_ptr<vector<vec3>> OBJFactory::get_vertices() {
+shared_ptr<vector<vec3<>>> OBJFactory::get_vertices() {
 	return vertices;
 }
 
-shared_ptr<vector<vec3>> OBJFactory::get_normals() {
+shared_ptr<vector<vec3<>>> OBJFactory::get_normals() {
 	return normals;
 }
 
-shared_ptr<vector<vec3>> OBJFactory::get_tex_coord() {
+shared_ptr<vector<vec3<>>> OBJFactory::get_tex_coord() {
 	return texCoords;
 }
 
@@ -45,23 +45,23 @@ shared_ptr<vector<unsigned>> OBJFactory::get_indices() {
 }
 
 void OBJFactory::initVertices() {
-	vertices = shared_ptr<vector<vec3>>(new vector<vec3>(
-		_model.vertex.size()/3, vec3() ));
+	vertices = shared_ptr<vector<vec3<>>>(new vector<vec3<>>(
+		_model.vertex.size()/3, vec3<>() ));
 	memcpy(vertices->data(), _model.vertex.data(), _model.vertex.size()*
 		sizeof(float));
 }
 
 void OBJFactory::initNormals() {
-	normals = shared_ptr<vector<vec3>>(new vector<vec3>(
-		_model.normal.size()/3, vec3() ));
+	normals = shared_ptr<vector<vec3<>>>(new vector<vec3<>>(
+		_model.normal.size()/3, vec3<>() ));
 	memcpy(normals->data(), _model.normal.data(), _model.normal.size()*
 		sizeof(float));
 }
 
 void OBJFactory::initTexCoords() {
-	texCoords = initSmartArray<vec3>();
+	texCoords = initSmartArray<vec3<>>();
 	for (int i=0; i<_model.texCoord.size(); i=i+2) {
-		texCoords->push_back(vec3(_model.texCoord.at(i), 
+		texCoords->push_back(vec3<>(_model.texCoord.at(i), 
 			_model.texCoord.at(i+1),0.0f));
 	}
 }
@@ -74,42 +74,42 @@ void OBJFactory::initIndices() {
 	}
 }
 
-shared_ptr<vector<vec3>> CubeGeometryFactory::get_vertices() {
-	auto returned = initSmartArray<vec3>();
-	returned->push_back(_radius*vec3(1.0f, -1.0f, -1.0f));
-	returned->push_back(_radius*vec3(1.0f, -1.0f, 1.0f));
-	returned->push_back(_radius*vec3(-1.0f, -1.0f, 1.0f));
-	returned->push_back(_radius*vec3(-1.0f, -1.0f, -1.0f));
-	returned->push_back(_radius*vec3(1.0f, 1.0f, -1.0f));
-	returned->push_back(_radius*vec3(1.0f, 1.0f, 1.0f));
-	returned->push_back(_radius*vec3(-1.0f, 1.0f, 1.0f));
-	returned->push_back(_radius*vec3(-1.0f, 1.0f, -1.0f));
+shared_ptr<vector<vec3<>>> CubeGeometryFactory::get_vertices() {
+	auto returned = initSmartArray<vec3<>>();
+	returned->push_back(_radius*vec3<>(1.0f, -1.0f, -1.0f));
+	returned->push_back(_radius*vec3<>(1.0f, -1.0f, 1.0f));
+	returned->push_back(_radius*vec3<>(-1.0f, -1.0f, 1.0f));
+	returned->push_back(_radius*vec3<>(-1.0f, -1.0f, -1.0f));
+	returned->push_back(_radius*vec3<>(1.0f, 1.0f, -1.0f));
+	returned->push_back(_radius*vec3<>(1.0f, 1.0f, 1.0f));
+	returned->push_back(_radius*vec3<>(-1.0f, 1.0f, 1.0f));
+	returned->push_back(_radius*vec3<>(-1.0f, 1.0f, -1.0f));
 	return returned;
 }
 
-shared_ptr<vector<vec3>> CubeGeometryFactory::get_normals() {
-	auto returned = initSmartArray<vec3>();
-	returned->push_back(vec3(0.408246f, -0.816492f, -0.408246f));
-	returned->push_back(vec3(0.816492f, -0.408246f, 0.408246f));
-	returned->push_back(vec3(-0.577349f, -0.577349f, 0.577349f));
-	returned->push_back(vec3(-0.408246f, -0.408246f, -0.816492f));
-	returned->push_back(vec3(0.666646f, 0.333323f, -0.666646f));
-	returned->push_back(vec3(0.333323f, 0.666646f, 0.666646f));
-	returned->push_back(vec3(-0.577349f, 0.577349f, 0.577349f));
-	returned->push_back(vec3(-0.666646f, 0.666646f, -0.333323f));
+shared_ptr<vector<vec3<>>> CubeGeometryFactory::get_normals() {
+	auto returned = initSmartArray<vec3<>>();
+	returned->push_back(vec3<>(0.408246f, -0.816492f, -0.408246f));
+	returned->push_back(vec3<>(0.816492f, -0.408246f, 0.408246f));
+	returned->push_back(vec3<>(-0.577349f, -0.577349f, 0.577349f));
+	returned->push_back(vec3<>(-0.408246f, -0.408246f, -0.816492f));
+	returned->push_back(vec3<>(0.666646f, 0.333323f, -0.666646f));
+	returned->push_back(vec3<>(0.333323f, 0.666646f, 0.666646f));
+	returned->push_back(vec3<>(-0.577349f, 0.577349f, 0.577349f));
+	returned->push_back(vec3<>(-0.666646f, 0.666646f, -0.333323f));
 	return returned;
 }
 
-shared_ptr<vector<vec3>> CubeGeometryFactory::get_tex_coord() {
-	auto returned = initSmartArray<vec3>();
-	returned->push_back(vec3(1.0, 0.0, 0.0));
-	returned->push_back(vec3(1.0, 0.0, 1.0));
-	returned->push_back(vec3(0.0, 0.0, 1.0));
-	returned->push_back(vec3(0.0, 0.0, 0.0));
-	returned->push_back(vec3(1.0, 1.0, 0.0));
-	returned->push_back(vec3(1.0, 1.0, 1.0));
-	returned->push_back(vec3(0.0, 1.0, 1.0));
-	returned->push_back(vec3(0.0, 1.0, 0.0));
+shared_ptr<vector<vec3<>>> CubeGeometryFactory::get_tex_coord() {
+	auto returned = initSmartArray<vec3<>>();
+	returned->push_back(vec3<>(1.0, 0.0, 0.0));
+	returned->push_back(vec3<>(1.0, 0.0, 1.0));
+	returned->push_back(vec3<>(0.0, 0.0, 1.0));
+	returned->push_back(vec3<>(0.0, 0.0, 0.0));
+	returned->push_back(vec3<>(1.0, 1.0, 0.0));
+	returned->push_back(vec3<>(1.0, 1.0, 1.0));
+	returned->push_back(vec3<>(0.0, 1.0, 1.0));
+	returned->push_back(vec3<>(0.0, 1.0, 0.0));
 	return returned;
 }
 
@@ -133,30 +133,30 @@ shared_ptr<vector<unsigned>> CubeGeometryFactory::get_indices() {
 	return returned;
 }
 
-shared_ptr<vector<vec3>> PlaneGeometryFactory::get_vertices() {
-	auto returned = initSmartArray<vec3>();
-	returned->push_back(_radius*vec3(-1.0f, -1.0f, 0.0f));
-	returned->push_back(_radius*vec3(1.0f, -1.0f, 0.0f));
-	returned->push_back(_radius*vec3(1.0f, 1.0f, 0.0f));
-	returned->push_back(_radius*vec3(-1.0f, 1.0f, 0.0f));
+shared_ptr<vector<vec3<>>> PlaneGeometryFactory::get_vertices() {
+	auto returned = initSmartArray<vec3<>>();
+	returned->push_back(_radius*vec3<>(-1.0f, -1.0f, 0.0f));
+	returned->push_back(_radius*vec3<>(1.0f, -1.0f, 0.0f));
+	returned->push_back(_radius*vec3<>(1.0f, 1.0f, 0.0f));
+	returned->push_back(_radius*vec3<>(-1.0f, 1.0f, 0.0f));
 	return returned;
 }
 
-shared_ptr<vector<vec3>> PlaneGeometryFactory::get_normals() {
-	auto returned = initSmartArray<vec3>();
-	returned->push_back(_radius*vec3(0.0, 0.0, 1.0));
-	returned->push_back(_radius*vec3(0.0, 0.0, 1.0));
-	returned->push_back(_radius*vec3(0.0, 0.0, 1.0));
-	returned->push_back(_radius*vec3(0.0, 0.0, 1.0));
+shared_ptr<vector<vec3<>>> PlaneGeometryFactory::get_normals() {
+	auto returned = initSmartArray<vec3<>>();
+	returned->push_back(_radius*vec3<>(0.0, 0.0, 1.0));
+	returned->push_back(_radius*vec3<>(0.0, 0.0, 1.0));
+	returned->push_back(_radius*vec3<>(0.0, 0.0, 1.0));
+	returned->push_back(_radius*vec3<>(0.0, 0.0, 1.0));
 	return returned;
 }
 
-shared_ptr<vector<vec3>> PlaneGeometryFactory::get_tex_coord() {
-	auto returned = initSmartArray<vec3>();
-	returned->push_back(_radius*vec3(0.0f, 0.0f, 0.0f));
-	returned->push_back(_radius*vec3(1.0f, 0.0f, 0.0f));
-	returned->push_back(_radius*vec3(1.0f, 1.0f, 0.0f));
-	returned->push_back(_radius*vec3(0.0f, 1.0f, 0.0f));
+shared_ptr<vector<vec3<>>> PlaneGeometryFactory::get_tex_coord() {
+	auto returned = initSmartArray<vec3<>>();
+	returned->push_back(_radius*vec3<>(0.0f, 0.0f, 0.0f));
+	returned->push_back(_radius*vec3<>(1.0f, 0.0f, 0.0f));
+	returned->push_back(_radius*vec3<>(1.0f, 1.0f, 0.0f));
+	returned->push_back(_radius*vec3<>(0.0f, 1.0f, 0.0f));
 	return returned;
 }
 
@@ -189,19 +189,19 @@ void VAODelegatee::send_to_gpu() {
 	glGenBuffers(1, &v_buf);
 	glBindBuffer(GL_ARRAY_BUFFER, v_buf);
 	auto verts = _factory->get_vertices();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*verts->size(), verts->data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3<>)*verts->size(), verts->data(), GL_STATIC_DRAW);
 	validGLSLBinder->EnablePositionAttribute(3);
 
 	glGenBuffers(1, &n_buf);
 	glBindBuffer(GL_ARRAY_BUFFER, n_buf);
 	auto norms = _factory->get_normals();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*norms->size(), norms->data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3<>)*norms->size(), norms->data(), GL_STATIC_DRAW);
 	validGLSLBinder->EnableNormalAttribute(3);
 
 	glGenBuffers(1, &vt_buf);
 	glBindBuffer(GL_ARRAY_BUFFER, vt_buf);
 	auto vts = _factory->get_tex_coord();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*vts->size(), vts->data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3<>)*vts->size(), vts->data(), GL_STATIC_DRAW);
 	validGLSLBinder->EnableTexCoordAttribute(3);
 
 	glGenBuffers(1, &in_buf);
