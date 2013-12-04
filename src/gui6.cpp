@@ -13,6 +13,7 @@ namespace fs = boost::filesystem;
 shared_ptr<GLSLProgram> VolumeTracingShader;
 static shared_ptr<VirTex> SparseNoise;
 static shared_ptr<VirModel> Cube;
+static shared_ptr<VirTex> VectorDataTexture;
 
 static shared_ptr<TextureVisitor> TextureVisitorFactory() {
 	return shared_ptr<TextureVisitor>(new GLSLTextureSamplerBinder());
@@ -58,14 +59,18 @@ void init6() {
 	static fs::path VERTEX_SHADER_PATH(BASE_PATH + "/shader/vert.vert");
 	static fs::path FRAGMENT_SHADER_PATH(BASE_PATH + "/shader/frag.frag");
 	static fs::path NOISE_PATH(BASE_PATH + "/noise/noise-256-sparse");
+
 	VolumeTracingShader.reset(new GLSLProgram());
 	VolumeTracingShader->Create(VERTEX_SHADER_PATH.string().c_str(),
 		FRAGMENT_SHADER_PATH.string().c_str());
 	VolumeTracingShader->Use();
+
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
 		NOISE_PATH.string().c_str(), 1));
 	shared_ptr<TextureDelegatee> delegatee(new GLTextureDelegatee(factory));
 	SparseNoise.reset(new VirTex(delegatee));
+
+
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
 	shared_ptr<GeometryDelegatee> vaoFreeable(new VAODelegatee(cubeFactory, 
