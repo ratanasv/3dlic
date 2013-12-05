@@ -16,10 +16,6 @@ static shared_ptr<VirTex> SparseNoise;
 static shared_ptr<VirModel> Cube;
 static shared_ptr<VirTex> VectorDataTexture;
 
-static shared_ptr<TextureVisitor> TextureVisitorFactory() {
-	return shared_ptr<TextureVisitor>(new GLSLTextureSamplerBinder());
-}
-
 static void BindFloatUniform(const char* var, LICFloatParam param) {
 	VolumeTracingShader->SetUniform(var, THREEDLICParameters::INSTANCE
 		->GetFloatParameter(param));
@@ -27,10 +23,12 @@ static void BindFloatUniform(const char* var, LICFloatParam param) {
 
 
 void draw6() {
-	static auto textureVisitor = TextureVisitorFactory();
-	VolumeTracingShader->Use();
-	SparseNoise->pre_render(textureVisitor);
-	VectorDataTexture->pre_render(textureVisitor);
+	static shared_ptr<TextureVisitor> sparseNoiseVisitor(new GLSLTextureSamplerBinder(
+		VolumeTracingShader, "uSparseNoiseSampler"));
+	static shared_ptr<TextureVisitor> vectorDataVisitor(new GLSLTextureSamplerBinder(
+		VolumeTracingShader, "uVectorData"));
+	SparseNoise->pre_render(sparseNoiseVisitor);
+	VectorDataTexture->pre_render(vectorDataVisitor);
 	BindFloatUniform("uNumSteps", LICFloatParam::NUM_STEPS);
 	BindFloatUniform("uBaseAlpha", LICFloatParam::BASE_ALPHA);
 	BindFloatUniform("uValMin", LICFloatParam::CLAMP_VAL_MIN);

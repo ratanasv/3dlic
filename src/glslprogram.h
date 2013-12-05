@@ -32,6 +32,13 @@ inline int GetOSU( int flag )
 
 void	CheckGlErrors( const char* );
 
+class GLSLUniformBinder {
+public:
+	virtual ~GLSLUniformBinder() {};
+	virtual void SetUniform(const string& name, int i) = 0;
+	virtual void SetUniform(const string& name, float f) = 0;
+};
+
 class GLSLAttributeBinder {
 public:
 	virtual ~GLSLAttributeBinder() {};
@@ -80,7 +87,9 @@ public:
 
 
 
-class GLSLProgram : public GLSLAttributeBinder, public GLSLCameraBinder {
+class GLSLProgram : public GLSLAttributeBinder, public GLSLCameraBinder, 
+	public GLSLUniformBinder
+{
   private:
 	std::map<const string, int>	AttributeLocs;
 	char *			Cfile;

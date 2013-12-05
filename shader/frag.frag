@@ -1,6 +1,7 @@
 #version 430 compatibility
 
 uniform sampler3D uSparseNoiseSampler;
+uniform sampler3D uVectorData;
 
 in vec3 fTexCoord;
 in vec3 fColor;
