@@ -8,9 +8,12 @@
 #include "virtex.h"
 #include <cstring>
 #include <memory>
+#include "Angel.h"
 
+using Angel::vec4;
 using std::weak_ptr;
 using std::string;
+using std::shared_ptr;
 
 class PipelineVisitor;
 class PipelineElement {
@@ -19,18 +22,23 @@ public:
 	virtual void Accept(weak_ptr<PipelineVisitor> visitor) = 0;
 };
 
+
+class Normalizer;
+class AlphaTrimmer;
+
 class MFalkDataTex3DFactory : public TextureAbstractFactory {
 private:
 	DatFile _datFile;
+	const GLenum _internalFormat;
 public:
-	MFalkDataTex3DFactory(const string& fileName);
+	MFalkDataTex3DFactory(const string& fileName, const GLenum internalFormat);
 	virtual GLenum getInternalFormat();
 	virtual int getWidth();
 	virtual int getHeight();
 	virtual int getDepth();
 	virtual GLenum getFormat();
 	virtual GLenum getType();
-	virtual void* get_data();
-private:
-	template<class T> void* getNormalizedData();
+	virtual shared_ptr<void> get_data();
+	virtual shared_ptr<vec4<>> getNormalizedData(const Normalizer& normalizer);
+	virtual shared_ptr<vec3<>> getFloatVecData();
 };

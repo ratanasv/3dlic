@@ -34,6 +34,7 @@
     <ClInclude Include="src\texture6.h" />
     <ClInclude Include="src\virmodel.h" />
     <ClInclude Include="src\virtex.h" />
+    <ClInclude Include="src\vir_toolbox.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\3dlic_model.cpp" />

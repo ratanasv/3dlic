@@ -30,6 +30,7 @@ void draw6() {
 	static auto textureVisitor = TextureVisitorFactory();
 	VolumeTracingShader->Use();
 	SparseNoise->pre_render(textureVisitor);
+	VectorDataTexture->pre_render(textureVisitor);
 	BindFloatUniform("uNumSteps", LICFloatParam::NUM_STEPS);
 	BindFloatUniform("uBaseAlpha", LICFloatParam::BASE_ALPHA);
 	BindFloatUniform("uValMin", LICFloatParam::CLAMP_VAL_MIN);
@@ -38,7 +39,9 @@ void draw6() {
 	BindFloatUniform("uVelocityScale", LICFloatParam::VELOCITY_SCALE);
 	BindFloatUniform("uDT", LICFloatParam::DT);
 	Cube->render();
+	VectorDataTexture->post_render();
 	SparseNoise->post_render();
+
 }
 
 void reset6() {
@@ -60,7 +63,7 @@ void init6() {
 	static fs::path VERTEX_SHADER_PATH(BASE_PATH + "/shader/vert.vert");
 	static fs::path FRAGMENT_SHADER_PATH(BASE_PATH + "/shader/frag.frag");
 	static fs::path NOISE_PATH(BASE_PATH + "/noise/noise-256-sparse");
-	static fs::path DATA_PATH(BASE_PATH + "/data/helix_float.dat");
+	static fs::path DATA_PATH(BASE_PATH + "/data/cyl_float.dat");
 
 	VolumeTracingShader.reset(new GLSLProgram());
 	VolumeTracingShader->Create(VERTEX_SHADER_PATH.string().c_str(),
@@ -72,7 +75,7 @@ void init6() {
 	shared_ptr<TextureDelegatee> delegatee(new GLTextureDelegatee(factory));
 	SparseNoise.reset(new VirTex(delegatee));
 
-	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.string().c_str()));
+	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.string().c_str(), GL_RGBA32F));
 	delegatee.reset(new GLTextureDelegatee(factory));
 	VectorDataTexture.reset(new VirTex(delegatee));
 

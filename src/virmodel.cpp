@@ -5,11 +5,6 @@
 using namespace vir;
 using std::transform;
 
-template <class T> shared_ptr<vector<T>> initSmartArray(const int size = 0) {
-	shared_ptr<vector<T>> returned(new vector<T>(size));
-	return returned;
-}
-
 
 OBJFactory::OBJFactory( const char* fn ) {
 	std::filebuf fb;

@@ -72,6 +72,9 @@
     <ClInclude Include="src\virtex.h">
       <Filter>Header Files\datareader</Filter>
     </ClInclude>
+    <ClInclude Include="src\vir_toolbox.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\abstract.cpp">

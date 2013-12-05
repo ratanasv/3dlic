@@ -29,5 +29,6 @@
 #include <algorithm>
 #include <boost/program_options.hpp>
 #include <iostream>
+#include "vir_toolbox.hpp"
 
 #pragma message("Compiling PCH")

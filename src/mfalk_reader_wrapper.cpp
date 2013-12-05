@@ -1,10 +1,16 @@
 #include "StdAfx.h"
 #include "mfalk_reader_wrapper.h"
 #include <stdexcept>
+#include <algorithm>
 
 using std::runtime_error;
+using Angel::vec4;
+using std::transform;
+using std::minmax_element;
 
-MFalkDataTex3DFactory::MFalkDataTex3DFactory(const string& fileName) {
+MFalkDataTex3DFactory::MFalkDataTex3DFactory(const string& fileName, 
+	GLenum internalFormat) : _internalFormat(internalFormat) 
+{
 	bool isOk = _datFile.parseDatFile(const_cast<char*>(fileName.c_str()));
 	if (!isOk) {
 		MessageBox( NULL, "Cannot parse DatFile", "Error", MB_ICONSTOP);
@@ -14,7 +20,7 @@ MFalkDataTex3DFactory::MFalkDataTex3DFactory(const string& fileName) {
 
 
 GLenum MFalkDataTex3DFactory::getInternalFormat() {
-	return GL_RGBA;
+	return _internalFormat;
 }
 
 int MFalkDataTex3DFactory::getWidth() {
@@ -34,36 +40,81 @@ GLenum MFalkDataTex3DFactory::getFormat() {
 }
 
 GLenum MFalkDataTex3DFactory::getType() {
-	auto dataType = _datFile.getDataType();
-	if (dataType == DATRAW_UCHAR)  {
-		return GL_UNSIGNED_BYTE;
-	} else if (dataType == DATRAW_FLOAT) {
-		return GL_FLOAT;
-	} else {
+	return GL_FLOAT;
+}
+
+
+class Normalizer {
+public:
+	Normalizer(float center, float radius) : _center(center), _radius(radius) {};
+	vec4<> operator() (const vec3<>& vec) {
+		float vecLength = length(vec);
+		return vec4<>(vec/vecLength*_radius + _center, vecLength);
+	}
+private:
+	const float _center;
+	const float _radius;
+};
+
+
+
+shared_ptr<void> MFalkDataTex3DFactory::get_data() {
+	switch (_internalFormat) {
+	case GL_RGBA32F:
+	case GL_RGBA16F:
+		return getNormalizedData(Normalizer(0.0, 1.0));
+	case GL_RGBA8:
+	case GL_RGBA: {
+		const unsigned numVectors = getWidth()*getHeight()*getDepth();
+		auto data = getNormalizedData(Normalizer(0.5, 0.5));
+		auto minMax = minmax_element(data.get(), data.get() + numVectors, 
+			[](const vec4<>& a, const vec4<>& b) {
+				return a.w < b.w;
+			}
+		);
+		float maxDist = minMax.second->w;
+		transform(data.get(), data.get() + numVectors, data.get(),
+			[&](const vec4<>& vec) {
+				vec4<> scaled = vec;
+				scaled[3] = scaled[3]/maxDist;
+				return scaled;
+			}
+		);
+		return data;
+	}
+	default:
 		throw runtime_error("texture datatype is not supported");
 	}
 }
 
-template<class T> void* MFalkDataTex3DFactory::getNormalizedData() {
-	shared_ptr<T> rawData((T*)_datFile.readRawData(_datFile.getTimeStepBegin()), 
-		[](T* ptr) {
-			delete[] ptr;
-		}
-	);
-	const int dataSize = getWidth()*getHeight()*getDepth()*4;
-	shared_ptr<T> scaledData(new T[dataSize], [](T* ptr) {
-		delete[] ptr;
-	});
+shared_ptr<vec4<>> MFalkDataTex3DFactory::getNormalizedData(
+	const Normalizer& normalizer) 
+{
+	const unsigned numVectors = getWidth()*getHeight()*getDepth();
+	auto scaledData = initCStyleArray(new vec4<>[numVectors]);
+	auto floatData = getFloatVecData();
+	transform(floatData.get(), floatData.get() + numVectors, scaledData.get(), 
+		normalizer);
 
-	return NULL;
+
+	return scaledData;
 }
 
-void* MFalkDataTex3DFactory::get_data() {
-	auto dataType = _datFile.getDataType();
-	if (dataType == DATRAW_UCHAR)  {
-		return getNormalizedData<unsigned char>();
-	} else if (dataType == DATRAW_FLOAT) {
-		return getNormalizedData<float>();
+shared_ptr<vec3<>> MFalkDataTex3DFactory::getFloatVecData() {
+	const unsigned numVectors = getWidth()*getHeight()*getDepth();
+	if (_datFile.getDataType() == DATRAW_UCHAR) {
+		auto rawData = initCStyleArray((vec3<unsigned char>*)_datFile.readRawData(
+			_datFile.getTimeStepBegin()));
+		auto floatData = initCStyleArray(new vec3<>[numVectors]);
+		transform(rawData.get(), rawData.get() + numVectors, floatData.get(),
+			[](const vec3<unsigned char>& vec) {
+				return vec3<>(vec.x, vec.y, vec.z);	
+			}
+		);
+		return floatData;
+	} else if (_datFile.getDataType() == DATRAW_FLOAT) {
+		return initCStyleArray(static_cast<vec3<>*>(_datFile.readRawData(
+			_datFile.getTimeStepEnd())));
 	} else {
 		throw runtime_error("texture datatype is not supported");
 	}

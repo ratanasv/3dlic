@@ -74,8 +74,8 @@ void ImageTex2DFactory::flip_vertically() {
 	_texels = flipped;
 }
 
-void* ImageTex2DFactory::get_data() {
-	return (void*)_texels.get();
+shared_ptr<void> ImageTex2DFactory::get_data() {
+	return _texels;
 }
 
 NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) : 
@@ -106,8 +106,8 @@ NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) :
 }
 
 
-void* NoiseTex3DFactory::get_data() {
-	return _texels.get();
+shared_ptr<void> NoiseTex3DFactory::get_data() {
+	return _texels;
 }
 
 GLenum NoiseTex3DFactory::getInternalFormat() {
@@ -146,7 +146,6 @@ void GLTextureDelegatee::send_to_gpu() {
 	int depth = _factory->getDepth();
 	GLenum data_ch = _factory->getFormat();
 	GLenum data_type = _factory->getType();
-	void* data = _factory->get_data();
 	
 	if (_factory->getDepth() == 1) {
 		_bind_site = GL_TEXTURE_2D;
@@ -163,10 +162,12 @@ void GLTextureDelegatee::send_to_gpu() {
 	glGenTextures(1, _tex_handle.get());
 	glBindTexture(_bind_site, *_tex_handle);
 	if (_bind_site == GL_TEXTURE_2D) {
-		glTexImage2D(_bind_site, 0, ch, width, height, 0, data_ch, data_type, data);
+		glTexImage2D(_bind_site, 0, ch, width, height, 0, data_ch, data_type,
+			_factory->get_data().get());
 	}
 	else {
-		glTexImage3D(_bind_site, 0, ch, width, height, depth, 0, data_ch, data_type, data);
+		glTexImage3D(_bind_site, 0, ch, width, height, depth, 0, data_ch, data_type, 
+			_factory->get_data().get());
 	}
 	glBindTexture(_bind_site, 0);
 }

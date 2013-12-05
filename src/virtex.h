@@ -26,7 +26,7 @@ public:
 	virtual int getDepth() = 0;
 	virtual GLenum getFormat() = 0;
 	virtual GLenum getType() = 0;
-	virtual void* get_data() = 0;
+	virtual shared_ptr<void> get_data() = 0;
 
 	virtual ~TextureAbstractFactory() {};
 };
@@ -45,7 +45,7 @@ public:
 private:
 	void flip_vertically();
 public:
-	virtual void* get_data();
+	virtual shared_ptr<void> get_data();
 
 };
 
@@ -62,7 +62,7 @@ private:
 public:
 	NoiseTex3DFactory(const string& file_name, const int ch);
 public:
-	virtual void* get_data();
+	virtual shared_ptr<void> get_data();
 	virtual GLenum getInternalFormat();
 	virtual int getWidth();
 	virtual int getHeight();
