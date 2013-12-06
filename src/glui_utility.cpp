@@ -152,14 +152,19 @@ void create_proj6_panel(GLUI* main_glui) {
 	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
 		LICFloatParam::BASE_ALPHA, "ALPHA = %0.4f");
 	GLUIPresentationLayer::INSTANCE->InsertDualSlider(main_glui, panel, 
-		LICFloatParam::CLAMP_VAL_MIN, LICFloatParam::CLAMP_VAL_MAX,
-		"clamp = %0.4f - %0.4f");
+		LICFloatParam::RAINBOW_VAL_MIN, LICFloatParam::RAINBOW_VAL_MAX,
+		"rainbow clamp = %0.4f - %0.4f");
 	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
 		LICFloatParam::NUM_STEPS_LIC, "num_steps_lic = %3.1f");
 	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
 		LICFloatParam::VELOCITY_SCALE, "velocity_scale = %0.4f");
 	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
 		LICFloatParam::DT, "dt = %0.4f");
+	GLUIPresentationLayer::INSTANCE->InsertDualSlider(main_glui, panel, 
+		LICFloatParam::MAGNITUDE_MIN, LICFloatParam::MAGNITUDE_MAX, 
+		"magnitude = %4.4f - %4.4f");
+	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
+		LICFloatParam::COLOR_INTENSITY, "color intensity = %4.4f");
 		
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);
 	// 	char* labels[] = {"texture enviroment","no texture", "modulate", "replace"};

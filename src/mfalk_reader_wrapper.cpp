@@ -59,32 +59,31 @@ private:
 
 
 shared_ptr<void> MFalkDataTex3DFactory::get_data() {
-	switch (_internalFormat) {
-	case GL_RGBA32F:
-	case GL_RGBA16F:
-		return getNormalizedData(Normalizer(0.0, 1.0));
-	case GL_RGBA8:
-	case GL_RGBA: {
-		const unsigned numVectors = getWidth()*getHeight()*getDepth();
-		auto data = getNormalizedData(Normalizer(0.5, 0.5));
-		auto minMax = minmax_element(data.get(), data.get() + numVectors, 
-			[](const vec4<>& a, const vec4<>& b) {
-				return a.w < b.w;
-			}
-		);
-		float maxDist = minMax.second->w;
-		transform(data.get(), data.get() + numVectors, data.get(),
-			[&](const vec4<>& vec) {
-				vec4<> scaled = vec;
-				scaled[3] = scaled[3]/maxDist;
-				return scaled;
-			}
-		);
-		return data;
-	}
-	default:
+	const unsigned numVectors = getWidth()*getHeight()*getDepth();
+	shared_ptr<vec4<>> data;
+	if (_internalFormat == GL_RGBA32F || _internalFormat == GL_RGBA16F) {
+		data = getNormalizedData(Normalizer(0.0, 1.0));
+	} else if (_internalFormat == GL_RGBA8 || _internalFormat == GL_RGBA) {
+		data = getNormalizedData(Normalizer(0.5, 0.5));
+	} else {
 		throw runtime_error("texture datatype is not supported");
 	}
+
+	auto minMax = minmax_element(data.get(), data.get() + numVectors, 
+		[](const vec4<>& a, const vec4<>& b) {
+			return a.w < b.w;
+		}
+	);
+	float maxLength = minMax.second->w;
+	transform(data.get(), data.get() + numVectors, data.get(),
+		[&](const vec4<>& vec) {
+			vec4<> scaled = vec;
+			scaled[3] = scaled[3]/maxLength;
+			return scaled;
+		}
+	);
+	return data;
+
 }
 
 shared_ptr<vec4<>> MFalkDataTex3DFactory::getNormalizedData(

@@ -11,8 +11,11 @@ in vec3 fDir;
 uniform mat4 uModelViewMatrix;
 uniform float uNumSteps;
 uniform float uBaseAlpha;
-uniform float uValMin;
-uniform float uValMax;
+uniform float uRainbowValMin;
+uniform float uRainbowValMax;
+uniform float uMinMagnitude;
+uniform float uMaxMagnitude;
+uniform float uColorIntensity;
 
 uniform float uNumStepsLIC;
 uniform float uVelocityScale;
@@ -25,7 +28,12 @@ vec3 GetScaledVelocityData(vec3 stp) {
 	returned.x = -3.0 + 6.0*stp.s - 4.0*stp.s*(stp.t+1.0) - 4.0*stp.p;
 	returned.y = 12.0*stp.s - 4.0*stp.s*stp.s - 12.0*stp.p + 4.0*stp.p*stp.p;
 	returned.z = 3.0 + 4.0*stp.s - 4.0*stp.s*(stp.t+1.0) + 6.0*stp.p + 4.0*(stp.t+1.0)*stp.p;
-	return returned*uVelocityScale;
+	return normalize(returned);
+}
+
+vec3 GetVelocityTextureData(vec3 stp) {
+	// data in texture is already normalized.
+	return texture(uVectorData, stp).rgb;
 }
 
 vec3 Rainbow( float t ) {
@@ -66,6 +74,14 @@ vec3 Rainbow( float t ) {
 	return rgb;
 }
 
+float transferFunction(vec3 stp, float accumulated) {
+	float magnitude = texture(uVectorData, stp).a;
+	if (magnitude < uMinMagnitude || magnitude > uMaxMagnitude) {
+		return 0.0;
+	}
+	return magnitude;
+}
+
 vec3 GetForwardDir() {
 	return fDir;
 }
@@ -91,12 +107,12 @@ float ComputeLIC(vec3 stp) {
 	float accumulated = FetchSparseNoise(stp);
 	vec3 stpIterator = stp;
 	for (int i=0; i<uNumStepsLIC; i++) {
-		vec3 velocity = GetScaledVelocityData(stpIterator);
+		vec3 velocity = GetVelocityTextureData(stpIterator);
 		stpIterator = SolveAdvectionEqn(stpIterator, velocity);
 		accumulated += FetchSparseNoise(stpIterator);
 	}
 	for (int i=0; i<uNumStepsLIC; i++) {
-		vec3 velocity = GetScaledVelocityData(stpIterator);
+		vec3 velocity = GetVelocityTextureData(stpIterator);
 		stpIterator = SolveAdvectionEqn(stpIterator, -1.0*velocity);
 		accumulated += FetchSparseNoise(stpIterator);
 	}
@@ -114,7 +130,7 @@ vec3 ClampRainbow(float t, float smin, float smax) {
 
 void main(void) {
 	vec3 stp = fTexCoord;
-	vec3 forwardDir = GetForwardDirAlternate();
+	vec3 forwardDir = GetForwardDir();
 
 
 	float astar = 1.;
@@ -130,8 +146,9 @@ void main(void) {
 			continue;
 		}
 		float accumulated = ComputeLIC(stp);
-		alpha = accumulated * uBaseAlpha; //opacity according to the texel's magnitude.
-		vec3 rgb = ClampRainbow(accumulated, uValMin, uValMax);
+		alpha = transferFunction(stp, accumulated) * uBaseAlpha;
+		vec3 rgb = uColorIntensity*accumulated*
+			ClampRainbow(texture(uVectorData, stp).a, uRainbowValMin, uRainbowValMax);
 		cstar += astar * alpha * rgb;
 		astar *= ( 1. - alpha );
 		stp += forwardDir; // doing front-to-back composition
@@ -139,7 +156,6 @@ void main(void) {
 			break;
 		}
 	}
-
-    gl_FragColor = vec4(1.0 - cstar, 1.0);
+    gl_FragColor = vec4(cstar, 1.0);
 
 }

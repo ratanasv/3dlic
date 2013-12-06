@@ -54,13 +54,16 @@ THREEDLICParameters::THREEDLICParameters() {
 	_floatParams[LICFloatParam::XTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
 	_floatParams[LICFloatParam::YTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
 	_floatParams[LICFloatParam::ZTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[LICFloatParam::NUM_STEPS] =  FloatParam(256.0, 0.0, 1000.0);
+	_floatParams[LICFloatParam::NUM_STEPS] =  FloatParam(100.0, 0.0, 1000.0);
 	_floatParams[LICFloatParam::BASE_ALPHA] = FloatParam(0.7, 0.0, 1.0);
-	_floatParams[LICFloatParam::CLAMP_VAL_MIN] = FloatParam(0.1, 0.0, 1.0);
-	_floatParams[LICFloatParam::CLAMP_VAL_MAX] = FloatParam(0.3, 0.0, 1.0);
+	_floatParams[LICFloatParam::RAINBOW_VAL_MIN] = FloatParam(0.1, 0.0, 1.0);
+	_floatParams[LICFloatParam::RAINBOW_VAL_MAX] = FloatParam(0.3, 0.0, 1.0);
 	_floatParams[LICFloatParam::NUM_STEPS_LIC] = FloatParam(20.0, 0.0, 100.0);
 	_floatParams[LICFloatParam::VELOCITY_SCALE] = FloatParam(0.01, 0.001, 1.0);
-	_floatParams[LICFloatParam::DT] = FloatParam(0.05, 0.0001, 0.3);
+	_floatParams[LICFloatParam::DT] = FloatParam(0.01, 0.0, 0.3);
+	_floatParams[LICFloatParam::MAGNITUDE_MIN] = FloatParam(0.0, 0.0, 1.0);
+	_floatParams[LICFloatParam::MAGNITUDE_MAX] = FloatParam(0.9, 0.0, 1.0);
+	_floatParams[LICFloatParam::COLOR_INTENSITY] = FloatParam(100.0, 0.1, 1000.0);
 	_projection = PERSP;
 	_isPaused = false;
 }

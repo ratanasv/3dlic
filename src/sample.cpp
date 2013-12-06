@@ -102,7 +102,7 @@ enum ButtonVals
 
 // window background color (rgba):
 
-const float BACKCOLOR[ ] = { 1.0, 1.0, 1.0, 1.0 };
+const float BACKCOLOR[ ] = { 0.0, 0.0, 0.0, 1.0 };
 
 const int PERIOD_MS = 10*1000;
 float Timer;

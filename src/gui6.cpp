@@ -31,11 +31,14 @@ void draw6() {
 	VectorDataTexture->pre_render(vectorDataVisitor);
 	BindFloatUniform("uNumSteps", LICFloatParam::NUM_STEPS);
 	BindFloatUniform("uBaseAlpha", LICFloatParam::BASE_ALPHA);
-	BindFloatUniform("uValMin", LICFloatParam::CLAMP_VAL_MIN);
-	BindFloatUniform("uValMax", LICFloatParam::CLAMP_VAL_MAX);
+	BindFloatUniform("uRainbowValMin", LICFloatParam::RAINBOW_VAL_MIN);
+	BindFloatUniform("uRainbowValMax", LICFloatParam::RAINBOW_VAL_MAX);
 	BindFloatUniform("uNumStepsLIC", LICFloatParam::NUM_STEPS_LIC);
 	BindFloatUniform("uVelocityScale", LICFloatParam::VELOCITY_SCALE);
 	BindFloatUniform("uDT", LICFloatParam::DT);
+	BindFloatUniform("uMinMagnitude", LICFloatParam::MAGNITUDE_MIN);
+	BindFloatUniform("uMaxMagnitude", LICFloatParam::MAGNITUDE_MAX);
+	BindFloatUniform("uColorIntensity", LICFloatParam::COLOR_INTENSITY);
 	Cube->render();
 	VectorDataTexture->post_render();
 	SparseNoise->post_render();
