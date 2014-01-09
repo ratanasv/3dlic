@@ -414,14 +414,14 @@ InitGraphics( void )
 	// set the initial window configuration:
 
 	glutInitWindowPosition( 0, 0 );
-	const int windowSize = GetIntProperty(WINDOW_SIZE);
+	const int windowSize = GetIntProperty(Property::WINDOW_SIZE);
 	glutInitWindowSize( windowSize, windowSize );
 
 
 	// open the window and set its title:
 
-	MainWindow = glutCreateWindow(GetStringProperty(WINDOW_TITLE).c_str());
-	glutSetWindowTitle(GetStringProperty(WINDOW_TITLE).c_str());
+	MainWindow = glutCreateWindow(GetStringProperty(Property::WINDOW_TITLE).c_str());
+	glutSetWindowTitle(GetStringProperty(Property::WINDOW_TITLE).c_str());
 	// setup the clear values:
 
 	glClearColor( BACKCOLOR[0], BACKCOLOR[1], BACKCOLOR[2], BACKCOLOR[3] );
@@ -965,13 +965,13 @@ void InitGlui( void ) {
 
 	// setup the glui window:
 
-	glutInitWindowPosition( GetIntProperty(WINDOW_SIZE) + 50, 0 );
+	glutInitWindowPosition( GetIntProperty(Property::WINDOW_SIZE) + 50, 0 );
 	GLUI* Glui = GLUI_Master.create_glui( const_cast<char*>(
-		GetStringProperty(WINDOW_TITLE).c_str()) );
+		GetStringProperty(Property::WINDOW_TITLE).c_str()) );
 
 
 	Glui->add_statictext(const_cast<char*>(
-		GetStringProperty(WINDOW_TITLE).c_str()));
+		GetStringProperty(Property::WINDOW_TITLE).c_str()));
 	Glui->add_separator( );
 
 	Glui->add_checkbox( "Perspective", &WhichProjection );

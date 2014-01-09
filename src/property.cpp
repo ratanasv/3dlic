@@ -17,8 +17,8 @@ static po::variables_map variable_map;
 static const string toString(Property prop) {
 	static map<Property, string> propertyToString;
 	if (propertyToString.size() == 0) {
-		propertyToString[WINDOW_SIZE] = "window_size";
-		propertyToString[WINDOW_TITLE] = "window_title";
+		propertyToString[Property::WINDOW_SIZE] = "window_size";
+		propertyToString[Property::WINDOW_TITLE] = "window_title";
 	}
 	return propertyToString[prop];
 }
@@ -29,8 +29,8 @@ void InitProgramOptions(int argc, char** argv) {
 	po::options_description desc("Allowed options");
 	desc.add_options()
 		("help", "produce help message")
-		(toString(WINDOW_SIZE).c_str(), po::value<int>(), "set window size")
-		(toString(WINDOW_TITLE).c_str(), po::value<string>(), "set window title")
+		(toString(Property::WINDOW_SIZE).c_str(), po::value<int>(), "set window size")
+		(toString(Property::WINDOW_TITLE).c_str(), po::value<string>(), "set window title")
 		("config_file", po::value<string>(), "fully-qualified path to config file");
 
 	try {

@@ -8,7 +8,7 @@
 
 using std::string;
 
-typedef enum {WINDOW_SIZE, WINDOW_TITLE} Property;
+enum class Property {WINDOW_SIZE, WINDOW_TITLE};
 
 
 void InitProgramOptions(int argc, char** argv);
