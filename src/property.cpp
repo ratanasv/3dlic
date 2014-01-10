@@ -19,6 +19,7 @@ static const string toString(Property prop) {
 	if (propertyToString.size() == 0) {
 		propertyToString[Property::WINDOW_SIZE] = "window_size";
 		propertyToString[Property::WINDOW_TITLE] = "window_title";
+		propertyToString[Property::PATH_DATA] = "path_data";
 	}
 	return propertyToString[prop];
 }
@@ -31,7 +32,8 @@ void InitProgramOptions(int argc, char** argv) {
 		("help", "produce help message")
 		(toString(Property::WINDOW_SIZE).c_str(), po::value<int>(), "set window size")
 		(toString(Property::WINDOW_TITLE).c_str(), po::value<string>(), "set window title")
-		("config_file", po::value<string>(), "fully-qualified path to config file");
+		("config_file", po::value<string>(), "fully-qualified path to config file")
+		(toString(Property::PATH_DATA).c_str(), po::value<string>(), "path to vector data");
 
 	try {
 		po::store(po::parse_command_line(argc, argv, desc), variable_map);
