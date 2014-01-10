@@ -60,23 +60,23 @@ void animate6(float t) {
 
 
 void init6() {
-	static const string BASE_PATH("E:/Vault/3dlic");
-	static fs::path VERTEX_SHADER_PATH(BASE_PATH + "/shader/vert.vert");
-	static fs::path FRAGMENT_SHADER_PATH(BASE_PATH + "/shader/frag.frag");
-	static fs::path NOISE_PATH(BASE_PATH + "/noise/noise-256-sparse");
-	static fs::path DATA_PATH(BASE_PATH + "/data/cyl_float.dat");
+	ExistingPath VERTEX_SHADER_PATH(GetStringProperty(Property::PATH_VERTEX_SHADER));
+	ExistingPath FRAGMENT_SHADER_PATH(GetStringProperty(Property::PATH_FRAGMENT_SHADER));
+	ExistingPath NOISE_PATH(GetStringProperty(Property::PATH_NOISE));
+	ExistingPath DATA_PATH(GetStringProperty(Property::PATH_DATA));
 
+	string wtf = VERTEX_SHADER_PATH;
 	VolumeTracingShader.reset(new GLSLProgram());
-	VolumeTracingShader->Create(VERTEX_SHADER_PATH.string().c_str(),
-		FRAGMENT_SHADER_PATH.string().c_str());
+	VolumeTracingShader->Create(VERTEX_SHADER_PATH.c_str(),
+		FRAGMENT_SHADER_PATH.c_str());
 	VolumeTracingShader->Use();
 
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
-		NOISE_PATH.string().c_str(), 1));
+		NOISE_PATH, 1));
 	shared_ptr<TextureDelegatee> delegatee(new GLTextureDelegatee(factory));
 	SparseNoise.reset(new VirTex(delegatee));
 
-	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.string().c_str(), GL_RGBA32F));
+	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.c_str(), GL_RGBA32F));
 	delegatee.reset(new GLTextureDelegatee(factory));
 	VectorDataTexture.reset(new VirTex(delegatee));
 

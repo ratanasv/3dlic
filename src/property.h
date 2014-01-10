@@ -8,7 +8,8 @@
 
 using std::string;
 
-enum class Property {WINDOW_SIZE, WINDOW_TITLE, PATH_DATA};
+enum class Property {WINDOW_SIZE, WINDOW_TITLE, PATH_DATA, PATH_VERTEX_SHADER, 
+	PATH_FRAGMENT_SHADER, PATH_NOISE};
 
 
 void InitProgramOptions(int argc, char** argv);

@@ -122,5 +122,8 @@
     <ClCompile Include="src\texture6.cpp">
       <Filter>Source Files\datareader</Filter>
     </ClCompile>
+    <ClCompile Include="src\vir_toolbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

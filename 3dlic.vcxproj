@@ -55,6 +55,7 @@
     <ClCompile Include="src\texture6.cpp" />
     <ClCompile Include="src\virmodel.cpp" />
     <ClCompile Include="src\virtex.cpp" />
+    <ClCompile Include="src\vir_toolbox.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{51CB8F8D-219A-4A00-988E-5D392EC775D6}</ProjectGuid>

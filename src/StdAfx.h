@@ -30,5 +30,6 @@
 #include <boost/program_options.hpp>
 #include <iostream>
 #include "vir_toolbox.hpp"
+#include "property.h"
 
 #pragma message("Compiling PCH")
