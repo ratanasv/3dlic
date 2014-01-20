@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "texture6.h"
 #include <cstring>
+#include "glslprogram.h"
 
 using std::string;
 

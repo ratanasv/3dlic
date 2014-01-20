@@ -1,6 +1,7 @@
 #pragma once
+
 #include "virtex.h"
-#include "glslprogram.h"
+class GLSLUniformBinder;
 
 class GLSLTextureSamplerBinder : public TextureVisitor {
 private:
