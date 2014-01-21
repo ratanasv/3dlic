@@ -11,58 +11,6 @@ using namespace vir;
 map<LICBoolParam, CheckboxBundle> BunchOfCheckboxes;
 map<int, RadioBundle> Bunch_Of_Radios;
 
-SliderBundle::SliderBundle(GLUI* main_glui, GLUI_Panel* panel, vec2<> def_vals,
-	vec2<> bounds, int id, const string format, void (*callback)(int id),
-	bool isDual /*= false*/) : 
-	slider(main_glui->add_slider_to_panel(panel, isDual, GLUI_HSLIDER_FLOAT,
-		_vals, id, callback)),
-	_label(main_glui->add_statictext_to_panel(panel, "bbbb")),
-	_vals(_defVals), 
-	_defVals(def_vals), 
-	_bounds(bounds), 
-	_callbackID(id), 
-	_format(format), 
-	_twoSided(isDual)
-{
-	slider->set_w(200.0);
-	slider->set_float_limits(bounds.x, bounds.y);
-	Refresh();
-}
-
-void SliderBundle::Update(const Observable* const observable) {
-	auto lic = dynamic_cast<const THREEDLICParameters* const>(observable);
-	if (lic) {
-		Refresh();
-	}
-}
-
-void SliderBundle::Refresh() {
-	char string[128];
-	if (_twoSided) {
-		sprintf( string, _format.c_str(), _vals.x, _vals.y);
-		_label->set_text(string);
-		slider->set_slider_val(_vals.x, _vals.y);
-	} else {
-		sprintf( string, _format.c_str(), _vals.x);
-		_label->set_text(string);
-		slider->set_slider_val(_vals.x);
-	}
-	float dummy = slider->float_low;
-	dummy = slider->float_high;
-}
-
-void SliderBundle::Reset() {
-	_vals = _defVals;
-	Refresh();
-}
-
-bool SliderBundle::IsDual() const {
-	return _twoSided;
-}
-
-vec2<> SliderBundle::GetValue() const {
-	return _vals;
-}
 
 // void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
 // 	const CheckboxBundle& cb_in) 
@@ -165,6 +113,11 @@ void create_proj6_panel(GLUI* main_glui) {
 		"magnitude = %4.4f - %4.4f");
 	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
 		LICFloatParam::COLOR_INTENSITY, "color intensity = %4.4f");
+
+	main_glui->add_separator();
+
+	panel = main_glui->add_rollout("more options", 1);
+
 		
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);
 	// 	char* labels[] = {"texture enviroment","no texture", "modulate", "replace"};
@@ -172,5 +125,3 @@ void create_proj6_panel(GLUI* main_glui) {
 	// 	char* labels2[] = {"texture sampling", "nearest", "linear"};
 
 }
-
-static GLUI* Glui;				// instance of glui window

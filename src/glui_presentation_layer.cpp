@@ -1,6 +1,10 @@
 #include "StdAfx.h"
 #include "glui_presentation_layer.h"
 #include "3dlic_model.h"
+#include "glui_utility.h"
+#include "glui.h"
+
+
 
 GLUIPresentationLayer* GLUIPresentationLayer::INSTANCE = new GLUIPresentationLayer();
 

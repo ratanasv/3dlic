@@ -2,14 +2,17 @@
 #include <map>
 #include <memory>
 #include <cstring>
-#include "glui.h"
-#include "glui_utility.h"
+
 
 using std::map;
 using std::shared_ptr;
 using std::string;
 
 enum class LICFloatParam : int;
+class SliderBundle;
+class GLUI;
+class GLUI_Panel;
+
 void CallbackMemFunWrapper(int id);
 
 // class for dealing with GLUI since it writes directly to memory.

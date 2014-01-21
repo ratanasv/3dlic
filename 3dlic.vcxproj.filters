@@ -75,6 +75,9 @@
     <ClInclude Include="src\vir_toolbox.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\SliderBundle.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\abstract.cpp">
@@ -124,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="src\vir_toolbox.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SliderBundle.cpp">
+      <Filter>Source Files\datareader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
