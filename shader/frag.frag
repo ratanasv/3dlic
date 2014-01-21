@@ -124,7 +124,7 @@ float ComputeLIC(vec3 stp) {
  * Clamps, and also converts it to rainbow color.
  */
 vec3 ClampRainbow(float t, float smin, float smax) {
-	return Rainbow((t - smin)/(smax - smin));
+	return Rainbow(1.0 - (t - smin)/(smax - smin));
 }
 
 
@@ -152,7 +152,7 @@ void main(void) {
 		cstar += astar * alpha * rgb;
 		astar *= ( 1. - alpha );
 		stp += forwardDir; // doing front-to-back composition
-		if ( astar == 0.0 ) {
+		if ( astar < 0.05 ) {
 			break;
 		}
 	}
