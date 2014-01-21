@@ -9,10 +9,9 @@ THREEDLICParameters* THREEDLICParameters::INSTANCE = new THREEDLICParameters();
 FloatParam::FloatParam() : _defaultVal(0.5), _minVal(0.0), _maxVal(1.0), 
 	_val(_defaultVal) {};
 
-FloatParam::FloatParam( float a, float b, float c ) {
-	_minVal = b;
-	_maxVal = c;
-	_defaultVal = a;
+FloatParam::FloatParam( float a, float b, float c ) : 
+	_minVal(b), _maxVal(c), _defaultVal(a)
+{
 	SetFloat(_defaultVal);
 }
 
@@ -44,22 +43,28 @@ void FloatParam::Reset() {
 	_val = _defaultVal;
 }
 
+template <class T, class V> static void InsertHelper(map<T,V>& theMap, 
+	const T& key, const V& value) 
+{
+	theMap.insert(pair<T,V>(key, value));
+}
+
 THREEDLICParameters::THREEDLICParameters() {
-	_floatParams[LICFloatParam::XROT] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[LICFloatParam::YROT] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[LICFloatParam::XTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[LICFloatParam::YTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[LICFloatParam::ZTRANSLATE] = FloatParam(0.0, -1000.0, 1000.0);
-	_floatParams[LICFloatParam::NUM_STEPS] =  FloatParam(100.0, 0.0, 1000.0);
-	_floatParams[LICFloatParam::BASE_ALPHA] = FloatParam(0.7, 0.0, 1.0);
-	_floatParams[LICFloatParam::RAINBOW_VAL_MIN] = FloatParam(0.1, 0.0, 1.0);
-	_floatParams[LICFloatParam::RAINBOW_VAL_MAX] = FloatParam(0.3, 0.0, 1.0);
-	_floatParams[LICFloatParam::NUM_STEPS_LIC] = FloatParam(20.0, 0.0, 100.0);
-	_floatParams[LICFloatParam::VELOCITY_SCALE] = FloatParam(0.01, 0.001, 1.0);
-	_floatParams[LICFloatParam::DT] = FloatParam(0.01, 0.0, 0.3);
-	_floatParams[LICFloatParam::MAGNITUDE_MIN] = FloatParam(0.0, 0.0, 1.0);
-	_floatParams[LICFloatParam::MAGNITUDE_MAX] = FloatParam(0.3, 0.0, 1.0);
-	_floatParams[LICFloatParam::COLOR_INTENSITY] = FloatParam(100.0, 0.1, 1000.0);
+	InsertHelper(_floatParams, LICFloatParam::XROT, FloatParam(0.0, -1000.0, 1000.0));
+	InsertHelper(_floatParams, LICFloatParam::YROT, FloatParam(0.0, -1000.0, 1000.0));
+	InsertHelper(_floatParams, LICFloatParam::XTRANSLATE, FloatParam(0.0, -1000.0, 1000.0));
+	InsertHelper(_floatParams, LICFloatParam::YTRANSLATE, FloatParam(0.0, -1000.0, 1000.0));
+	InsertHelper(_floatParams, LICFloatParam::ZTRANSLATE, FloatParam(0.0, -1000.0, 1000.0));
+	InsertHelper(_floatParams, LICFloatParam::NUM_STEPS, FloatParam(100.0, 0.0, 1000.0));
+	InsertHelper(_floatParams, LICFloatParam::BASE_ALPHA, FloatParam(0.7, 0.0, 1.0));
+	InsertHelper(_floatParams, LICFloatParam::RAINBOW_VAL_MIN, FloatParam(0.1, 0.0, 1.0));
+	InsertHelper(_floatParams, LICFloatParam::RAINBOW_VAL_MAX, FloatParam(0.3, 0.0, 1.0));
+	InsertHelper(_floatParams, LICFloatParam::NUM_STEPS_LIC, FloatParam(20.0, 0.0, 100.0));
+	InsertHelper(_floatParams, LICFloatParam::VELOCITY_SCALE, FloatParam(0.01, 0.001, 1.0));
+	InsertHelper(_floatParams, LICFloatParam::DT, FloatParam(0.01, 0.0, 0.3));
+	InsertHelper(_floatParams, LICFloatParam::MAGNITUDE_MIN, FloatParam(0.0, 0.0, 1.0));
+	InsertHelper(_floatParams, LICFloatParam::MAGNITUDE_MAX, FloatParam(0.3, 0.0, 1.0));
+	InsertHelper(_floatParams, LICFloatParam::COLOR_INTENSITY, FloatParam(100.0, 0.1, 1000.0));
 	_projection = PROJ_TYPE::PERSP;
 }
 
@@ -85,3 +90,23 @@ void THREEDLICParameters::SetFloatParameter( LICFloatParam param, float in ) {
 	NotifyObservers();
 }
 
+
+BoolParam::BoolParam(bool defaultVal) : _defaultVal(defaultVal) {
+	SetBool(_defaultVal);
+}
+
+BoolParam::~BoolParam() {
+
+}
+
+bool BoolParam::GetDefaultVal() const {
+	return _defaultVal;
+}
+
+bool BoolParam::GetBool() const {
+	return _val;
+}
+
+void BoolParam::SetBool(bool in) {
+	_val = in;
+}

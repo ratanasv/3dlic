@@ -19,10 +19,23 @@ public:
 	void Reset();
 	float GetFloat() const;
 private:
-	float _minVal;
-	float _maxVal;
-	float _defaultVal;
+	const float _minVal;
+	const float _maxVal;
+	const float _defaultVal;
 	float _val;
+};
+
+class BoolParam {
+public:
+	BoolParam(bool defaultVal);
+	virtual ~BoolParam();
+private:
+	const bool _defaultVal;
+	bool _val;
+public:
+	bool GetDefaultVal() const;
+	bool GetBool() const;
+	void SetBool(bool in);
 };
 
 enum class LICFloatParam : int {
