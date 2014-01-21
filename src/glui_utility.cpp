@@ -8,7 +8,6 @@ using std::map;
 using std::pair;
 using namespace vir;
 
-map<LICBoolParam, CheckboxBundle> BunchOfCheckboxes;
 map<int, RadioBundle> Bunch_Of_Radios;
 
 

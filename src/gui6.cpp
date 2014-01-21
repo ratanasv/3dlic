@@ -18,7 +18,7 @@ static shared_ptr<VirTex> VectorDataTexture;
 
 static void BindFloatUniform(const char* var, LICFloatParam param) {
 	VolumeTracingShader->SetUniform(var, THREEDLICParameters::INSTANCE
-		->GetFloatParameter(param));
+		->GetFloatParameter(param).GetFloat());
 }
 
 

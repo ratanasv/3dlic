@@ -1,6 +1,7 @@
 #pragma once
-#include "glslprogram.h"
 #include "memory"
+
+class GLSLProgram;
 
 using std::shared_ptr;
 

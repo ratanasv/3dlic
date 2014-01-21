@@ -617,7 +617,7 @@ void MouseMotion( int x, int y ) {
 
 	if( ( ActiveButton & MIDDLE ) != 0 ) {
 		const float zTranslate = THREEDLICParameters::INSTANCE->GetFloatParameter(
-			LICFloatParam::ZTRANSLATE);
+			LICFloatParam::ZTRANSLATE).GetFloat();
 		THREEDLICParameters::INSTANCE->SetFloatParameter(
 			LICFloatParam::ZTRANSLATE, zTranslate + SCLFACT*dy);
 	}
@@ -1006,11 +1006,11 @@ void apply_transformations() {
 	
 	camera->Translate(
 		THREEDLICParameters::INSTANCE->GetFloatParameter(
-			LICFloatParam::XTRANSLATE), 
+			LICFloatParam::XTRANSLATE).GetFloat(), 
 		THREEDLICParameters::INSTANCE->GetFloatParameter(
-			LICFloatParam::YTRANSLATE),
+			LICFloatParam::YTRANSLATE).GetFloat(),
 		THREEDLICParameters::INSTANCE->GetFloatParameter(
-			LICFloatParam::ZTRANSLATE)
+			LICFloatParam::ZTRANSLATE).GetFloat()
 	);
 	camera->Rotate(Xrot, Yrot, 0.0);
 

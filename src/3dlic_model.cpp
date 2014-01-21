@@ -16,11 +16,7 @@ FloatParam::FloatParam( float a, float b, float c ) {
 	SetFloat(_defaultVal);
 }
 
-FloatParam::operator float() {
-	return _val;
-}
-
-FloatParam::operator const float() const {
+float FloatParam::GetFloat() const {
 	return _val;
 }
 
@@ -64,17 +60,13 @@ THREEDLICParameters::THREEDLICParameters() {
 	_floatParams[LICFloatParam::MAGNITUDE_MIN] = FloatParam(0.0, 0.0, 1.0);
 	_floatParams[LICFloatParam::MAGNITUDE_MAX] = FloatParam(0.3, 0.0, 1.0);
 	_floatParams[LICFloatParam::COLOR_INTENSITY] = FloatParam(100.0, 0.1, 1000.0);
-	_projection = PERSP;
-	_isPaused = false;
+	_projection = PROJ_TYPE::PERSP;
 }
 
-THREEDLICParameters::PROJ_TYPE THREEDLICParameters::GetProjection() const {
+PROJ_TYPE THREEDLICParameters::GetProjection() const {
 	return _projection;
 }
 
-bool THREEDLICParameters::GetIsPaused() const {
-	return _isPaused;
-}
 
 
 void THREEDLICParameters::SetProjection( PROJ_TYPE in ) {
@@ -82,10 +74,6 @@ void THREEDLICParameters::SetProjection( PROJ_TYPE in ) {
 	NotifyObservers();
 }
 
-void THREEDLICParameters::SetIsPaused( bool in ) {
-	_isPaused = in;
-	NotifyObservers();
-}
 
 
 FloatParam THREEDLICParameters::GetFloatParameter( LICFloatParam param ) const {

@@ -12,13 +12,12 @@ class FloatParam {
 public:
 	FloatParam();
 	FloatParam(float a, float b, float c);
-	operator float();
-	operator const float() const;
 	void SetFloat(float in);
 	float GetMinVal() const;
 	float GetMaxVal() const;
 	float GetDefaultVal() const;
 	void Reset();
+	float GetFloat() const;
 private:
 	float _minVal;
 	float _maxVal;
@@ -36,24 +35,25 @@ enum class LICBoolParam : int {
 	PROJECTION, ISPAUSED
 };
 
+enum class PROJ_TYPE : int {
+	ORTHO, PERSP
+};
+
 
 class THREEDLICParameters : public Observable {
 private: //enforces a singleton property.
 	THREEDLICParameters();
 	THREEDLICParameters(const THREEDLICParameters& other);
-public:
-	typedef enum {ORTHO, PERSP} PROJ_TYPE;
 private:
 	PROJ_TYPE _projection;
-	bool _isPaused;
 	map<LICFloatParam, FloatParam> _floatParams;
+	map<LICBoolParam, FloatParam> _boolParams;
 public:
 	PROJ_TYPE GetProjection() const;
-	bool GetIsPaused() const;
 	void SetTranslate(const vec3<>& in);
 	void SetProjection(PROJ_TYPE in);
-	void SetIsPaused(bool in);
 	FloatParam GetFloatParameter(LICFloatParam param) const;
+	BOOL GetBoolParameter(LICBoolParam param) const;
 	void SetFloatParameter(LICFloatParam param, float in);
 
 	static THREEDLICParameters* INSTANCE;
