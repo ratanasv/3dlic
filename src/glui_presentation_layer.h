@@ -18,6 +18,13 @@ class GLUI_Panel;
 void CallbackWrapper(int id);
 void CallbackWrapper2(int id);
 
+/** Guideline for adding another GLSL uniform variable.
+ * i) Add your enum to THREEDLICParameters.
+ * ii) Add default values and register it in THREEDLICParameters's default ctor.
+ * iii) (optional) Create a GLUI element in glui_utility::create_proj6_panel.
+ * iv) Send it to the GPU before the draw call in gui6::draw6.
+ */
+
 // class for dealing with GLUI since it writes directly to memory.
 class GLUIPresentationLayer {
 private:
