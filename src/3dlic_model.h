@@ -45,7 +45,7 @@ enum class LICFloatParam : int {
 };
 
 enum class LICBoolParam : int {
-	PROJECTION, ISPAUSED
+	PROJECTION, ISPAUSED, RENDER_RAY_DEPTH
 };
 
 enum class PROJ_TYPE : int {

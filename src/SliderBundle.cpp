@@ -22,6 +22,17 @@ SliderBundle::SliderBundle(GLUI* main_glui, GLUI_Panel* panel, vec2<> def_vals,
 	Refresh();
 }
 
+/** Data Binding
+ * Need to sync between SliderBundle::_vals & THREEDLICParameters::_floatParams[id]
+ * & SliderBundle::_label. 
+ * The Mechanism
+ * i) User interacts with a GLUI element
+ * ii) GLUI Internally calls its callback func 
+ * iii) In this case THE callback is GLUIPresentationLayer::OnGLUICallback
+ * iv) OnGLUICallback then updates the model (THREEDLICParameters).
+ * v) THREEDLICParameters then notify all observers of state changes.
+ */
+
 void SliderBundle::Update(const Observable* const observable) {
 	auto lic = dynamic_cast<const THREEDLICParameters* const>(observable);
 	if (lic) {

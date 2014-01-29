@@ -116,6 +116,8 @@ void create_proj6_panel(GLUI* main_glui) {
 	main_glui->add_separator();
 
 	panel = main_glui->add_rollout("more options", 1);
+	GLUIPresentationLayer::INSTANCE->InsertCheckBox(main_glui, panel, 
+		LICBoolParam::RENDER_RAY_DEPTH);
 
 		
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);
