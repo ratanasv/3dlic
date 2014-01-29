@@ -11,6 +11,7 @@ using std::string;
 enum class LICFloatParam : int;
 enum class LICBoolParam : int;
 class SliderBundle;
+class CheckboxBundle;
 class GLUI;
 class GLUI_Panel;
 
@@ -21,6 +22,7 @@ class GLUIPresentationLayer {
 private:
 	map<LICFloatParam, shared_ptr<SliderBundle>> _sliders;
 	map<LICFloatParam, LICFloatParam> _dualSliderIDs;
+	map<LICBoolParam, shared_ptr<CheckboxBundle>> _checkboxes;
 private: //enforces a singleton property.
 	GLUIPresentationLayer() {};
 	GLUIPresentationLayer(const GLUIPresentationLayer& other);

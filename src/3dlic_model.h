@@ -66,7 +66,7 @@ public:
 	void SetTranslate(const vec3<>& in);
 	void SetProjection(PROJ_TYPE in);
 	FloatParam GetFloatParameter(LICFloatParam param) const;
-	bool GetBoolParameter(LICBoolParam param) const;
+	BoolParam GetBoolParameter(LICBoolParam param) const;
 	void SetFloatParameter(LICFloatParam param, float in);
 	void SetBoolParameter(LICBoolParam param, bool in);
 

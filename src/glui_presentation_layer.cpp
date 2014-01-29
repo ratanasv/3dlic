@@ -4,7 +4,7 @@
 #include "glui_utility.h"
 #include "glui.h"
 #include "SliderBundle.h"
-
+#include "CheckboxBundle.h"
 
 
 GLUIPresentationLayer* GLUIPresentationLayer::INSTANCE = new GLUIPresentationLayer();
@@ -49,7 +49,11 @@ void GLUIPresentationLayer::InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel,
 	LICBoolParam param)
 {
 	const int callbackID = static_cast<int>(param);
-	
+	const BoolParam boolParam = THREEDLICParameters::INSTANCE->GetBoolParameter(param);
+	shared_ptr<CheckboxBundle> checkboxBundle(new CheckboxBundle(main_glui, panel, 
+		boolParam.GetBool(), boolParam.GetDefaultVal(), callbackID, CallbackMemFunWrapper));
+	_checkboxes[param] = checkboxBundle;
+	THREEDLICParameters::INSTANCE->AddObserver(checkboxBundle);	
 }
 
 int GLUIPresentationLayer::GetCallbackID(LICFloatParam pone, LICFloatParam ptwo) {
