@@ -15,7 +15,8 @@ class CheckboxBundle;
 class GLUI;
 class GLUI_Panel;
 
-void CallbackMemFunWrapper(int id);
+void CallbackWrapper(int id);
+void CallbackWrapper2(int id);
 
 // class for dealing with GLUI since it writes directly to memory.
 class GLUIPresentationLayer {
@@ -33,13 +34,15 @@ public:
 	void InsertDualSlider(GLUI* main_glui, GLUI_Panel* panel, 
 		LICFloatParam paramOne, LICFloatParam paramTwo, const string& label);
 	void InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel, LICBoolParam param);
-	friend void ::CallbackMemFunWrapper(int id);
+	friend void ::CallbackWrapper(int id);
+	friend void ::CallbackWrapper2(int id);
 private:
 	int GetCallbackID(LICFloatParam pone, LICFloatParam ptwo);
 	/**
 	 * Establishes data binding between the slider and the model.
 	 */
-	void OnGLUICallback(const int callbackID);
+	void OnFloatCallback(const int callbackID);
+	void OnBooleanCallback(const int callbackID);
 public:
 	static GLUIPresentationLayer* INSTANCE;
 };

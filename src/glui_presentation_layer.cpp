@@ -6,11 +6,14 @@
 #include "SliderBundle.h"
 #include "CheckboxBundle.h"
 
-
 GLUIPresentationLayer* GLUIPresentationLayer::INSTANCE = new GLUIPresentationLayer();
 
-void CallbackMemFunWrapper(int id) {
-	GLUIPresentationLayer::INSTANCE->OnGLUICallback(id);
+void CallbackWrapper(int id) {
+	GLUIPresentationLayer::INSTANCE->OnFloatCallback(id);
+}
+
+void CallbackWrapper2(int id) {
+	GLUIPresentationLayer::INSTANCE->OnBooleanCallback(id);
 }
 
 void GLUIPresentationLayer::InsertSlider(GLUI* main_glui, GLUI_Panel* panel, 
@@ -22,7 +25,7 @@ void GLUIPresentationLayer::InsertSlider(GLUI* main_glui, GLUI_Panel* panel,
 	vec2<> bounds(floatParam.GetMinVal(), floatParam.GetMaxVal());
 
 	shared_ptr<SliderBundle> sliderBundle(new SliderBundle(main_glui, panel,
-		val, bounds, callbackID, label.c_str(), CallbackMemFunWrapper));
+		val, bounds, callbackID, label.c_str(), CallbackWrapper ));
 	_sliders[param] = sliderBundle;
 	THREEDLICParameters::INSTANCE->AddObserver(sliderBundle);
 }
@@ -39,7 +42,7 @@ void GLUIPresentationLayer::InsertDualSlider(GLUI* main_glui, GLUI_Panel* panel,
 	vec2<> bounds(floatParamOne.GetMinVal(), floatParamOne.GetMaxVal());
 
 	shared_ptr<SliderBundle> sliderBundle(new SliderBundle(main_glui, panel,
-		val, bounds, callbackID, label.c_str(), CallbackMemFunWrapper, true));
+		val, bounds, callbackID, label.c_str(), CallbackWrapper, true));
 	_sliders[paramOne] = sliderBundle;
 	_dualSliderIDs[paramOne] = paramTwo;
 	THREEDLICParameters::INSTANCE->AddObserver(sliderBundle);
@@ -51,7 +54,7 @@ void GLUIPresentationLayer::InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel,
 	const int callbackID = static_cast<int>(param);
 	const BoolParam boolParam = THREEDLICParameters::INSTANCE->GetBoolParameter(param);
 	shared_ptr<CheckboxBundle> checkboxBundle(new CheckboxBundle(main_glui, panel, 
-		boolParam.GetBool(), boolParam.GetDefaultVal(), callbackID, CallbackMemFunWrapper));
+		boolParam.GetBool(), boolParam.GetDefaultVal(), callbackID, CallbackWrapper2));
 	_checkboxes[param] = checkboxBundle;
 	THREEDLICParameters::INSTANCE->AddObserver(checkboxBundle);	
 }
@@ -60,7 +63,7 @@ int GLUIPresentationLayer::GetCallbackID(LICFloatParam pone, LICFloatParam ptwo)
 	return static_cast<int>(pone);
 }
 
-void GLUIPresentationLayer::OnGLUICallback(const int callbackID) {
+void GLUIPresentationLayer::OnFloatCallback(const int callbackID) {
 	LICFloatParam which = static_cast<LICFloatParam>(callbackID);
 	THREEDLICParameters::INSTANCE->SetFloatParameter(which, 
 		_sliders.at(which)->GetValue().x);
@@ -69,4 +72,10 @@ void GLUIPresentationLayer::OnGLUICallback(const int callbackID) {
 		THREEDLICParameters::INSTANCE->SetFloatParameter(otherEnd, 
 			_sliders.at(which)->GetValue().y);
 	}
+}
+
+void GLUIPresentationLayer::OnBooleanCallback(const int callbackID) {
+	LICBoolParam which = static_cast<LICBoolParam>(callbackID);
+	THREEDLICParameters::INSTANCE->SetBoolParameter(which, 
+		_checkboxes.at(which)->_val);
 }
