@@ -3,6 +3,7 @@
 #include "3dlic_model.h"
 #include "glui_utility.h"
 #include "glui.h"
+#include "SliderBundle.h"
 
 
 
@@ -42,6 +43,13 @@ void GLUIPresentationLayer::InsertDualSlider(GLUI* main_glui, GLUI_Panel* panel,
 	_sliders[paramOne] = sliderBundle;
 	_dualSliderIDs[paramOne] = paramTwo;
 	THREEDLICParameters::INSTANCE->AddObserver(sliderBundle);
+}
+
+void GLUIPresentationLayer::InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel, 
+	LICBoolParam param)
+{
+	const int callbackID = static_cast<int>(param);
+	
 }
 
 int GLUIPresentationLayer::GetCallbackID(LICFloatParam pone, LICFloatParam ptwo) {

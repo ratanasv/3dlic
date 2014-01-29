@@ -90,6 +90,15 @@ void THREEDLICParameters::SetFloatParameter( LICFloatParam param, float in ) {
 	NotifyObservers();
 }
 
+bool THREEDLICParameters::GetBoolParameter(LICBoolParam param) const {
+	return _boolParams.at(param).GetBool();
+}
+
+void THREEDLICParameters::SetBoolParameter(LICBoolParam param, bool in) {
+	_boolParams.at(param).SetBool(in);
+	NotifyObservers();
+}
+
 
 BoolParam::BoolParam(bool defaultVal) : _defaultVal(defaultVal) {
 	SetBool(_defaultVal);

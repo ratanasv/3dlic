@@ -78,6 +78,9 @@
     <ClInclude Include="src\SliderBundle.h">
       <Filter>Header Files\mvc</Filter>
     </ClInclude>
+    <ClInclude Include="src\CheckboxBundle.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\abstract.cpp">
@@ -129,7 +132,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SliderBundle.cpp">
-      <Filter>Source Files\datareader</Filter>
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CheckboxBundle.cpp">
+      <Filter>Source Files\mvc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

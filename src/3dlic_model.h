@@ -60,14 +60,15 @@ private: //enforces a singleton property.
 private:
 	PROJ_TYPE _projection;
 	map<LICFloatParam, FloatParam> _floatParams;
-	map<LICBoolParam, FloatParam> _boolParams;
+	map<LICBoolParam, BoolParam> _boolParams;
 public:
 	PROJ_TYPE GetProjection() const;
 	void SetTranslate(const vec3<>& in);
 	void SetProjection(PROJ_TYPE in);
 	FloatParam GetFloatParameter(LICFloatParam param) const;
-	BOOL GetBoolParameter(LICBoolParam param) const;
+	bool GetBoolParameter(LICBoolParam param) const;
 	void SetFloatParameter(LICFloatParam param, float in);
+	void SetBoolParameter(LICBoolParam param, bool in);
 
 	static THREEDLICParameters* INSTANCE;
 };
