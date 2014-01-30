@@ -10,20 +10,6 @@ using namespace vir;
 
 map<int, RadioBundle> Bunch_Of_Radios;
 
-
-// void cbox45_factory(GLUI* main_glui, GLUI_Panel* panel, char* name, 
-// 	const CheckboxBundle& cb_in) 
-// {
-// 	const int irrelavent = 0;
-// 	BunchOfCheckboxes.insert(
-// 		pair<LICBoolParam, CheckboxBundle>(
-// 		cb_in.id, cb_in));
-// 	auto& cb = BunchOfCheckboxes.at(cb_in.id);
-// 	cb.checkbox = main_glui->add_checkbox_to_panel(panel, name, &cb.val, 
-// 		irrelavent, (GLUI_Update_CB)callback);
-// 	cb.refresh();
-// }
-
 void hsv_to_rgb(float hsv[3], float rgb[3])
 {
 	float tmp1 = hsv[2] * (1-hsv[1]);

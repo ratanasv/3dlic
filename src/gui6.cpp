@@ -6,6 +6,7 @@
 #include "texture6.h"
 #include "3dlic_model.h"
 #include "mfalk_reader_wrapper.h"
+#include "NoiseTex3DFactory.h"
 
 using namespace vir;
 using std::string;
