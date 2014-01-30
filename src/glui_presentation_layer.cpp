@@ -49,14 +49,14 @@ void GLUIPresentationLayer::InsertDualSlider(GLUI* main_glui, GLUI_Panel* panel,
 }
 
 void GLUIPresentationLayer::InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel, 
-	LICBoolParam param)
+	LICBoolParam param, const string& label)
 {
 	const int callbackID = static_cast<int>(param);
 	const BoolParam boolParam = THREEDLICParameters::INSTANCE->GetBoolParameter(param);
 	CheckboxBundle::Builder builder;
 	builder.WithMainGLUI(main_glui)
 		.WithPanel(panel)
-		.WithLabel("asdf")
+		.WithLabel(label)
 		.WithDefaultValue(boolParam.GetDefaultVal())
 		.WithCallbackID(callbackID)
 		.WithCallback(CallbackWrapper2);

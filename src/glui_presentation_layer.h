@@ -40,7 +40,8 @@ public:
 		const string& label);
 	void InsertDualSlider(GLUI* main_glui, GLUI_Panel* panel, 
 		LICFloatParam paramOne, LICFloatParam paramTwo, const string& label);
-	void InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel, LICBoolParam param);
+	void InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel, LICBoolParam param, 
+		const std::string& label);
 	friend void ::CallbackWrapper(int id);
 	friend void ::CallbackWrapper2(int id);
 private:
