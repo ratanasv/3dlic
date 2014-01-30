@@ -25,11 +25,11 @@
     <Filter Include="Source Files\datareader">
       <UniqueIdentifier>{7b09e52d-229d-444d-bbe7-5306005ffa89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="thirdparty">
+      <UniqueIdentifier>{dbfbaf05-1a6f-40b3-b902-629b7bef5be4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\abstract.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\glslprogram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,11 +81,17 @@
     <ClInclude Include="src\CheckboxBundle.h">
       <Filter>Header Files\mvc</Filter>
     </ClInclude>
-    <ClInclude Include="src\noise.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\NoiseTex3DFactory.h">
       <Filter>Header Files\datareader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ProceduralNoise.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\abstract.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\halton.hpp">
+      <Filter>thirdparty</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +151,12 @@
     </ClCompile>
     <ClCompile Include="src\NoiseTex3DFactory.cpp">
       <Filter>Source Files\datareader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ProceduralNoise.cpp">
+      <Filter>Source Files\datareader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\halton.cpp">
+      <Filter>thirdparty</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

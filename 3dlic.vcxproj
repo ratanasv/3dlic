@@ -26,9 +26,10 @@
     <ClInclude Include="src\glui_presentation_layer.h" />
     <ClInclude Include="src\gui6.h" />
     <ClInclude Include="src\glui_utility.h" />
+    <ClInclude Include="src\halton.hpp" />
     <ClInclude Include="src\mfalk_reader_wrapper.h" />
     <ClInclude Include="src\model_controller.h" />
-    <ClInclude Include="src\noise.h" />
+    <ClInclude Include="src\ProceduralNoise.h" />
     <ClInclude Include="src\NoiseTex3DFactory.h" />
     <ClInclude Include="src\objload.h" />
     <ClInclude Include="src\property.h" />
@@ -48,9 +49,11 @@
     <ClCompile Include="src\glui_presentation_layer.cpp" />
     <ClCompile Include="src\gui6.cpp" />
     <ClCompile Include="src\glui_utility.cpp" />
+    <ClCompile Include="src\halton.cpp" />
     <ClCompile Include="src\mfalk_reader_wrapper.cpp" />
     <ClCompile Include="src\model_controller.cpp" />
     <ClCompile Include="src\NoiseTex3DFactory.cpp" />
+    <ClCompile Include="src\ProceduralNoise.cpp" />
     <ClCompile Include="src\property.cpp" />
     <ClCompile Include="src\reader.cpp" />
     <ClCompile Include="src\sample.cpp" />

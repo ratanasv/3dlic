@@ -9,6 +9,7 @@ using std::string;
 using std::atomic_uint;
 
 GLenum toGLTexInternalFormat(const int ch);
+GLenum toGLTexFormat(const int ch);
 
 class TextureVisitor {
 public:

@@ -31,6 +31,19 @@ GLenum toGLTexInternalFormat(const int ch) {
 }
 
 
+GLenum toGLTexFormat(const int ch) {
+	switch(ch) {
+	case(1) :
+		return GL_RED;
+	case(3) :
+		return GL_RGB;
+	case(4) :
+		return GL_RGBA;
+	default:
+		throw invalid_argument("unsupported GL texture format");
+	}
+}
+
 ImageTex2DFactory::ImageTex2DFactory(const string& file_name) {
 	validatePath(file_name);
 	int numChannel;

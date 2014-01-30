@@ -3,19 +3,6 @@
 
 using std::invalid_argument;
 
-static GLenum toGLTexFormat(const int ch) {
-	switch(ch) {
-	case(1) :
-		return GL_RED;
-	case(3) :
-		return GL_RGB;
-	case(4) :
-		return GL_RGBA;
-	default:
-		throw invalid_argument("unsupported GL texture format");
-	}
-}
-
 NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) : 
 	_numChannel(ch), _internalFormat(toGLTexInternalFormat(ch)), 
 	_format(toGLTexFormat(ch)), _type(GL_UNSIGNED_BYTE)
