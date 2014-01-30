@@ -53,8 +53,15 @@ void GLUIPresentationLayer::InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel,
 {
 	const int callbackID = static_cast<int>(param);
 	const BoolParam boolParam = THREEDLICParameters::INSTANCE->GetBoolParameter(param);
-	shared_ptr<CheckboxBundle> checkboxBundle(new CheckboxBundle(main_glui, panel, 
-		boolParam.GetBool(), boolParam.GetDefaultVal(), callbackID, CallbackWrapper2));
+	CheckboxBundle::Builder builder;
+	builder.WithMainGLUI(main_glui)
+		.WithPanel(panel)
+		.WithLabel("asdf")
+		.WithDefaultValue(boolParam.GetDefaultVal())
+		.WithCallbackID(callbackID)
+		.WithCallback(CallbackWrapper2);
+		
+	shared_ptr<CheckboxBundle> checkboxBundle(new CheckboxBundle(builder));
 	_checkboxes[param] = checkboxBundle;
 	THREEDLICParameters::INSTANCE->AddObserver(checkboxBundle);	
 }

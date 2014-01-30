@@ -21,6 +21,8 @@ uniform float uNumStepsLIC;
 uniform float uVelocityScale;
 uniform float uDT;
 
+uniform bool uRenderRayDepth;
+
 const float SQRT3 = 1.732;
 
 vec3 GetScaledVelocityData(vec3 stp) {
@@ -135,7 +137,8 @@ void main(void) {
 
 	float astar = 1.;
 	vec3 cstar = vec3(0.0, 0.0, 0.0);
-	for (int i=0; i<uNumSteps; i++) {
+	int stepsTotal = 0;
+	for (stepsTotal=0; stepsTotal<uNumSteps; stepsTotal++) {
 		float alpha = uBaseAlpha;
 		if (any(lessThan(stp, vec3(0.0,0.0,0.0)))) {
 			alpha = 0.0;
@@ -156,6 +159,12 @@ void main(void) {
 			break;
 		}
 	}
-    gl_FragColor = vec4(cstar, 1.0);
+	if (uRenderRayDepth) {
+		vec3 rainbow = Rainbow(1.0 - stepsTotal/uNumSteps);
+		gl_FragColor = vec4(rainbow, 1.0);
+
+	} else {
+		gl_FragColor = vec4(cstar, 1.0);
+	}
 
 }

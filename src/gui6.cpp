@@ -21,6 +21,11 @@ static void BindFloatUniform(const char* var, LICFloatParam param) {
 		->GetFloatParameter(param).GetFloat());
 }
 
+static void BindBoolUniform(const char* var, LICBoolParam param) {
+	VolumeTracingShader->SetUniform(var, THREEDLICParameters::INSTANCE->
+		GetBoolParameter(param).GetBool());
+}
+
 
 void draw6() {
 	static shared_ptr<TextureVisitor> sparseNoiseVisitor(new GLSLTextureSamplerBinder(
@@ -39,6 +44,7 @@ void draw6() {
 	BindFloatUniform("uMinMagnitude", LICFloatParam::MAGNITUDE_MIN);
 	BindFloatUniform("uMaxMagnitude", LICFloatParam::MAGNITUDE_MAX);
 	BindFloatUniform("uColorIntensity", LICFloatParam::COLOR_INTENSITY);
+	BindBoolUniform("uRenderRayDepth", LICBoolParam::RENDER_RAY_DEPTH);
 	Cube->render();
 	VectorDataTexture->post_render();
 	SparseNoise->post_render();
