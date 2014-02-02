@@ -173,36 +173,44 @@ int    Xside, Yside, Zside;	// which side is visible, PLUS or MINUS
 //
 
 int main( int argc, char *argv[ ] ) {
-	// turn on the glut package:
-	// (do this before checking argc and argv since it might
-	// pull some command line arguments out)
+	try {
+		// turn on the glut package:
+		// (do this before checking argc and argv since it might
+		// pull some command line arguments out)
 
-	glutInit( &argc, argv );
-	InitProgramOptions(argc, argv);
+		glutInit( &argc, argv );
+		InitProgramOptions(argc, argv);
 
-	// setup all the graphics stuff:
+		// setup all the graphics stuff:
 
-	InitGraphics( );
-
-
-	// init all the global variables used by Display( ):
-	// this will also post a redisplay
-	// it is important to call this before InitGlui( )
-	// so that the variables that glui will control are correct
-	// when each glui widget is created
-
-	Reset( );
+		InitGraphics( );
 
 
-	// setup all the user interface stuff:
+		// init all the global variables used by Display( ):
+		// this will also post a redisplay
+		// it is important to call this before InitGlui( )
+		// so that the variables that glui will control are correct
+		// when each glui widget is created
+
+		Reset( );
+
+
+		// setup all the user interface stuff:
 #ifdef USE_GLUI
-	InitGlui();
+		InitGlui();
 #endif
-	glutSetWindow(MainWindow);
-	init6();
+		glutSetWindow(MainWindow);
+		init6();
 
-	glutMainLoop( );
+		glutMainLoop( );
 
+	} catch (std::exception& error) {
+		
+		MessageBox(NULL, error.what(), "Uncaught Exception", MB_OK | MB_ICONERROR);
+		fprintf(stderr, "uncaught exception : %s", error.what());
+		return 1;
+	}
+	
 
 	// this is here to make the compiler happy:
 
