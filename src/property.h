@@ -9,7 +9,7 @@
 using std::string;
 
 enum class Property {WINDOW_SIZE, WINDOW_TITLE, PATH_DATA, PATH_VERTEX_SHADER, 
-	PATH_FRAGMENT_SHADER, PATH_NOISE};
+	PATH_FRAGMENT_SHADER, PATH_NOISE, PATH_GAUSSIAN_COMPUTE_SHADER};
 
 
 void InitProgramOptions(int argc, char** argv);

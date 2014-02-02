@@ -72,8 +72,11 @@ void init6() {
 	ExistingPath FRAGMENT_SHADER_PATH(GetStringProperty(Property::PATH_FRAGMENT_SHADER));
 	ExistingPath NOISE_PATH(GetStringProperty(Property::PATH_NOISE));
 	ExistingPath DATA_PATH(GetStringProperty(Property::PATH_DATA));
+	ExistingPath GAUSSIAN_COMPUTE_SHADER_PATH(GetStringProperty(
+		Property::PATH_GAUSSIAN_COMPUTE_SHADER));
 
-	string wtf = VERTEX_SHADER_PATH;
+	GLSLProgram* compute = new GLSLProgram();
+	compute->Create(GAUSSIAN_COMPUTE_SHADER_PATH.c_str());
 	VolumeTracingShader.reset(new GLSLProgram());
 	VolumeTracingShader->Create(VERTEX_SHADER_PATH.c_str(),
 		FRAGMENT_SHADER_PATH.c_str());

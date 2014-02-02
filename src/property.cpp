@@ -23,6 +23,8 @@ static const string toString(Property prop) {
 		propertyToString[Property::PATH_VERTEX_SHADER] = "path_vertex_shader";
 		propertyToString[Property::PATH_FRAGMENT_SHADER] = "path_fragment_shader";
 		propertyToString[Property::PATH_NOISE] = "path_noise";
+		propertyToString[Property::PATH_GAUSSIAN_COMPUTE_SHADER] = 
+			"path_gaussian_compute_shader";
 	}
 	return propertyToString[prop];
 }
@@ -33,13 +35,21 @@ void InitProgramOptions(int argc, char** argv) {
 	po::options_description desc("Allowed options");
 	desc.add_options()
 		("help", "produce help message")
-		(toString(Property::WINDOW_SIZE).c_str(), po::value<int>(), "set window size")
-		(toString(Property::WINDOW_TITLE).c_str(), po::value<string>(), "set window title")
+		(toString(Property::WINDOW_SIZE).c_str(), po::value<int>(), 
+			"set window size")
+		(toString(Property::WINDOW_TITLE).c_str(), po::value<string>(), 
+			"set window title")
 		("config_file", po::value<string>(), "fully-qualified path to config file")
-		(toString(Property::PATH_DATA).c_str(), po::value<string>(), "path to vector data")
-		(toString(Property::PATH_VERTEX_SHADER).c_str(), po::value<string>(), "path to vertex shader")
-		(toString(Property::PATH_FRAGMENT_SHADER).c_str(), po::value<string>(), "path to fragment shader")
-		(toString(Property::PATH_NOISE).c_str(), po::value<string>(), "path to noise data");
+		(toString(Property::PATH_DATA).c_str(), po::value<string>(), 
+			"path to vector data")
+		(toString(Property::PATH_VERTEX_SHADER).c_str(), po::value<string>(),
+			"path to vertex shader")
+		(toString(Property::PATH_FRAGMENT_SHADER).c_str(), po::value<string>(), 
+			"path to fragment shader")
+		(toString(Property::PATH_NOISE).c_str(), po::value<string>(), 
+			"path to noise data")
+		(toString(Property::PATH_GAUSSIAN_COMPUTE_SHADER).c_str(), po::value<string>(), 
+			"path to gaussian filter compute shader");
 
 	try {
 		po::store(po::parse_command_line(argc, argv, desc), variable_map);
