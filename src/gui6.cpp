@@ -8,6 +8,7 @@
 #include "mfalk_reader_wrapper.h"
 #include "NoiseTex3DFactory.h"
 #include "ProceduralNoise.h"
+#include "LICFloatParam.h"
 
 using namespace vir;
 using std::string;
@@ -19,13 +20,13 @@ static shared_ptr<VirModel> Cube;
 static shared_ptr<VirTex> VectorDataTexture;
 
 static void BindFloatUniform(const char* var, LICFloatParam param) {
-	VolumeTracingShader->SetUniform(var, THREEDLICParameters::INSTANCE
-		->GetFloatParameter(param).GetFloat());
+	VolumeTracingShader->SetUniform(var, GetTDLPInstance()
+		.GetFloatParameter(param).GetFloat());
 }
 
 static void BindBoolUniform(const char* var, LICBoolParam param) {
-	VolumeTracingShader->SetUniform(var, THREEDLICParameters::INSTANCE->
-		GetBoolParameter(param).GetBool());
+	VolumeTracingShader->SetUniform(var, GetTDLPInstance()
+		.GetBoolParameter(param).GetBool());
 }
 
 

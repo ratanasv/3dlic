@@ -3,6 +3,7 @@
 #include "property.h"
 #include "3dlic_model.h"
 #include "glui_presentation_layer.h"
+#include "LICFloatParam.h"
 
 using std::map;
 using std::pair;

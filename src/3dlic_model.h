@@ -2,6 +2,7 @@
 #include "model_controller.h"
 #include "abstract.h"
 #include <map>
+#include "LICFloatParam.h"
 
 using std::map;
 using vir::Abstract;
@@ -38,11 +39,11 @@ public:
 	void SetBool(bool in);
 };
 
-enum class LICFloatParam : int {
-	XROT, YROT, XTRANSLATE, YTRANSLATE, ZTRANSLATE, 
-	NUM_STEPS, BASE_ALPHA, RAINBOW_VAL_MIN, RAINBOW_VAL_MAX, NUM_STEPS_LIC,
-	VELOCITY_SCALE, DT, MAGNITUDE_MIN, MAGNITUDE_MAX, COLOR_INTENSITY
-};
+// enum class LICFloatParam : int {
+// 	XROT, YROT, XTRANSLATE, YTRANSLATE, ZTRANSLATE, 
+// 	NUM_STEPS, BASE_ALPHA, RAINBOW_VAL_MIN, RAINBOW_VAL_MAX, NUM_STEPS_LIC,
+// 	VELOCITY_SCALE, DT, MAGNITUDE_MIN, MAGNITUDE_MAX, COLOR_INTENSITY
+// };
 
 enum class LICBoolParam : int {
 	PROJECTION, ISPAUSED, RENDER_RAY_DEPTH
@@ -70,5 +71,7 @@ public:
 	void SetFloatParameter(LICFloatParam param, float in);
 	void SetBoolParameter(LICBoolParam param, bool in);
 
-	static THREEDLICParameters* INSTANCE;
+	friend THREEDLICParameters& GetTDLPInstance();
 };
+
+THREEDLICParameters& GetTDLPInstance();

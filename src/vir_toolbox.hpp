@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 #include <cstring>
+#include <map>
+#include <utility>
 
 template <class T> std::shared_ptr<std::vector<T>> initSmartArray(const int size = 0) {
 	std::shared_ptr<vector<T>> returned(new std::vector<T>(size));
@@ -25,3 +27,9 @@ public:
 	operator const std::string() const;
 	const char* c_str() const;
 };
+
+template <class T, class V> static void InsertHelper(std::map<T,V>& theMap, 
+	const T& key, const V& value) 
+{
+	theMap.insert(std::pair<T,V>(key, value));
+}

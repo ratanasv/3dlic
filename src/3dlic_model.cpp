@@ -1,10 +1,9 @@
 #include "StdAfx.h"
 #include "3dlic_model.h"
 #include <stdexcept>
+#include "LICFloatParam.h"
 
 using std::invalid_argument;
-
-THREEDLICParameters* THREEDLICParameters::INSTANCE = new THREEDLICParameters();
 
 FloatParam::FloatParam() : _defaultVal(0.5), _minVal(0.0), _maxVal(1.0), 
 	_val(_defaultVal) {};
@@ -41,12 +40,6 @@ float FloatParam::GetDefaultVal() const {
 
 void FloatParam::Reset() {
 	_val = _defaultVal;
-}
-
-template <class T, class V> static void InsertHelper(map<T,V>& theMap, 
-	const T& key, const V& value) 
-{
-	theMap.insert(pair<T,V>(key, value));
 }
 
 THREEDLICParameters::THREEDLICParameters() {
@@ -119,4 +112,9 @@ bool BoolParam::GetBool() const {
 
 void BoolParam::SetBool(bool in) {
 	_val = in;
+}
+
+THREEDLICParameters& GetTDLPInstance() {
+	static THREEDLICParameters INSTANCE;
+	return INSTANCE;
 }

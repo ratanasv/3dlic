@@ -11,6 +11,7 @@
 #include "property.h"
 #include "3dlic_model.h"
 #include "glui_utility.h"
+#include "LICFloatParam.h"
 
 #ifdef USE_GLUI
 #include "glui.h"
@@ -173,7 +174,7 @@ int    Xside, Yside, Zside;	// which side is visible, PLUS or MINUS
 //
 
 int main( int argc, char *argv[ ] ) {
-	try {
+	//try {
 		// turn on the glut package:
 		// (do this before checking argc and argv since it might
 		// pull some command line arguments out)
@@ -204,12 +205,12 @@ int main( int argc, char *argv[ ] ) {
 
 		glutMainLoop( );
 
-	} catch (std::exception& error) {
-		
-		MessageBox(NULL, error.what(), "Uncaught Exception", MB_OK | MB_ICONERROR);
-		fprintf(stderr, "uncaught exception : %s", error.what());
-		return 1;
-	}
+// 	} catch (std::exception& error) {
+// 		
+// 		MessageBox(NULL, error.what(), "Uncaught Exception", MB_OK | MB_ICONERROR);
+// 		fprintf(stderr, "uncaught exception : %s", error.what());
+// 		return 1;
+// 	}
 	
 
 	// this is here to make the compiler happy:
@@ -624,9 +625,9 @@ void MouseMotion( int x, int y ) {
 
 
 	if( ( ActiveButton & MIDDLE ) != 0 ) {
-		const float zTranslate = THREEDLICParameters::INSTANCE->GetFloatParameter(
+		const float zTranslate = GetTDLPInstance().GetFloatParameter(
 			LICFloatParam::ZTRANSLATE).GetFloat();
-		THREEDLICParameters::INSTANCE->SetFloatParameter(
+		GetTDLPInstance().SetFloatParameter(
 			LICFloatParam::ZTRANSLATE, zTranslate + SCLFACT*dy);
 	}
 
@@ -650,11 +651,11 @@ void Reset( void ) {
 	LeftButton = ROTATE;
 	WhichProjection = PERSP;
 	Xrot = Yrot = 0.;
-	THREEDLICParameters::INSTANCE->SetFloatParameter(
+	GetTDLPInstance().SetFloatParameter(
 		LICFloatParam::XTRANSLATE, 0.0);
-	THREEDLICParameters::INSTANCE->SetFloatParameter(
+	GetTDLPInstance().SetFloatParameter(
 		LICFloatParam::YTRANSLATE, 0.0);
-	THREEDLICParameters::INSTANCE->SetFloatParameter(
+	GetTDLPInstance().SetFloatParameter(
 		LICFloatParam::ZTRANSLATE, 0.0);
 	reset6();
 }
@@ -1013,11 +1014,11 @@ void apply_transformations() {
 	camera->LookAt( vec3<>(0., 0., 15.), vec3<>(0., 0., 0.), vec3<>(0., 1., 0.));
 	
 	camera->Translate(
-		THREEDLICParameters::INSTANCE->GetFloatParameter(
+		GetTDLPInstance().GetFloatParameter(
 			LICFloatParam::XTRANSLATE).GetFloat(), 
-		THREEDLICParameters::INSTANCE->GetFloatParameter(
+		GetTDLPInstance().GetFloatParameter(
 			LICFloatParam::YTRANSLATE).GetFloat(),
-		THREEDLICParameters::INSTANCE->GetFloatParameter(
+		GetTDLPInstance().GetFloatParameter(
 			LICFloatParam::ZTRANSLATE).GetFloat()
 	);
 	camera->Rotate(Xrot, Yrot, 0.0);

@@ -7,7 +7,7 @@
 using Angel::vec2;
 using Angel::vec3;
 
-enum class LICFloatParam : int;
+class LICFloatParam;
 enum class LICBoolParam : int;
 
 

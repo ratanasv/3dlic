@@ -31,6 +31,7 @@
     <ClInclude Include="src\gui6.h" />
     <ClInclude Include="src\glui_utility.h" />
     <ClInclude Include="src\halton.hpp" />
+    <ClInclude Include="src\LICFloatParam.h" />
     <ClInclude Include="src\mfalk_reader_wrapper.h" />
     <ClInclude Include="src\model_controller.h" />
     <ClInclude Include="src\ProceduralNoise.h" />
@@ -56,6 +57,7 @@
     <ClCompile Include="src\gui6.cpp" />
     <ClCompile Include="src\glui_utility.cpp" />
     <ClCompile Include="src\halton.cpp" />
+    <ClCompile Include="src\LICFloatParam.cpp" />
     <ClCompile Include="src\mfalk_reader_wrapper.cpp" />
     <ClCompile Include="src\model_controller.cpp" />
     <ClCompile Include="src\NoiseTex3DFactory.cpp" />

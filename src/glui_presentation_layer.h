@@ -8,7 +8,7 @@ using std::map;
 using std::shared_ptr;
 using std::string;
 
-enum class LICFloatParam : int;
+class LICFloatParam;
 enum class LICBoolParam : int;
 class SliderBundle;
 class CheckboxBundle;

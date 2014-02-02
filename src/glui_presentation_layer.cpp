@@ -19,24 +19,24 @@ void CallbackWrapper2(int id) {
 void GLUIPresentationLayer::InsertSlider(GLUI* main_glui, GLUI_Panel* panel, 
 	LICFloatParam param, const string& label) 
 {
-	const int callbackID = static_cast<int>(param);
-	const FloatParam floatParam = THREEDLICParameters::INSTANCE->GetFloatParameter(param);
+	const int callbackID = param.GetID();
+	const FloatParam floatParam = GetTDLPInstance().GetFloatParameter(param);
 	vec2<> val(floatParam.GetDefaultVal(), floatParam.GetDefaultVal());
 	vec2<> bounds(floatParam.GetMinVal(), floatParam.GetMaxVal());
 
 	shared_ptr<SliderBundle> sliderBundle(new SliderBundle(main_glui, panel,
 		val, bounds, callbackID, label.c_str(), CallbackWrapper ));
 	_sliders[param] = sliderBundle;
-	THREEDLICParameters::INSTANCE->AddObserver(sliderBundle);
+	GetTDLPInstance().AddObserver(sliderBundle);
 }
 
 void GLUIPresentationLayer::InsertDualSlider(GLUI* main_glui, GLUI_Panel* panel, 
 	LICFloatParam paramOne, LICFloatParam paramTwo, const string& label)
 {
 	const int callbackID = GetCallbackID(paramOne, paramTwo);
-	const FloatParam floatParamOne = THREEDLICParameters::INSTANCE->
+	const FloatParam floatParamOne = GetTDLPInstance().
 		GetFloatParameter(paramOne);
-	const FloatParam floatParamTwo = THREEDLICParameters::INSTANCE->
+	const FloatParam floatParamTwo = GetTDLPInstance().
 		GetFloatParameter(paramTwo);
 	vec2<> val(floatParamOne.GetDefaultVal(), floatParamTwo.GetDefaultVal());
 	vec2<> bounds(floatParamOne.GetMinVal(), floatParamOne.GetMaxVal());
@@ -44,15 +44,15 @@ void GLUIPresentationLayer::InsertDualSlider(GLUI* main_glui, GLUI_Panel* panel,
 	shared_ptr<SliderBundle> sliderBundle(new SliderBundle(main_glui, panel,
 		val, bounds, callbackID, label.c_str(), CallbackWrapper, true));
 	_sliders[paramOne] = sliderBundle;
-	_dualSliderIDs[paramOne] = paramTwo;
-	THREEDLICParameters::INSTANCE->AddObserver(sliderBundle);
+	InsertHelper(_dualSliderIDs, paramOne, paramTwo);
+	GetTDLPInstance().AddObserver(sliderBundle);
 }
 
 void GLUIPresentationLayer::InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel, 
 	LICBoolParam param, const string& label)
 {
 	const int callbackID = static_cast<int>(param);
-	const BoolParam boolParam = THREEDLICParameters::INSTANCE->GetBoolParameter(param);
+	const BoolParam boolParam = GetTDLPInstance().GetBoolParameter(param);
 	CheckboxBundle::Builder builder;
 	builder.WithMainGLUI(main_glui)
 		.WithPanel(panel)
@@ -63,26 +63,26 @@ void GLUIPresentationLayer::InsertCheckBox(GLUI* main_glui, GLUI_Panel* panel,
 		
 	shared_ptr<CheckboxBundle> checkboxBundle(new CheckboxBundle(builder));
 	_checkboxes[param] = checkboxBundle;
-	THREEDLICParameters::INSTANCE->AddObserver(checkboxBundle);	
+	GetTDLPInstance().AddObserver(checkboxBundle);	
 }
 
 int GLUIPresentationLayer::GetCallbackID(LICFloatParam pone, LICFloatParam ptwo) {
-	return static_cast<int>(pone);
+	return pone.GetID();
 }
 
 void GLUIPresentationLayer::OnFloatCallback(const int callbackID) {
-	LICFloatParam which = static_cast<LICFloatParam>(callbackID);
-	THREEDLICParameters::INSTANCE->SetFloatParameter(which, 
+	LICFloatParam which = LICFloatParam::FromID(callbackID);
+	GetTDLPInstance().SetFloatParameter(which, 
 		_sliders.at(which)->GetValue().x);
 	if (_sliders.at(which)->IsDual()) {
 		LICFloatParam otherEnd = _dualSliderIDs.at(which);
-		THREEDLICParameters::INSTANCE->SetFloatParameter(otherEnd, 
+		GetTDLPInstance().SetFloatParameter(otherEnd, 
 			_sliders.at(which)->GetValue().y);
 	}
 }
 
 void GLUIPresentationLayer::OnBooleanCallback(const int callbackID) {
 	LICBoolParam which = static_cast<LICBoolParam>(callbackID);
-	THREEDLICParameters::INSTANCE->SetBoolParameter(which, 
+	GetTDLPInstance().SetBoolParameter(which, 
 		_checkboxes.at(which)->_val);
 }
