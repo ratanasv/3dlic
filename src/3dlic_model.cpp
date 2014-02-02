@@ -75,11 +75,11 @@ void THREEDLICParameters::SetProjection( PROJ_TYPE in ) {
 
 
 
-FloatParam THREEDLICParameters::GetFloatParameter( LICFloatParam param ) const {
+FloatParam THREEDLICParameters::GetFloatParameter(const LICFloatParam& param) const {
 	return _floatParams.at(param);
 }
 
-void THREEDLICParameters::SetFloatParameter( LICFloatParam param, float in ) {
+void THREEDLICParameters::SetFloatParameter(const LICFloatParam& param, float in) {
 	_floatParams.at(param).SetFloat(in);
 	NotifyObservers();
 }

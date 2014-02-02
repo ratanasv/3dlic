@@ -66,9 +66,9 @@ public:
 	PROJ_TYPE GetProjection() const;
 	void SetTranslate(const vec3<>& in);
 	void SetProjection(PROJ_TYPE in);
-	FloatParam GetFloatParameter(LICFloatParam param) const;
+	FloatParam GetFloatParameter(const LICFloatParam& param) const;
 	BoolParam GetBoolParameter(LICBoolParam param) const;
-	void SetFloatParameter(LICFloatParam param, float in);
+	void SetFloatParameter(const LICFloatParam& param, float in);
 	void SetBoolParameter(LICBoolParam param, bool in);
 
 	friend THREEDLICParameters& GetTDLPInstance();
