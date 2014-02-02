@@ -1,4 +1,5 @@
 #include "StdAfx.h"
+#include "halton.hpp"
 #include "ProceduralNoise.h"
 
 using std::vector;
@@ -6,11 +7,19 @@ using std::vector;
 
 shared_ptr<void> ProceduralNoise::get_data() {
 	if (!_texels) {
-		_texels.reset(new unsigned char[_width*_height*_depth*_numChannel]);
-		vector<float> seeds;
-		float dx = 1.0/(float)_seed0;
-		for (int i=0; i<_seed0-1; i++) {
-			seeds.push_back(dx*(float)i);
+		_texels.reset(new unsigned char[_width*_height*_depth]);
+		int seeds[3] = {0, 0, 0};
+		int bases[3] = {_seed0, _seed1, _seed2};
+		int jumps[3] = {1, 1, 1};
+		double* result = new double[3*_density];
+		i4_to_halton_sequence(3, _density, 0, seeds, jumps, bases, result);
+		for (int i=0; i<_density; i++) {
+			int xi = (int)(result[3*i+0]*_width);
+			int yi = (int)(result[3*i+1]*_width);
+			int zi = (int)(result[3*i+2]*_width);
+
+			unsigned char* rawPtr = _texels.get();
+			rawPtr[zi*(_width*_height) + yi*(_width) + xi] = (unsigned char)255;
 		}
 	}
 	return _texels;

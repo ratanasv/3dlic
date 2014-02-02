@@ -7,6 +7,7 @@
 #include "3dlic_model.h"
 #include "mfalk_reader_wrapper.h"
 #include "NoiseTex3DFactory.h"
+#include "ProceduralNoise.h"
 
 using namespace vir;
 using std::string;
@@ -91,4 +92,13 @@ void init6() {
 	shared_ptr<GeometryDelegatee> vaoFreeable(new VAODelegatee(cubeFactory, 
 		VolumeTracingShader));
 	Cube.reset(new VirModel(vaoFreeable));
+
+
+	ProceduralNoise blah;
+	blah.WithSeed0(2)
+		.WithSeed1(3)
+		.WithSeed2(5)
+		.WithDimension(256)
+		.WithDensity(5);
+	blah.get_data();
 }
