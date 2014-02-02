@@ -28,11 +28,20 @@
     <Filter Include="thirdparty">
       <UniqueIdentifier>{dbfbaf05-1a6f-40b3-b902-629b7bef5be4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\shader">
+      <UniqueIdentifier>{e37014cc-231e-47ad-932a-e4d74d6bb8f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shader">
+      <UniqueIdentifier>{9d7cc4e9-d4d0-4b97-86f3-3a6880ffd28d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\opengl">
+      <UniqueIdentifier>{c896d4e9-d98e-4873-8378-cd79c5c70ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\opengl">
+      <UniqueIdentifier>{f68bd0a4-e450-4e91-a3bd-bb741bfed7b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\glslprogram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\gui6.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,12 +102,24 @@
     <ClInclude Include="src\halton.hpp">
       <Filter>thirdparty</Filter>
     </ClInclude>
+    <ClInclude Include="src\glslprogram.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GLSLUniformBinder.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GLSLAttributeBinder.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DeprecatedAttributeBinder.h">
+      <Filter>Header Files\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DeprecatedCameraBinder.h">
+      <Filter>Header Files\opengl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\abstract.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\glslprogram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gui6.cpp">
@@ -158,5 +179,19 @@
     <ClCompile Include="src\halton.cpp">
       <Filter>thirdparty</Filter>
     </ClCompile>
+    <ClCompile Include="src\glslprogram.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeprecatedAttributeBinder.cpp">
+      <Filter>Source Files\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DeprecatedCameraBinder.cpp">
+      <Filter>Source Files\opengl</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\GLSLCameraBinder.h">
+      <Filter>Header Files\opengl</Filter>
+    </None>
   </ItemGroup>
 </Project>

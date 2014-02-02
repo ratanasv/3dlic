@@ -22,7 +22,11 @@
     <ClInclude Include="src\3dlic_model.h" />
     <ClInclude Include="src\abstract.h" />
     <ClInclude Include="src\CheckboxBundle.h" />
+    <ClInclude Include="src\DeprecatedAttributeBinder.h" />
+    <ClInclude Include="src\DeprecatedCameraBinder.h" />
+    <ClInclude Include="src\GLSLAttributeBinder.h" />
     <ClInclude Include="src\glslprogram.h" />
+    <ClInclude Include="src\GLSLUniformBinder.h" />
     <ClInclude Include="src\glui_presentation_layer.h" />
     <ClInclude Include="src\gui6.h" />
     <ClInclude Include="src\glui_utility.h" />
@@ -45,6 +49,8 @@
     <ClCompile Include="src\3dlic_model.cpp" />
     <ClCompile Include="src\abstract.cpp" />
     <ClCompile Include="src\CheckboxBundle.cpp" />
+    <ClCompile Include="src\DeprecatedAttributeBinder.cpp" />
+    <ClCompile Include="src\DeprecatedCameraBinder.cpp" />
     <ClCompile Include="src\glslprogram.cpp" />
     <ClCompile Include="src\glui_presentation_layer.cpp" />
     <ClCompile Include="src\gui6.cpp" />
@@ -66,6 +72,9 @@
     <ClCompile Include="src\virmodel.cpp" />
     <ClCompile Include="src\virtex.cpp" />
     <ClCompile Include="src\vir_toolbox.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\GLSLCameraBinder.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{51CB8F8D-219A-4A00-988E-5D392EC775D6}</ProjectGuid>

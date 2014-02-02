@@ -15,6 +15,9 @@
 #include <cstring>
 #include "vec.h"
 #include "mat.h"
+#include "GLSLUniformBinder.h"
+#include "GLSLAttributeBinder.h"
+#include "GLSLCameraBinder.h"
 
 using std::string;
 using Angel::vec3;
@@ -31,59 +34,6 @@ inline int GetOSU( int flag )
 
 
 void	CheckGlErrors( const char* );
-
-class GLSLUniformBinder {
-public:
-	virtual ~GLSLUniformBinder() {};
-	virtual void SetUniform(const string& name, int i) = 0;
-	virtual void SetUniform(const string& name, float f) = 0;
-};
-
-class GLSLAttributeBinder {
-public:
-	virtual ~GLSLAttributeBinder() {};
-	virtual void EnablePositionAttribute(const int vecLength = 4) = 0;
-	virtual void EnableNormalAttribute(const int vecLength = 4) = 0;
-	virtual void EnableColorAttribute(const int vecLength = 4) = 0;
-	virtual void EnableTexCoordAttribute(const int vecLength = 4) = 0;
-};
-
-
-class GLSLCameraBinder {
-public:
-	virtual ~GLSLCameraBinder() {};
-	virtual void LookAt(const vec3<>& eye, const vec3<>& at, const vec3<>& up) = 0;
-	virtual void Ortho(float left, float right, float bottom, float top, 
-		float zNear, float zFar) = 0;
-	virtual void Perspective(float fovy, float ratio, float zNear, float zFar) = 0;
-	virtual void Rotate(float x, float y, float z) = 0;
-	virtual void Translate(float x, float y, float z) = 0;
-	virtual void Scale(float x, float y, float z) = 0;
-	virtual void ClearProjection() = 0;
-	virtual void ClearModelView() = 0;
-};
-
-class DepracatedAttributeBinder : public GLSLAttributeBinder {
-public:
-	virtual void EnablePositionAttribute( const int vecLength = 4 );
-	virtual void EnableNormalAttribute( const int vecLength = 4 );
-	virtual void EnableColorAttribute( const int vecLength = 4 );
-	virtual void EnableTexCoordAttribute( const int vecLength = 4 );
-};
-
-class DeprecatedCameraBinder : public GLSLCameraBinder {
-public:
-	virtual void LookAt( const vec3<>& eye, const vec3<>& at, const vec3<>& up );
-	virtual void Ortho( float left, float right, float bottom, float top, 
-		float zNear, float zFar );
-	virtual void Perspective( float fovy, float ratio, float zNear, float zFar );
-	virtual void Rotate( float x, float y, float z );
-	virtual void Translate( float x, float y, float z );
-	virtual void Scale( float x, float y, float z );
-	virtual void ClearProjection();
-	virtual void ClearModelView();
-
-};
 
 
 
