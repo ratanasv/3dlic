@@ -2,21 +2,21 @@
 #include "virtex.h"
 
 class ProceduralNoise : public TextureAbstractFactory {
-private:
+protected:
 	shared_ptr<unsigned char> _texels;
 	const int _numChannel;
-	int _width;
-	int _height;
+	const int _width;
+	const int _height;
 	const GLenum _internalFormat;
 	const GLenum _format;
 	const GLenum _type;
-	int _depth;
-	int _seed0;
-	int _seed1;
-	int _seed2;
-	int _density;
+	const int _depth;
+	const int _seed0;
+	const int _seed1;
+	const int _seed2;
+	const int _density;
 public:
-	ProceduralNoise();
+	ProceduralNoise(int s0, int s1, int s2, int dim, int density);
 
 	virtual GLenum getInternalFormat();
 
@@ -31,11 +31,4 @@ public:
 	virtual GLenum getType();
 
 	virtual shared_ptr<void> get_data();
-
-	ProceduralNoise& WithSeed0(int);
-	ProceduralNoise& WithSeed1(int);
-	ProceduralNoise& WithSeed2(int);
-	ProceduralNoise& WithDimension(int);
-	ProceduralNoise& WithDensity(int);
-
 };

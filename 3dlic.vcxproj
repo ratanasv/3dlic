@@ -24,6 +24,7 @@
     <ClInclude Include="src\CheckboxBundle.h" />
     <ClInclude Include="src\DeprecatedAttributeBinder.h" />
     <ClInclude Include="src\DeprecatedCameraBinder.h" />
+    <ClInclude Include="src\FilteredNoise.h" />
     <ClInclude Include="src\GLSLAttributeBinder.h" />
     <ClInclude Include="src\glslprogram.h" />
     <ClInclude Include="src\GLSLUniformBinder.h" />
@@ -52,6 +53,7 @@
     <ClCompile Include="src\CheckboxBundle.cpp" />
     <ClCompile Include="src\DeprecatedAttributeBinder.cpp" />
     <ClCompile Include="src\DeprecatedCameraBinder.cpp" />
+    <ClCompile Include="src\FilteredNoise.cpp" />
     <ClCompile Include="src\glslprogram.cpp" />
     <ClCompile Include="src\glui_presentation_layer.cpp" />
     <ClCompile Include="src\gui6.cpp" />

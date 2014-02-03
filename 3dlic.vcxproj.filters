@@ -120,6 +120,9 @@
     <ClInclude Include="src\LICFloatParam.h">
       <Filter>Header Files\mvc</Filter>
     </ClInclude>
+    <ClInclude Include="src\FilteredNoise.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\abstract.cpp">
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="src\LICFloatParam.cpp">
       <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FilteredNoise.cpp">
+      <Filter>Source Files\datareader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

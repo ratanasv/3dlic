@@ -7,7 +7,7 @@
 #include "3dlic_model.h"
 #include "mfalk_reader_wrapper.h"
 #include "NoiseTex3DFactory.h"
-#include "ProceduralNoise.h"
+#include "FilteredNoise.h"
 #include "LICFloatParam.h"
 
 using namespace vir;
@@ -18,6 +18,7 @@ shared_ptr<GLSLProgram> VolumeTracingShader;
 static shared_ptr<VirTex> SparseNoise;
 static shared_ptr<VirModel> Cube;
 static shared_ptr<VirTex> VectorDataTexture;
+static shared_ptr<VirTex> VirNoise;
 
 static void BindFloatUniform(const char* var, LICFloatParam param) {
 	VolumeTracingShader->SetUniform(var, GetTDLPInstance()
@@ -76,13 +77,12 @@ void init6() {
 	ExistingPath GAUSSIAN_COMPUTE_SHADER_PATH(GetStringProperty(
 		Property::PATH_GAUSSIAN_COMPUTE_SHADER));
 
-	GLSLProgram* compute = new GLSLProgram();
-	compute->Create(GAUSSIAN_COMPUTE_SHADER_PATH.c_str());
 	VolumeTracingShader.reset(new GLSLProgram());
 	VolumeTracingShader->Create(VERTEX_SHADER_PATH.c_str(),
 		FRAGMENT_SHADER_PATH.c_str());
 	VolumeTracingShader->Use();
 
+	
 	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
 		NOISE_PATH, 1));
 	shared_ptr<TextureDelegatee> delegatee(new GLTextureDelegatee(factory));
@@ -97,12 +97,8 @@ void init6() {
 		VolumeTracingShader));
 	Cube.reset(new VirModel(vaoFreeable));
 
+	factory.reset(new FilteredNoise(2, 3, 5, 256, 500, 0.5));
+	delegatee.reset(new GLTextureDelegatee(factory));
+	VirNoise.reset(new VirTex(delegatee));
 
-	ProceduralNoise blah;
-	blah.WithSeed0(2)
-		.WithSeed1(3)
-		.WithSeed2(5)
-		.WithDimension(256)
-		.WithDensity(5);
-	blah.get_data();
 }

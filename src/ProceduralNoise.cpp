@@ -8,6 +8,7 @@ using std::vector;
 shared_ptr<void> ProceduralNoise::get_data() {
 	if (!_texels) {
 		_texels.reset(new unsigned char[_width*_height*_depth]);
+		memset(_texels.get(), 0, _width*_height*_depth*sizeof(unsigned char));
 		int seeds[3] = {0, 0, 0};
 		int bases[3] = {_seed0, _seed1, _seed2};
 		int jumps[3] = {1, 1, 1};
@@ -49,36 +50,11 @@ GLenum ProceduralNoise::getType() {
 	return _type;
 }
 
-ProceduralNoise::ProceduralNoise() : 
+ProceduralNoise::ProceduralNoise(int s0, int s1, int s2, int dim, int density) : 
 	_internalFormat(toGLTexInternalFormat(1)), _numChannel(1),
-	_format(toGLTexFormat(1)), _type(GL_UNSIGNED_BYTE)
+	_format(toGLTexFormat(1)), _type(GL_UNSIGNED_BYTE),
+	_seed0(s0), _seed1(s1), _seed2(s2), _depth(dim), _width(dim), _height(dim), 
+	_density(density)
 {
 	
-}
-
-ProceduralNoise& ProceduralNoise::WithSeed0(int i) {
-	_seed0 = i;
-	return *this;
-}
-
-ProceduralNoise& ProceduralNoise::WithSeed1(int i) {
-	_seed1 = i;
-	return *this;
-}
-
-ProceduralNoise& ProceduralNoise::WithSeed2(int i) {
-	_seed2 = i;
-	return *this;
-}
-
-ProceduralNoise& ProceduralNoise::WithDimension(int i) {
-	_width = i;
-	_height = i;
-	_depth = i;
-	return *this;
-}
-
-ProceduralNoise& ProceduralNoise::WithDensity(int i) {
-	_density = i;
-	return *this;
 }
