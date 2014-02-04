@@ -77,11 +77,12 @@ vec3 Rainbow( float t ) {
 }
 
 float transferFunction(vec3 stp, float accumulated) {
-	float magnitude = texture(uVectorData, stp).a;
+	/*float magnitude = texture(uVectorData, stp).a;
 	if (magnitude < uMinMagnitude || magnitude > uMaxMagnitude) {
 		return 0.0;
 	}
-	return magnitude;
+	return magnitude;*/
+	return accumulated;
 }
 
 vec3 GetForwardDir() {
@@ -140,18 +141,22 @@ void main(void) {
 	int stepsTotal = 0;
 	for (stepsTotal=0; stepsTotal<uNumSteps; stepsTotal++) {
 		float alpha = uBaseAlpha;
-		if (any(lessThan(stp, vec3(0.0,0.0,0.0)))) {
+		float vectorMagnitude = texture(uVectorData, stp).a;
+		vec3 rgb;
+		if (any(lessThan(stp, vec3(0.0,0.0,0.0))) || any(greaterThan(stp, vec3(1.,1.,1.))) || 
+			vectorMagnitude < uMinMagnitude || vectorMagnitude > uMaxMagnitude) 
+		{
 			alpha = 0.0;
-			continue;
+			rgb = vec3(0.0, 0.0, 0.0);
+		} else {
+			float accumulated = ComputeLIC(stp);
+			alpha = transferFunction(stp, accumulated) * uBaseAlpha;
+			rgb = uColorIntensity*accumulated*
+			ClampRainbow(vectorMagnitude, uRainbowValMin, uRainbowValMax);
 		}
-		if (any(greaterThan(stp, vec3(1.,1.,1.)))) {
-			alpha = 0.;
-			continue;
-		}
-		float accumulated = ComputeLIC(stp);
-		alpha = transferFunction(stp, accumulated) * uBaseAlpha;
-		vec3 rgb = uColorIntensity*accumulated*
-			ClampRainbow(texture(uVectorData, stp).a, uRainbowValMin, uRainbowValMax);
+
+
+		
 		cstar += astar * alpha * rgb;
 		astar *= ( 1. - alpha );
 		stp += forwardDir; // doing front-to-back composition
