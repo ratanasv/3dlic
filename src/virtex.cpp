@@ -104,7 +104,8 @@ void GLTextureDelegatee::send_to_gpu() {
 	}
 
 	_tex_handle = shared_ptr<unsigned>(new unsigned[1], [](unsigned* u) { 
-		delete[] u; glDeleteTextures(1, u);
+		glDeleteTextures(1, u);
+		delete[] u; 
 	});
 
 	glActiveTexture(GL_TEXTURE0 + _which_tex);

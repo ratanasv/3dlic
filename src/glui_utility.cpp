@@ -101,6 +101,8 @@ void create_proj6_panel(GLUI* main_glui) {
 		LICFloatParam::COLOR_INTENSITY, "color intensity = %4.4f");
 	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
 		LICFloatParam::NOISE_DENSITY, "noise intensity = %4.4f");
+	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
+		LICFloatParam::NOISE_SIGMA, "noise standard deviation = %4.4f");
 
 	main_glui->add_separator();
 

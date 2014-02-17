@@ -40,6 +40,7 @@
     <ClInclude Include="src\objload.h" />
     <ClInclude Include="src\property.h" />
     <ClInclude Include="src\reader.h" />
+    <ClInclude Include="src\RegenerateNoise.h" />
     <ClInclude Include="src\SliderBundle.h" />
     <ClInclude Include="src\StdAfx.h" />
     <ClInclude Include="src\texture6.h" />
@@ -66,6 +67,7 @@
     <ClCompile Include="src\ProceduralNoise.cpp" />
     <ClCompile Include="src\property.cpp" />
     <ClCompile Include="src\reader.cpp" />
+    <ClCompile Include="src\RegenerateNoise.cpp" />
     <ClCompile Include="src\sample.cpp" />
     <ClCompile Include="src\SliderBundle.cpp" />
     <ClCompile Include="src\StdAfx.cpp">

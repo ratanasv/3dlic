@@ -82,8 +82,11 @@ void FilteredNoise::ApplyFilter(unsigned char* p, int i, int j, int k) {
 					bj >= 0 && bj < _height &&
 					ck >= 0 && ck < _width) 
 				{
-					p[GetIndex(ai, bj, ck)] = (unsigned char)(_filter[
+					const int index = GetIndex(ai, bj, ck);
+					unsigned char prev = p[index];
+					unsigned char next = (unsigned char)(_filter[
 						a*_filterSize*_filterSize + b*_filterSize + c]);
+					p[index] = max(prev, next);
 				}
 			}
 		}

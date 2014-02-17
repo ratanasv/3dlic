@@ -30,6 +30,7 @@ public:
 	static LICFloatParam MAGNITUDE_MAX; 
 	static LICFloatParam COLOR_INTENSITY;
 	static LICFloatParam NOISE_DENSITY;
+	static LICFloatParam NOISE_SIGMA;
 
 	std::string GetStringRep() const;
 	int GetID() const;

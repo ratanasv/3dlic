@@ -117,11 +117,14 @@
     <ClInclude Include="src\DeprecatedCameraBinder.h">
       <Filter>Header Files\opengl</Filter>
     </ClInclude>
+    <ClInclude Include="src\FilteredNoise.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
     <ClInclude Include="src\LICFloatParam.h">
       <Filter>Header Files\mvc</Filter>
     </ClInclude>
-    <ClInclude Include="src\FilteredNoise.h">
-      <Filter>Header Files\datareader</Filter>
+    <ClInclude Include="src\RegenerateNoise.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="src\FilteredNoise.cpp">
       <Filter>Source Files\datareader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RegenerateNoise.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

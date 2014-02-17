@@ -1,6 +1,7 @@
 #version 430 compatibility
 
 uniform sampler3D uSparseNoiseSampler;
+uniform sampler3D uVirNoiseSampler;
 uniform sampler3D uVectorData;
 
 in vec3 fTexCoord;
@@ -103,7 +104,7 @@ vec3 SolveAdvectionEqn(vec3 pos, vec3 vel) {
 }
 
 float FetchSparseNoise(vec3 stp) {
-	return texture(uSparseNoiseSampler, stp).r;
+	return texture(uVirNoiseSampler, stp).r;
 }
 
 float ComputeLIC(vec3 stp) {

@@ -9,6 +9,7 @@
 #include "NoiseTex3DFactory.h"
 #include "FilteredNoise.h"
 #include "LICFloatParam.h"
+#include "RegenerateNoise.h"
 
 using namespace vir;
 using std::string;
@@ -19,6 +20,7 @@ static shared_ptr<VirTex> SparseNoise;
 static shared_ptr<VirModel> Cube;
 static shared_ptr<VirTex> VectorDataTexture;
 static shared_ptr<VirTex> VirNoise;
+static RegenerateNoise* RegenNoise = NULL;
 
 static void BindFloatUniform(const char* var, LICFloatParam param) {
 	VolumeTracingShader->SetUniform(var, GetTDLPInstance()
@@ -32,10 +34,15 @@ static void BindBoolUniform(const char* var, LICBoolParam param) {
 
 
 void draw6() {
+	RegenNoise->RunInMainThread(VirNoise);
+
 	static shared_ptr<TextureVisitor> sparseNoiseVisitor(new GLSLTextureSamplerBinder(
 		VolumeTracingShader, "uSparseNoiseSampler"));
+	static shared_ptr<TextureVisitor> virNoiseVisitor(new GLSLTextureSamplerBinder(
+		VolumeTracingShader, "uVirNoiseSampler"));
 	static shared_ptr<TextureVisitor> vectorDataVisitor(new GLSLTextureSamplerBinder(
 		VolumeTracingShader, "uVectorData"));
+	VirNoise->pre_render(virNoiseVisitor);
 	SparseNoise->pre_render(sparseNoiseVisitor);
 	VectorDataTexture->pre_render(vectorDataVisitor);
 	BindFloatUniform("uNumSteps", LICFloatParam::NUM_STEPS);
@@ -52,6 +59,7 @@ void draw6() {
 	Cube->render();
 	VectorDataTexture->post_render();
 	SparseNoise->post_render();
+	VirNoise->post_render();
 
 }
 
@@ -97,8 +105,15 @@ void init6() {
 		VolumeTracingShader));
 	Cube.reset(new VirModel(vaoFreeable));
 
-	factory.reset(new FilteredNoise(2, 3, 5, 256, 500, 0.5));
+	factory.reset(new FilteredNoise(2, 3, 5, 256, 
+		GetTDLPInstance().GetFloatParameter(LICFloatParam::NOISE_DENSITY).GetFloat(), 
+		0.5));
 	delegatee.reset(new GLTextureDelegatee(factory));
 	VirNoise.reset(new VirTex(delegatee));
+	
+	delegatee.reset(new GLTextureDelegatee(factory));
+	VirNoise.reset(new VirTex(delegatee));
+
+	RegenNoise = new RegenerateNoise(LICFloatParam::NOISE_DENSITY);
 
 }

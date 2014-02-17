@@ -26,6 +26,7 @@ LICFloatParam LICFloatParam::MAGNITUDE_MIN("uMinMagnitude");
 LICFloatParam LICFloatParam::MAGNITUDE_MAX("uMaxMagnitude"); 
 LICFloatParam LICFloatParam::COLOR_INTENSITY("uColorIntensity");
 LICFloatParam LICFloatParam::NOISE_DENSITY("noise density");
+LICFloatParam LICFloatParam::NOISE_SIGMA("noise sigma");
 
 LICFloatParam::LICFloatParam(const char* stringRep) : 
 	_stringRep(stringRep), _id(nextID++)
