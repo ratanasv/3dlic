@@ -26,7 +26,7 @@ public:
 class Normalizer;
 class AlphaTrimmer;
 
-class MFalkDataTex3DFactory : public TextureAbstractFactory {
+class MFalkDataTex3DFactory : public TextureData {
 private:
 	DatFile _datFile;
 	const GLenum _internalFormat;

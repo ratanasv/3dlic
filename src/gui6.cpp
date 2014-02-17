@@ -16,10 +16,10 @@ using std::string;
 namespace fs = boost::filesystem;
 
 shared_ptr<GLSLProgram> VolumeTracingShader;
-static shared_ptr<VirTex> SparseNoise;
+static shared_ptr<GLTexture> SparseNoise;
 static shared_ptr<VirModel> Cube;
-static shared_ptr<VirTex> VectorDataTexture;
-static shared_ptr<VirTex> VirNoise;
+static shared_ptr<GLTexture> VectorDataTexture;
+static shared_ptr<GLTexture> VirNoise;
 static RegenerateNoise* RegenNoise = NULL;
 
 static void BindFloatUniform(const char* var, LICFloatParam param) {
@@ -34,7 +34,7 @@ static void BindBoolUniform(const char* var, LICBoolParam param) {
 
 
 void draw6() {
-	RegenNoise->RunInMainThread(VirNoise);
+	//RegenNoise->RunInMainThread(VirNoise);
 
 	static shared_ptr<TextureVisitor> sparseNoiseVisitor(new GLSLTextureSamplerBinder(
 		VolumeTracingShader, "uSparseNoiseSampler"));
@@ -91,14 +91,14 @@ void init6() {
 	VolumeTracingShader->Use();
 
 	
-	shared_ptr<TextureAbstractFactory> factory(new NoiseTex3DFactory(
+	shared_ptr<TextureData> factory(new NoiseTex3DFactory(
 		NOISE_PATH, 1));
-	shared_ptr<TextureDelegatee> delegatee(new GLTextureDelegatee(factory));
-	SparseNoise.reset(new VirTex(delegatee));
+	SparseNoise.reset(new GLTexture());
+	SparseNoise->send_to_gpu(factory);
 
 	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.c_str(), GL_RGBA32F));
-	delegatee.reset(new GLTextureDelegatee(factory));
-	VectorDataTexture.reset(new VirTex(delegatee));
+	VectorDataTexture.reset(new GLTexture());
+	VectorDataTexture->send_to_gpu(factory);
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
 	shared_ptr<GeometryDelegatee> vaoFreeable(new VAODelegatee(cubeFactory, 
@@ -108,12 +108,10 @@ void init6() {
 	factory.reset(new FilteredNoise(2, 3, 5, 256, 
 		GetTDLPInstance().GetFloatParameter(LICFloatParam::NOISE_DENSITY).GetFloat(), 
 		0.5));
-	delegatee.reset(new GLTextureDelegatee(factory));
-	VirNoise.reset(new VirTex(delegatee));
+	VirNoise.reset(new GLTexture());
+	VirNoise->send_to_gpu(factory);
 	
-	delegatee.reset(new GLTextureDelegatee(factory));
-	VirNoise.reset(new VirTex(delegatee));
 
-	RegenNoise = new RegenerateNoise(LICFloatParam::NOISE_DENSITY);
+	//RegenNoise = new RegenerateNoise(LICFloatParam::NOISE_DENSITY);
 
 }

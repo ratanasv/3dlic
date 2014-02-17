@@ -3,9 +3,7 @@
 #include <memory>
 #include <mutex>
 
-class TextureAbstractFactory;
-class TextureDelegatee;
-class VirTex;
+class GLTexture;
 
 class RegenerateNoise {
 private:
@@ -16,5 +14,5 @@ private:
 public:
 	RegenerateNoise(const LICFloatParam& param);
 	void operator()();
-	void RunInMainThread(std::shared_ptr<VirTex>& noise);
+	void RunInMainThread(std::shared_ptr<GLTexture>& noise);
 };

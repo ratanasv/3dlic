@@ -1,7 +1,7 @@
 #pragma once
 #include "virtex.h"
 
-class ProceduralNoise : public TextureAbstractFactory {
+class ProceduralNoise : public TextureData {
 protected:
 	shared_ptr<unsigned char> _texels;
 	const int _numChannel;

@@ -44,7 +44,7 @@ GLenum toGLTexFormat(const int ch) {
 	}
 }
 
-ImageTex2DFactory::ImageTex2DFactory(const string& file_name) {
+Texture2DData::Texture2DData(const string& file_name) {
 	validatePath(file_name);
 	int numChannel;
 	unsigned char* tex_ptr = SOIL_load_image(file_name.c_str(),
@@ -62,7 +62,7 @@ ImageTex2DFactory::ImageTex2DFactory(const string& file_name) {
 	_type = GL_UNSIGNED_BYTE;
 }
 
-void ImageTex2DFactory::flip_vertically() {
+void Texture2DData::flip_vertically() {
 	shared_ptr<unsigned char> flipped(new unsigned char[_width*_height*_internalFormat],
 		[] (unsigned char* uc){delete[] uc;});
 	unsigned char* upside_down = _texels.get();
@@ -77,26 +77,26 @@ void ImageTex2DFactory::flip_vertically() {
 	_texels = flipped;
 }
 
-shared_ptr<void> ImageTex2DFactory::get_data() {
+shared_ptr<void> Texture2DData::get_data() {
 	return _texels;
 }
 
 
 
-atomic_uint GLTextureDelegatee::OGLActiveTextureCounter;
+atomic_uint GLTexture::OGLActiveTextureCounter;
 
-GLTextureDelegatee::GLTextureDelegatee(const shared_ptr<TextureAbstractFactory>& factory) :
-	TextureDelegatee(factory), _which_tex(OGLActiveTextureCounter++) {};
+GLTexture::GLTexture() :
+	_which_tex(OGLActiveTextureCounter++) {};
 
-void GLTextureDelegatee::send_to_gpu() {
-	GLenum ch = _factory->getInternalFormat();
-	int width = _factory->getWidth();
-	int height = _factory->getHeight();
-	int depth = _factory->getDepth();
-	GLenum data_ch = _factory->getFormat();
-	GLenum data_type = _factory->getType();
+void GLTexture::send_to_gpu(const shared_ptr<TextureData>& factory) {
+	GLenum ch = factory->getInternalFormat();
+	int width = factory->getWidth();
+	int height = factory->getHeight();
+	int depth = factory->getDepth();
+	GLenum data_ch = factory->getFormat();
+	GLenum data_type = factory->getType();
 	
-	if (_factory->getDepth() == 1) {
+	if (factory->getDepth() == 1) {
 		_bind_site = GL_TEXTURE_2D;
 	}
 	else {
@@ -113,31 +113,22 @@ void GLTextureDelegatee::send_to_gpu() {
 	glBindTexture(_bind_site, *_tex_handle);
 	if (_bind_site == GL_TEXTURE_2D) {
 		glTexImage2D(_bind_site, 0, ch, width, height, 0, data_ch, data_type,
-			_factory->get_data().get());
+			factory->get_data().get());
 	}
 	else {
 		glTexImage3D(_bind_site, 0, ch, width, height, depth, 0, data_ch, data_type, 
-			_factory->get_data().get());
+			factory->get_data().get());
 	}
 	glBindTexture(_bind_site, 0);
 }
 
-void GLTextureDelegatee::pre_render(const shared_ptr<TextureVisitor>& visitor) {
+void GLTexture::pre_render(const shared_ptr<TextureVisitor>& visitor) {
 	glActiveTexture(GL_TEXTURE0+_which_tex);
 	glBindTexture(_bind_site, *_tex_handle);
-	visitor->pre_render(_which_tex, _bind_site, _tex_handle);
+	visitor->PreRender(_which_tex, _bind_site, _tex_handle);
 }
 
-void GLTextureDelegatee::post_render() {
+void GLTexture::post_render() {
 	glActiveTexture(GL_TEXTURE0+_which_tex);
 	glBindTexture(_bind_site, 0);
-}
-
-
-void VirTex::pre_render( const shared_ptr<TextureVisitor>& visitor ) {
-	_delegatee->pre_render(visitor);
-}
-
-void VirTex::post_render() {
-	_delegatee->post_render();
 }

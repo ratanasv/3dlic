@@ -1,7 +1,7 @@
 #pragma once
 #include "virtex.h"
 
-class NoiseTex3DFactory: public TextureAbstractFactory {
+class NoiseTex3DFactory: public TextureData {
 private:
 	shared_ptr<unsigned char> _texels;
 	const int _numChannel;

@@ -7,7 +7,7 @@
 using namespace std;
 
 mutex _mutex;
-shared_ptr<TextureDelegatee> _textureDelegatee;
+shared_ptr<GLTexture> _textureDelegatee;
 
 RegenerateNoise::RegenerateNoise(const LICFloatParam& param) : 
 	_param(param)
@@ -27,11 +27,12 @@ void RegenerateNoise::operator()() {
 		if (_lastSeenValue != newValue || _lastSeenSigma != newSigma) {
 			_lastSeenValue = newValue;
 			_lastSeenSigma = newSigma;
-			shared_ptr<TextureAbstractFactory> factory(new FilteredNoise(2, 3, 5, 256, 
+			shared_ptr<TextureData> factory(new FilteredNoise(2, 3, 5, 256, 
 				_lastSeenValue, _lastSeenSigma));
 			{
 				lock_guard<mutex> synchronized(_mutex);
-				_textureDelegatee.reset(new GLTextureDelegatee(factory));
+				_textureDelegatee.reset(new GLTexture());
+				_textureDelegatee->send_to_gpu(factory);
 			}
 		}
 			
@@ -40,10 +41,9 @@ void RegenerateNoise::operator()() {
 
 }
 
-void RegenerateNoise::RunInMainThread(std::shared_ptr<VirTex>& noise) {
+void RegenerateNoise::RunInMainThread(std::shared_ptr<GLTexture>& noise) {
 	lock_guard<mutex> synchronized(_mutex);
 	if (_textureDelegatee) {
-		noise.reset(new VirTex(_textureDelegatee));
-		_textureDelegatee.reset();
+		noise = _textureDelegatee;
 	}
 }

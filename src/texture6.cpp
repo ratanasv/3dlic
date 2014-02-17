@@ -15,7 +15,7 @@ GLSLTextureSamplerBinder::GLSLTextureSamplerBinder(
 
 }
 
-void GLSLTextureSamplerBinder::pre_render( const unsigned int whichTex, 
+void GLSLTextureSamplerBinder::PreRender( const unsigned int whichTex, 
 	GLenum bindSite, const shared_ptr<unsigned> texHandle )
 {
 	glTexParameteri( bindSite, GL_TEXTURE_MAG_FILTER, GL_LINEAR ); 

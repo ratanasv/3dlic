@@ -10,7 +10,7 @@ private:
 public:
 	GLSLTextureSamplerBinder(const shared_ptr<GLSLUniformBinder>& binder, 
 		const string& uniformVariable);
-	virtual void pre_render( const unsigned int whichTex, GLenum bindSite, 
+	virtual void PreRender( const unsigned int whichTex, GLenum bindSite, 
 		const shared_ptr<unsigned> texHandle );
 
 };

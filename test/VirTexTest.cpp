@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 #include "virtex.h"
 
-class MockTex2DFactory : TextureAbstractFactory {
+class MockTex2DFactory : TextureData {
 
 };
 
