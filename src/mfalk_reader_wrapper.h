@@ -9,6 +9,7 @@
 #include <cstring>
 #include <memory>
 #include "Angel.h"
+#include "vir_toolbox.hpp"
 
 using Angel::vec4;
 using std::weak_ptr;
@@ -30,6 +31,7 @@ class MFalkDataTex3DFactory : public TextureData {
 private:
 	DatFile _datFile;
 	const GLenum _internalFormat;
+	LazyInitOnce<shared_ptr<const void>> _data;
 public:
 	MFalkDataTex3DFactory(const string& fileName, const GLenum internalFormat);
 	virtual GLenum getInternalFormat();
@@ -39,6 +41,7 @@ public:
 	virtual GLenum getFormat();
 	virtual GLenum getType();
 	virtual shared_ptr<const void> get_data();
+private:
 	virtual shared_ptr<vec4<>> getNormalizedData(const Normalizer& normalizer);
 	virtual shared_ptr<vec3<>> getFloatVecData();
 };

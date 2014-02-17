@@ -5,6 +5,7 @@
 #include <cstring>
 #include <map>
 #include <utility>
+#include <mutex>
 
 template <class T> std::shared_ptr<std::vector<T>> initSmartArray(const int size = 0) {
 	std::shared_ptr<vector<T>> returned(new std::vector<T>(size));
@@ -33,3 +34,24 @@ template <class T, class V> static void InsertHelper(std::map<T,V>& theMap,
 {
 	theMap.insert(std::pair<T,V>(key, value));
 }
+
+
+template<class T> class LazyInitOnce {
+private:
+	std::once_flag _initFlag;
+	T _data;
+	std::function<T()> _initFunc;
+private:
+	void init() {
+		_data = _initFunc();
+	}
+public:
+	void Set(const std::function<T()>& lambda) {
+		_initFunc = lambda ;
+	}
+	operator T&() {
+		std::call_once(_initFlag, &LazyInitOnce::init, this);
+		return _data;
+	}
+
+};
