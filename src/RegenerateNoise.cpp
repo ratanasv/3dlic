@@ -31,8 +31,7 @@ void RegenerateNoise::operator()() {
 				_lastSeenValue, _lastSeenSigma));
 			{
 				lock_guard<mutex> synchronized(_mutex);
-				_textureDelegatee.reset(new GLTexture());
-				_textureDelegatee->send_to_gpu(factory);
+				_textureDelegatee.reset(new GLTexture(factory));
 			}
 		}
 			

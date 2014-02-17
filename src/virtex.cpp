@@ -85,8 +85,11 @@ shared_ptr<void> Texture2DData::get_data() {
 
 atomic_uint GLTexture::OGLActiveTextureCounter;
 
-GLTexture::GLTexture() :
-	_which_tex(OGLActiveTextureCounter++) {};
+GLTexture::GLTexture(const shared_ptr<TextureData>& factory) :
+	_which_tex(OGLActiveTextureCounter++) 
+{
+	send_to_gpu(factory);
+};
 
 void GLTexture::send_to_gpu(const shared_ptr<TextureData>& factory) {
 	GLenum ch = factory->getInternalFormat();

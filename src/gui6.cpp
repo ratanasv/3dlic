@@ -93,12 +93,10 @@ void init6() {
 	
 	shared_ptr<TextureData> factory(new NoiseTex3DFactory(
 		NOISE_PATH, 1));
-	SparseNoise.reset(new GLTexture());
-	SparseNoise->send_to_gpu(factory);
+	SparseNoise.reset(new GLTexture(factory));
 
 	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.c_str(), GL_RGBA32F));
-	VectorDataTexture.reset(new GLTexture());
-	VectorDataTexture->send_to_gpu(factory);
+	VectorDataTexture.reset(new GLTexture(factory));
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
 	shared_ptr<GeometryDelegatee> vaoFreeable(new VAODelegatee(cubeFactory, 
@@ -108,8 +106,7 @@ void init6() {
 	factory.reset(new FilteredNoise(2, 3, 5, 256, 
 		GetTDLPInstance().GetFloatParameter(LICFloatParam::NOISE_DENSITY).GetFloat(), 
 		0.5));
-	VirNoise.reset(new GLTexture());
-	VirNoise->send_to_gpu(factory);
+	VirNoise.reset(new GLTexture(factory));
 	
 
 	//RegenNoise = new RegenerateNoise(LICFloatParam::NOISE_DENSITY);

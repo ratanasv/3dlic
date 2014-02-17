@@ -54,7 +54,7 @@ public:
 
 class GLTexture {
 public:
-	GLTexture();
+	GLTexture(const shared_ptr<TextureData>& factory);
 	virtual void send_to_gpu(const shared_ptr<TextureData>& factory);
 	virtual void pre_render(const shared_ptr<TextureVisitor>& visitor);
 	virtual void post_render();
