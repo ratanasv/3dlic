@@ -5,7 +5,7 @@
 using std::vector;
 
 
-shared_ptr<void> ProceduralNoise::get_data() {
+shared_ptr<const void> ProceduralNoise::get_data() {
 	if (!_texels) {
 		_texels.reset(new unsigned char[_width*_height*_depth]);
 		memset(_texels.get(), 0, _width*_height*_depth*sizeof(unsigned char));

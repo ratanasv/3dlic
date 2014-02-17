@@ -78,7 +78,7 @@ void Texture2DData::flip_vertically() {
 	_texels = flipped;
 }
 
-shared_ptr<void> Texture2DData::get_data() {
+shared_ptr<const void> Texture2DData::get_data() {
 	return _texels;
 }
 

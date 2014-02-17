@@ -30,5 +30,5 @@ public:
 
 	virtual GLenum getType();
 
-	virtual shared_ptr<void> get_data();
+	virtual shared_ptr<const void> get_data();
 };

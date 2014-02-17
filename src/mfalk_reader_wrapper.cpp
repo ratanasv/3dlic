@@ -58,7 +58,7 @@ private:
 
 
 
-shared_ptr<void> MFalkDataTex3DFactory::get_data() {
+shared_ptr<const void> MFalkDataTex3DFactory::get_data() {
 	const unsigned numVectors = getWidth()*getHeight()*getDepth();
 	shared_ptr<vec4<>> data;
 	if (_internalFormat == GL_RGBA32F || _internalFormat == GL_RGBA16F) {

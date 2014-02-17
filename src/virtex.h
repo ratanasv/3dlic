@@ -32,11 +32,12 @@ public:
 	virtual int getDepth() = 0;
 	virtual GLenum getFormat() = 0;
 	virtual GLenum getType() = 0;
-	virtual shared_ptr<void> get_data() = 0;
+	virtual shared_ptr<const void> get_data() = 0;
 
 	virtual ~TextureData() {};
 };
 
+//thread-safe because it is immutable
 class Texture2DData: public TextureData {
 private:
 	shared_ptr<unsigned char> _texels;
@@ -51,7 +52,7 @@ public:
 private:
 	void flip_vertically();
 public:
-	virtual shared_ptr<void> get_data();
+	virtual shared_ptr<const void> get_data();
 
 };
 

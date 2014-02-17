@@ -31,7 +31,7 @@ NoiseTex3DFactory::NoiseTex3DFactory(const string& file_name, const int ch) :
 }
 
 
-shared_ptr<void> NoiseTex3DFactory::get_data() {
+shared_ptr<const void> NoiseTex3DFactory::get_data() {
 	return _texels;
 }
 

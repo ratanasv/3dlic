@@ -4,13 +4,13 @@
 
 using namespace std;
 
-shared_ptr<void> FilteredNoise::get_data() {
+shared_ptr<const void> FilteredNoise::get_data() {
 	const int total = _depth*_width*_height;
-	shared_ptr<void> data = ProceduralNoise::get_data();
+	shared_ptr<const void> data = ProceduralNoise::get_data();
 	shared_ptr<void> result(new unsigned char[total]);
 	memset(result.get(), 0, total*sizeof(unsigned char));
-	unsigned char* rawData = (unsigned char*)data.get();
-	unsigned char* rawResult = (unsigned char*)result.get();
+	auto rawData = (const unsigned char*)data.get();
+	auto rawResult = (unsigned char*)result.get();
 
 	int counter = 0;
 	for (int i=0; i<_depth; i++) {

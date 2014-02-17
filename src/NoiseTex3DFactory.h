@@ -14,7 +14,7 @@ private:
 public:
 	NoiseTex3DFactory(const string& file_name, const int ch);
 public:
-	virtual shared_ptr<void> get_data();
+	virtual shared_ptr<const void> get_data();
 	virtual GLenum getInternalFormat();
 	virtual int getWidth();
 	virtual int getHeight();

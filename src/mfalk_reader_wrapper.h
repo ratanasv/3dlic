@@ -38,7 +38,7 @@ public:
 	virtual int getDepth();
 	virtual GLenum getFormat();
 	virtual GLenum getType();
-	virtual shared_ptr<void> get_data();
+	virtual shared_ptr<const void> get_data();
 	virtual shared_ptr<vec4<>> getNormalizedData(const Normalizer& normalizer);
 	virtual shared_ptr<vec3<>> getFloatVecData();
 };
