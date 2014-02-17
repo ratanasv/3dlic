@@ -2,6 +2,8 @@
 #include "3dlic_model.h"
 #include <stdexcept>
 #include "LICFloatParam.h"
+#include <mutex>
+#include <boost/thread/locks.hpp>
 
 using std::invalid_argument;
 
@@ -65,33 +67,45 @@ THREEDLICParameters::THREEDLICParameters() {
 }
 
 PROJ_TYPE THREEDLICParameters::GetProjection() const {
+	boost::shared_lock<boost::shared_mutex> synchronous(_mutex);
 	return _projection;
 }
 
 
 
 void THREEDLICParameters::SetProjection( PROJ_TYPE in ) {
-	_projection = in;
+	{
+		std::lock_guard<boost::shared_mutex> synchronous(_mutex);
+		_projection = in;
+	}
 	NotifyObservers();
 }
 
 
 
 FloatParam THREEDLICParameters::GetFloatParameter(const LICFloatParam& param) const {
+	boost::shared_lock<boost::shared_mutex> synchronous(_mutex);
 	return _floatParams.at(param);
 }
 
 void THREEDLICParameters::SetFloatParameter(const LICFloatParam& param, float in) {
-	_floatParams.at(param).SetFloat(in);
+	{
+		std::lock_guard<boost::shared_mutex> synchronous(_mutex);
+		_floatParams.at(param).SetFloat(in);
+	}
 	NotifyObservers();
 }
 
 BoolParam THREEDLICParameters::GetBoolParameter(LICBoolParam param) const {
+	boost::shared_lock<boost::shared_mutex> synchronous(_mutex);
 	return _boolParams.at(param);
 }
 
 void THREEDLICParameters::SetBoolParameter(LICBoolParam param, bool in) {
-	_boolParams.at(param).SetBool(in);
+	{
+		std::lock_guard<boost::shared_mutex> synchronous(_mutex);
+		_boolParams.at(param).SetBool(in);
+	}
 	NotifyObservers();
 }
 

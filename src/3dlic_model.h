@@ -3,6 +3,7 @@
 #include "abstract.h"
 #include <map>
 #include "LICFloatParam.h"
+#include <boost/thread/shared_mutex.hpp>
 
 using std::map;
 using vir::Abstract;
@@ -62,6 +63,7 @@ private:
 	PROJ_TYPE _projection;
 	map<LICFloatParam, FloatParam> _floatParams;
 	map<LICBoolParam, BoolParam> _boolParams;
+	mutable boost::shared_mutex _mutex;
 public:
 	PROJ_TYPE GetProjection() const;
 	void SetTranslate(const vec3<>& in);
