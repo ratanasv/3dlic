@@ -3,6 +3,9 @@
 #include <cstring>
 #include "glew.h"
 #include <atomic>
+#include <thread>
+#include <mutex>
+#include <boost/thread/shared_mutex.hpp>
 
 using std::shared_ptr;
 using std::string;
@@ -62,6 +65,7 @@ protected:
 	shared_ptr<unsigned> _tex_handle;
 	const unsigned _which_tex;
 	GLenum _bind_site;
+	boost::shared_mutex _mutex;
 private:
 	static atomic_uint OGLActiveTextureCounter;
 };

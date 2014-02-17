@@ -1,10 +1,11 @@
 #include "StdAfx.h"
 #include "virtex.h"
+#include <boost/thread/locks.hpp>
 
 using namespace vir;
 using std::shared_ptr;
 using std::invalid_argument;
-
+using namespace std;
 using std::runtime_error;
 namespace fs = boost::filesystem;
 
@@ -92,6 +93,7 @@ GLTexture::GLTexture(const shared_ptr<TextureData>& factory) :
 };
 
 void GLTexture::send_to_gpu(const shared_ptr<TextureData>& factory) {
+	std::lock_guard<boost::shared_mutex> synchronous(_mutex);
 	GLenum ch = factory->getInternalFormat();
 	int width = factory->getWidth();
 	int height = factory->getHeight();
@@ -126,12 +128,14 @@ void GLTexture::send_to_gpu(const shared_ptr<TextureData>& factory) {
 }
 
 void GLTexture::pre_render(const shared_ptr<TextureVisitor>& visitor) {
+	boost::shared_lock<boost::shared_mutex> synchronous(_mutex);
 	glActiveTexture(GL_TEXTURE0+_which_tex);
 	glBindTexture(_bind_site, *_tex_handle);
 	visitor->PreRender(_which_tex, _bind_site, _tex_handle);
 }
 
 void GLTexture::post_render() {
+	boost::shared_lock<boost::shared_mutex> synchronous(_mutex);
 	glActiveTexture(GL_TEXTURE0+_which_tex);
 	glBindTexture(_bind_site, 0);
 }
