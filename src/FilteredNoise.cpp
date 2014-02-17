@@ -29,7 +29,8 @@ FilteredNoise::FilteredNoise(int s0, int s1, int s2, int dim, int density, float
 	_center = size-1;
 	_filterSize = size*2-1;
 
-	_filter = new float[_filterSize*_filterSize*_filterSize];
+	_filter.reset(new float[_filterSize*_filterSize*_filterSize]);
+	auto filterPtr = _filter.get();
 	for (int i=0; i<_filterSize; i++) {
 		for (int j=0; j<_filterSize; j++) {
 			for (int k=0; k<_filterSize; k++) {
@@ -37,7 +38,7 @@ FilteredNoise::FilteredNoise(int s0, int s1, int s2, int dim, int density, float
 				const float y2 = pow(DtoC(_center - j), 2);
 				const float z2 = pow(DtoC(_center - i), 2);
 				const float falloff = exp(-1.0*(x2 + y2 + z2)/(2.0*sigma));
-				_filter[i*_filterSize*_filterSize + j*_filterSize + k] = 255.0*falloff;
+				filterPtr[i*_filterSize*_filterSize + j*_filterSize + k] = 255.0*falloff;
 			}
 		}
 	}
@@ -55,6 +56,8 @@ int FilteredNoise::GetIndex(int i, int j, int k) {
 }
 
 void FilteredNoise::ApplyFilter(unsigned char* p, int i, int j, int k) {
+	assert(_filter);
+	auto filterPtr = _filter.get();
 	for (int a=0; a<_filterSize; a++) {
 		for (int b=0; b<_filterSize; b++) {
 			for (int c=0; c<_filterSize; c++) {
@@ -67,7 +70,7 @@ void FilteredNoise::ApplyFilter(unsigned char* p, int i, int j, int k) {
 				{
 					const int index = GetIndex(ai, bj, ck);
 					unsigned char prev = p[index];
-					unsigned char next = (unsigned char)(_filter[
+					unsigned char next = (unsigned char)(filterPtr[
 						a*_filterSize*_filterSize + b*_filterSize + c]);
 					p[index] = max(prev, next);
 				}

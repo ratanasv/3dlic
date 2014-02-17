@@ -12,7 +12,7 @@ private:
 	int GetIndex(int i, int j, int k);
 	void ApplyFilter(unsigned char* p, int i, int j, int k);
 	void initData();
-	float* _filter;
+	std::shared_ptr<float> _filter;
 	int _filterSize;
 	int _center;
 	std::shared_ptr<void> _data;
