@@ -1,7 +1,12 @@
 #pragma once
 #include "virtex.h"
+#include <thread>
+#include <mutex>
 
 class ProceduralNoise : public TextureData {
+private:
+	std::once_flag _initFlag;
+	void initData();
 protected:
 	shared_ptr<unsigned char> _texels;
 	const int _numChannel;

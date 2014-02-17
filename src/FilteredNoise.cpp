@@ -5,25 +5,8 @@
 using namespace std;
 
 shared_ptr<const void> FilteredNoise::get_data() {
-	const int total = _depth*_width*_height;
-	shared_ptr<const void> data = ProceduralNoise::get_data();
-	shared_ptr<void> result(new unsigned char[total]);
-	memset(result.get(), 0, total*sizeof(unsigned char));
-	auto rawData = (const unsigned char*)data.get();
-	auto rawResult = (unsigned char*)result.get();
-
-	int counter = 0;
-	for (int i=0; i<_depth; i++) {
-		for (int j=0; j<_height; j++) {
-			for (int k=0; k<_width; k++) {
-				if (rawData[counter] == (unsigned char)255) {
-					ApplyFilter(rawResult, i, j, k);
-				}
-				counter++;
-			}
-		}
-	}
-	return result;
+	std::call_once(_initFlag, &FilteredNoise::initData, this);
+	return _data;
 }
 
 FilteredNoise::FilteredNoise(int s0, int s1, int s2, int dim, int density, float sigma) : 
@@ -88,6 +71,27 @@ void FilteredNoise::ApplyFilter(unsigned char* p, int i, int j, int k) {
 						a*_filterSize*_filterSize + b*_filterSize + c]);
 					p[index] = max(prev, next);
 				}
+			}
+		}
+	}
+}
+
+void FilteredNoise::initData() {
+	const int total = _depth*_width*_height;
+	shared_ptr<const void> data = ProceduralNoise::get_data();
+	_data.reset(new unsigned char[total]);
+	memset(_data.get(), 0, total*sizeof(unsigned char));
+	auto rawData = (const unsigned char*)data.get();
+	auto rawResult = (unsigned char*)_data.get();
+
+	int counter = 0;
+	for (int i=0; i<_depth; i++) {
+		for (int j=0; j<_height; j++) {
+			for (int k=0; k<_width; k++) {
+				if (rawData[counter] == (unsigned char)255) {
+					ApplyFilter(rawResult, i, j, k);
+				}
+				counter++;
 			}
 		}
 	}
