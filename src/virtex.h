@@ -48,7 +48,7 @@ private:
 	GLenum _format;
 	GLenum _type;
 public:
-	Texture2DData(const string& file_name);
+	explicit Texture2DData(const string& file_name);
 private:
 	void flip_vertically();
 public:

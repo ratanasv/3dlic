@@ -21,6 +21,7 @@ static shared_ptr<VirModel> Cube;
 static shared_ptr<GLTexture> VectorDataTexture;
 static shared_ptr<GLTexture> VirNoise;
 static RegenerateNoise* RegenNoise = NULL;
+static shared_ptr<GLTexture> KernelNoise;
 
 static void BindFloatUniform(const char* var, LICFloatParam param) {
 	VolumeTracingShader->SetUniform(var, GetTDLPInstance()
@@ -84,6 +85,8 @@ void init6() {
 	ExistingPath DATA_PATH(GetStringProperty(Property::PATH_DATA));
 	ExistingPath GAUSSIAN_COMPUTE_SHADER_PATH(GetStringProperty(
 		Property::PATH_GAUSSIAN_COMPUTE_SHADER));
+	ExistingPath KERNEL_PATH(GetStringProperty(
+		Property::PATH_GAUSSIAN_COMPUTE_SHADER));
 
 	VolumeTracingShader.reset(new GLSLProgram());
 	VolumeTracingShader->Create(VERTEX_SHADER_PATH.c_str(),
@@ -95,7 +98,7 @@ void init6() {
 		NOISE_PATH, 1));
 	SparseNoise.reset(new GLTexture(factory));
 
-	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.c_str(), GL_COMPRESSED_RGBA));
+	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.c_str(), GL_RGBA32F));
 	VectorDataTexture.reset(new GLTexture(factory));
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());

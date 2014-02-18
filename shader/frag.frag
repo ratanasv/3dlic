@@ -153,7 +153,7 @@ void main(void) {
 			float accumulated = ComputeLIC(stp);
 			alpha = transferFunction(stp, accumulated) * uBaseAlpha;
 			rgb = uColorIntensity*accumulated*
-			ClampRainbow(vectorMagnitude, uRainbowValMin, uRainbowValMax);
+				ClampRainbow(vectorMagnitude, uRainbowValMin, uRainbowValMax);
 		}
 
 

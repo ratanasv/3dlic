@@ -25,6 +25,7 @@ static const string toString(Property prop) {
 		propertyToString[Property::PATH_NOISE] = "path_noise";
 		propertyToString[Property::PATH_GAUSSIAN_COMPUTE_SHADER] = 
 			"path_gaussian_compute_shader";
+		propertyToString[Property::PATH_KERNEL] = "path_kernel"
 	}
 	return propertyToString[prop];
 }
@@ -49,7 +50,9 @@ void InitProgramOptions(int argc, char** argv) {
 		(toString(Property::PATH_NOISE).c_str(), po::value<string>(), 
 			"path to noise data")
 		(toString(Property::PATH_GAUSSIAN_COMPUTE_SHADER).c_str(), po::value<string>(), 
-			"path to gaussian filter compute shader");
+			"path to gaussian filter compute shader")
+		(toString(Property::PATH_KERNEL).c_str(), po::value<string>(), 
+			"path to kernel texture");
 
 	try {
 		po::store(po::parse_command_line(argc, argv, desc), variable_map);

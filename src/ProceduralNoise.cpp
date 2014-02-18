@@ -35,7 +35,7 @@ GLenum ProceduralNoise::getType() {
 }
 
 ProceduralNoise::ProceduralNoise(int s0, int s1, int s2, int dim, int density) : 
-	_internalFormat(toGLTexInternalFormat(1)), _numChannel(1),
+	_internalFormat(GL_COMPRESSED_RED), _numChannel(1),
 	_format(toGLTexFormat(1)), _type(GL_UNSIGNED_BYTE),
 	_seed0(s0), _seed1(s1), _seed2(s2), _depth(dim), _width(dim), _height(dim), 
 	_density(density)

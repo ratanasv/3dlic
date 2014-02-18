@@ -47,16 +47,21 @@ GLenum toGLTexFormat(const int ch) {
 
 Texture2DData::Texture2DData(const string& file_name) {
 	validatePath(file_name);
-	int numChannel;
+	const int numChannel = 3;
+	int actualNumChannel;
 	unsigned char* tex_ptr = SOIL_load_image(file_name.c_str(),
-		&_width, &_height, &numChannel, SOIL_LOAD_RGB);
+		&_width, &_height, &actualNumChannel, SOIL_LOAD_RGB);
 	if (tex_ptr == NULL) {
 		throw runtime_error("SOIL_load_image failed");
 	}
-	_texels = shared_ptr<unsigned char>( tex_ptr, [](unsigned char* uc){
-		delete[] uc;
-	});
-	flip_vertically();
+	if (numChannel != actualNumChannel) {
+		fprintf(stderr, "Imagefile %s : requested RGB but found %d\n", file_name.c_str(), 
+			actualNumChannel);
+	}
+	_texels = initCStyleArray(tex_ptr);
+	if (_height != 1) {
+		flip_vertically();
+	}
 	_internalFormat = toGLTexInternalFormat(numChannel);
 	_depth = 1;
 	_format = GL_RGB;
@@ -64,14 +69,14 @@ Texture2DData::Texture2DData(const string& file_name) {
 }
 
 void Texture2DData::flip_vertically() {
-	shared_ptr<unsigned char> flipped(new unsigned char[_width*_height*_internalFormat],
-		[] (unsigned char* uc){delete[] uc;});
+	const int numChannel = 3;
+	auto flipped = initCStyleArray(new unsigned char[_width*_height*numChannel]);
 	unsigned char* upside_down = _texels.get();
-	for (int i =0; i<_width; i++) {
-		for (int j= 0 ;j<_height; j++) {
-			for (int k =0; k<_internalFormat; k++) {
-				flipped.get()[(_width-1-i)*_height*_internalFormat+j*_internalFormat+k] = 
-					(upside_down[_height*i*_internalFormat+j*_internalFormat+k]);
+	for (int i=0; i<_height; i++) {
+		for (int j=0; j<_width; j++) {
+			for (int k =0; k<numChannel; k++) {
+				flipped.get()[(_height-1-i)*_width*numChannel+j*numChannel+k] = 
+					(upside_down[_width*i*numChannel+j*numChannel+k]);
 			}
 		}
 	}
@@ -101,10 +106,12 @@ void GLTexture::send_to_gpu(const shared_ptr<TextureData>& factory) {
 	GLenum data_ch = factory->getFormat();
 	GLenum data_type = factory->getType();
 	
-	if (factory->getDepth() == 1) {
+
+	if (factory->getHeight() ==1 ) {
+		_bind_site = GL_TEXTURE_1D;
+	} else if (factory->getDepth() == 1) {
 		_bind_site = GL_TEXTURE_2D;
-	}
-	else {
+	} else {
 		_bind_site = GL_TEXTURE_3D;
 	}
 
@@ -116,11 +123,14 @@ void GLTexture::send_to_gpu(const shared_ptr<TextureData>& factory) {
 	glActiveTexture(GL_TEXTURE0 + _which_tex);
 	glGenTextures(1, _tex_handle.get());
 	glBindTexture(_bind_site, *_tex_handle);
-	if (_bind_site == GL_TEXTURE_2D) {
+
+	if (_bind_site == GL_TEXTURE_1D) {
+		glTexImage1D(_bind_site, 0, ch, width, 0, data_ch, data_type, 
+			factory->get_data().get());
+	} else if (_bind_site == GL_TEXTURE_2D) {
 		glTexImage2D(_bind_site, 0, ch, width, height, 0, data_ch, data_type,
 			factory->get_data().get());
-	}
-	else {
+	} else {
 		glTexImage3D(_bind_site, 0, ch, width, height, depth, 0, data_ch, data_type, 
 			factory->get_data().get());
 	}
