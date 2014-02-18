@@ -34,7 +34,7 @@ static void BindBoolUniform(const char* var, LICBoolParam param) {
 
 
 void draw6() {
-	//RegenNoise->RunInMainThread(VirNoise);
+	RegenNoise->RunInMainThread(VirNoise);
 
 	static shared_ptr<TextureVisitor> sparseNoiseVisitor(new GLSLTextureSamplerBinder(
 		VolumeTracingShader, "uSparseNoiseSampler"));
@@ -95,7 +95,7 @@ void init6() {
 		NOISE_PATH, 1));
 	SparseNoise.reset(new GLTexture(factory));
 
-	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.c_str(), GL_RGBA32F));
+	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.c_str(), GL_COMPRESSED_RGBA));
 	VectorDataTexture.reset(new GLTexture(factory));
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
@@ -109,6 +109,6 @@ void init6() {
 	VirNoise.reset(new GLTexture(factory));
 	
 
-	//RegenNoise = new RegenerateNoise(LICFloatParam::NOISE_DENSITY);
+	RegenNoise = new RegenerateNoise(LICFloatParam::NOISE_DENSITY);
 
 }

@@ -33,7 +33,9 @@ MFalkDataTex3DFactory::MFalkDataTex3DFactory(const string& fileName,
 	_data.Set([&]() {
 		const unsigned numVectors = getWidth()*getHeight()*getDepth();
 		shared_ptr<vec4<>> data;
-		if (_internalFormat == GL_RGBA32F || _internalFormat == GL_RGBA16F) {
+		if (_internalFormat == GL_RGBA32F || _internalFormat == GL_RGBA16F || 
+			_internalFormat == GL_COMPRESSED_RGBA) 
+		{
 			data = getNormalizedData(Normalizer(0.0, 1.0));
 		} else if (_internalFormat == GL_RGBA8 || _internalFormat == GL_RGBA) {
 			data = getNormalizedData(Normalizer(0.5, 0.5));
