@@ -25,7 +25,7 @@ static const string toString(Property prop) {
 		propertyToString[Property::PATH_NOISE] = "path_noise";
 		propertyToString[Property::PATH_GAUSSIAN_COMPUTE_SHADER] = 
 			"path_gaussian_compute_shader";
-		propertyToString[Property::PATH_KERNEL] = "path_kernel"
+		propertyToString[Property::PATH_KERNEL] = "path_kernel";
 	}
 	return propertyToString[prop];
 }

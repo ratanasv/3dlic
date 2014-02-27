@@ -57,7 +57,7 @@ THREEDLICParameters::THREEDLICParameters() {
 	InsertHelper(_floatParams, LICFloatParam::NUM_STEPS_LIC, FloatParam(20.0, 0.0, 100.0));
 	InsertHelper(_floatParams, LICFloatParam::VELOCITY_SCALE, FloatParam(0.01, 0.001, 1.0));
 	InsertHelper(_floatParams, LICFloatParam::DT, FloatParam(0.01, 0.0, 0.3));
-	InsertHelper(_floatParams, LICFloatParam::MAGNITUDE_MIN, FloatParam(0.0, 0.0, 1.0));
+	InsertHelper(_floatParams, LICFloatParam::MAGNITUDE_MIN, FloatParam(0.01, 0.0, 1.0));
 	InsertHelper(_floatParams, LICFloatParam::MAGNITUDE_MAX, FloatParam(0.3, 0.0, 1.0));
 	InsertHelper(_floatParams, LICFloatParam::COLOR_INTENSITY, FloatParam(100.0, 0.1, 1000.0));
 	InsertHelper(_floatParams, LICFloatParam::NOISE_DENSITY, FloatParam(500.0, 1.0, 2000.0));
