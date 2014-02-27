@@ -87,6 +87,30 @@ shared_ptr<const void> Texture2DData::get_data() {
 	return _texels;
 }
 
+GLenum Texture2DData::getInternalFormat() {
+	return _internalFormat;
+}
+
+int Texture2DData::getWidth() {
+	return _width;
+}
+
+int Texture2DData::getHeight() {
+	return _height;
+}
+
+int Texture2DData::getDepth() {
+	return _depth;
+}
+
+GLenum Texture2DData::getFormat() {
+	return _format;
+}
+
+GLenum Texture2DData::getType() {
+	return _type;
+}
+
 
 
 atomic_uint GLTexture::OGLActiveTextureCounter;

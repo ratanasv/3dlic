@@ -26,6 +26,9 @@ static const string toString(Property prop) {
 		propertyToString[Property::PATH_GAUSSIAN_COMPUTE_SHADER] = 
 			"path_gaussian_compute_shader";
 		propertyToString[Property::PATH_KERNEL] = "path_kernel";
+		propertyToString[Property::PATH_NOISE2D] = "path_noise2d";
+		propertyToString[Property::PATH_VS_2DLIC] = "path_vs_2dlic";
+		propertyToString[Property::PATH_FS_2DLIC] = "path_fs_2dlic";
 	}
 	return propertyToString[prop];
 }
@@ -52,7 +55,13 @@ void InitProgramOptions(int argc, char** argv) {
 		(toString(Property::PATH_GAUSSIAN_COMPUTE_SHADER).c_str(), po::value<string>(), 
 			"path to gaussian filter compute shader")
 		(toString(Property::PATH_KERNEL).c_str(), po::value<string>(), 
-			"path to kernel texture");
+			"path to kernel texture")
+		(toString(Property::PATH_NOISE2D).c_str(), po::value<string>(), 
+			"path to noise2d")
+		(toString(Property::PATH_FS_2DLIC).c_str(), po::value<string>(), 
+			"path 2d lic fragment shader")
+		(toString(Property::PATH_VS_2DLIC).c_str(), po::value<string>(), 
+			"path 2d lic vertex shader");
 
 	try {
 		po::store(po::parse_command_line(argc, argv, desc), variable_map);

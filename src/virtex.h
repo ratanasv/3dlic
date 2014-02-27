@@ -54,6 +54,18 @@ private:
 public:
 	virtual shared_ptr<const void> get_data();
 
+	virtual GLenum getInternalFormat();
+
+	virtual int getWidth();
+
+	virtual int getHeight();
+
+	virtual int getDepth();
+
+	virtual GLenum getFormat();
+
+	virtual GLenum getType();
+
 };
 
 class GLTexture {

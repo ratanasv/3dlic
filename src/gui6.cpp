@@ -16,12 +16,15 @@ using std::string;
 namespace fs = boost::filesystem;
 
 shared_ptr<GLSLProgram> VolumeTracingShader;
+static shared_ptr<GLSLProgram> TwoDLICShader;
 static shared_ptr<GLTexture> SparseNoise;
 static shared_ptr<VirModel> Cube;
 static shared_ptr<GLTexture> VectorDataTexture;
 static shared_ptr<GLTexture> VirNoise;
 static RegenerateNoise* RegenNoise = NULL;
 static shared_ptr<GLTexture> KernelNoise;
+static shared_ptr<GLTexture> Noise2D;
+static shared_ptr<VirModel> Quad;
 
 static void BindFloatUniform(const char* var, LICFloatParam param) {
 	VolumeTracingShader->SetUniform(var, GetTDLPInstance()
@@ -37,6 +40,7 @@ static void BindBoolUniform(const char* var, LICBoolParam param) {
 void draw6() {
 	RegenNoise->RunInMainThread(VirNoise);
 
+	VolumeTracingShader->Use();
 	static shared_ptr<TextureVisitor> sparseNoiseVisitor(new GLSLTextureSamplerBinder(
 		VolumeTracingShader, "uSparseNoiseSampler"));
 	static shared_ptr<TextureVisitor> virNoiseVisitor(new GLSLTextureSamplerBinder(
@@ -62,6 +66,23 @@ void draw6() {
 	SparseNoise->post_render();
 	VirNoise->post_render();
 
+	TwoDLICShader->Use();
+	static shared_ptr<TextureVisitor> noise2dVisitor(new GLSLTextureSamplerBinder(
+		TwoDLICShader, "uNoiseSampler"));
+	static shared_ptr<TextureVisitor> vectorData2DVisitor(new GLSLTextureSamplerBinder(
+		VolumeTracingShader, "uVectorData"));
+	VectorDataTexture->pre_render(vectorData2DVisitor);
+	Noise2D->pre_render(noise2dVisitor);
+	BindFloatUniform("uRainbowValMin", LICFloatParam::RAINBOW_VAL_MIN);
+	BindFloatUniform("uRainbowValMax", LICFloatParam::RAINBOW_VAL_MAX);
+	BindFloatUniform("uNumStepsLIC", LICFloatParam::NUM_STEPS_LIC);
+	BindFloatUniform("uVelocityScale", LICFloatParam::VELOCITY_SCALE);
+	BindFloatUniform("uDT", LICFloatParam::DT);
+	BindFloatUniform("uMinMagnitude", LICFloatParam::MAGNITUDE_MIN);
+	BindFloatUniform("uMaxMagnitude", LICFloatParam::MAGNITUDE_MAX);
+	Quad->render();
+	VectorDataTexture->post_render();
+	Noise2D->post_render();
 }
 
 void reset6() {
@@ -93,6 +114,10 @@ void init6() {
 		FRAGMENT_SHADER_PATH.c_str());
 	VolumeTracingShader->Use();
 
+	TwoDLICShader.reset(new GLSLProgram());
+	TwoDLICShader->Create(GetStringProperty(Property::PATH_VS_2DLIC).c_str(),
+		GetStringProperty(Property::PATH_FS_2DLIC).c_str());
+
 	
 	shared_ptr<TextureData> factory(new NoiseTex3DFactory(
 		NOISE_PATH, 1));
@@ -110,7 +135,13 @@ void init6() {
 		GetTDLPInstance().GetFloatParameter(LICFloatParam::NOISE_DENSITY).GetFloat(), 
 		0.5));
 	VirNoise.reset(new GLTexture(factory));
-	
+
+	factory.reset(new Texture2DData(GetStringProperty(Property::PATH_NOISE2D)));
+	Noise2D.reset(new GLTexture(factory));
+
+	shared_ptr<GeometryAbstractFactory> planeFactory(new PlaneGeometryFactory());
+	vaoFreeable.reset(new VAODelegatee(planeFactory, TwoDLICShader));
+	Quad.reset(new VirModel(vaoFreeable));
 
 	RegenNoise = new RegenerateNoise(LICFloatParam::NOISE_DENSITY);
 
