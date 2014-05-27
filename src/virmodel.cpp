@@ -161,7 +161,7 @@ shared_ptr<vector<unsigned>> PlaneGeometryFactory::get_indices() {
 		3, 0, 2
 	};
 	auto returned = initSmartArray<unsigned>();
-	returned->insert(returned->begin(), &indices[0], &indices[5]);
+	returned->insert(returned->begin(), &indices[0], &indices[6]);
 	return returned;
 }
 

@@ -31,6 +31,7 @@ public:
 	static LICFloatParam COLOR_INTENSITY;
 	static LICFloatParam NOISE_DENSITY;
 	static LICFloatParam NOISE_SIGMA;
+	static LICFloatParam Z_CUTTING_PLANE;
 
 	std::string GetStringRep() const;
 	int GetID() const;

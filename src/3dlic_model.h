@@ -47,7 +47,7 @@ public:
 // };
 
 enum class LICBoolParam : int {
-	PROJECTION, ISPAUSED, RENDER_RAY_DEPTH
+	PROJECTION, ISPAUSED, CUTTING_PLANE
 };
 
 enum class PROJ_TYPE : int {

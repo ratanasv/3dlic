@@ -15,6 +15,9 @@ using namespace vir;
 using std::string;
 namespace fs = boost::filesystem;
 
+extern float Xrot;
+extern float Yrot;	
+
 shared_ptr<GLSLProgram> VolumeTracingShader;
 static shared_ptr<GLSLProgram> TwoDLICShader;
 static shared_ptr<GLTexture> SparseNoise;
@@ -26,13 +29,17 @@ static shared_ptr<GLTexture> KernelNoise;
 static shared_ptr<GLTexture> Noise2D;
 static shared_ptr<VirModel> Quad;
 
-static void BindFloatUniform(const char* var, LICFloatParam param) {
-	VolumeTracingShader->SetUniform(var, GetTDLPInstance()
+static void BindFloatUniform(const char* var, LICFloatParam param, 
+	const shared_ptr<GLSLProgram>& program = VolumeTracingShader) 
+{
+	program->SetUniform(var, GetTDLPInstance()
 		.GetFloatParameter(param).GetFloat());
 }
 
-static void BindBoolUniform(const char* var, LICBoolParam param) {
-	VolumeTracingShader->SetUniform(var, GetTDLPInstance()
+static void BindBoolUniform(const char* var, LICBoolParam param,
+	const shared_ptr<GLSLProgram>& program = VolumeTracingShader) 
+{
+	program->SetUniform(var, GetTDLPInstance()
 		.GetBoolParameter(param).GetBool());
 }
 
@@ -60,29 +67,49 @@ void draw6() {
 	BindFloatUniform("uMinMagnitude", LICFloatParam::MAGNITUDE_MIN);
 	BindFloatUniform("uMaxMagnitude", LICFloatParam::MAGNITUDE_MAX);
 	BindFloatUniform("uColorIntensity", LICFloatParam::COLOR_INTENSITY);
-	BindBoolUniform("uRenderRayDepth", LICBoolParam::RENDER_RAY_DEPTH);
 	Cube->render();
 	VectorDataTexture->post_render();
 	SparseNoise->post_render();
 	VirNoise->post_render();
 
+	if (GetTDLPInstance().GetBoolParameter(LICBoolParam::CUTTING_PLANE).GetBool()) {
+
+	
+	glClear(GL_DEPTH_BUFFER_BIT);
+	TwoDLICShader->ClearProjection();
+	TwoDLICShader->Perspective( 90., 1.,	0.1, 100. );
+	TwoDLICShader->ClearModelView();
+	TwoDLICShader->LookAt( vec3<>(0., 0., 15.), vec3<>(0., 0., 0.), vec3<>(0., 1., 0.));
+
+	TwoDLICShader->Translate(
+		GetTDLPInstance().GetFloatParameter(
+		LICFloatParam::XTRANSLATE).GetFloat(), 
+		GetTDLPInstance().GetFloatParameter(
+		LICFloatParam::YTRANSLATE).GetFloat(),
+		GetTDLPInstance().GetFloatParameter(
+		LICFloatParam::ZTRANSLATE).GetFloat()
+	);
+	TwoDLICShader->Rotate(Xrot, Yrot, 0.0);
 	TwoDLICShader->Use();
 	static shared_ptr<TextureVisitor> noise2dVisitor(new GLSLTextureSamplerBinder(
 		TwoDLICShader, "uNoiseSampler"));
 	static shared_ptr<TextureVisitor> vectorData2DVisitor(new GLSLTextureSamplerBinder(
-		VolumeTracingShader, "uVectorData"));
+		TwoDLICShader, "uVectorData"));
 	VectorDataTexture->pre_render(vectorData2DVisitor);
 	Noise2D->pre_render(noise2dVisitor);
-	BindFloatUniform("uRainbowValMin", LICFloatParam::RAINBOW_VAL_MIN);
-	BindFloatUniform("uRainbowValMax", LICFloatParam::RAINBOW_VAL_MAX);
-	BindFloatUniform("uNumStepsLIC", LICFloatParam::NUM_STEPS_LIC);
-	BindFloatUniform("uVelocityScale", LICFloatParam::VELOCITY_SCALE);
-	BindFloatUniform("uDT", LICFloatParam::DT);
-	BindFloatUniform("uMinMagnitude", LICFloatParam::MAGNITUDE_MIN);
-	BindFloatUniform("uMaxMagnitude", LICFloatParam::MAGNITUDE_MAX);
+	BindFloatUniform("uRainbowValMin", LICFloatParam::RAINBOW_VAL_MIN, TwoDLICShader);
+	BindFloatUniform("uRainbowValMax", LICFloatParam::RAINBOW_VAL_MAX, TwoDLICShader);
+	BindFloatUniform("uNumStepsLIC", LICFloatParam::NUM_STEPS_LIC, TwoDLICShader);
+	BindFloatUniform("uVelocityScale", LICFloatParam::VELOCITY_SCALE, TwoDLICShader);
+	BindFloatUniform("uDT", LICFloatParam::DT, TwoDLICShader);
+	BindFloatUniform("uMinMagnitude", LICFloatParam::MAGNITUDE_MIN, TwoDLICShader);
+	BindFloatUniform("uMaxMagnitude", LICFloatParam::MAGNITUDE_MAX, TwoDLICShader);
+	BindFloatUniform("uZ", LICFloatParam::Z_CUTTING_PLANE, TwoDLICShader);
 	Quad->render();
-	VectorDataTexture->post_render();
 	Noise2D->post_render();
+	VectorDataTexture->post_render();
+	
+	}
 }
 
 void reset6() {

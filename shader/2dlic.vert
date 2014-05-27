@@ -18,7 +18,7 @@ void main(void) {
 	vec4 modelSpaceCoord = vec4(vPosition.xy, uZ, 1.0);
 
 	fTexCoord = vec3(vTexCoord.st, 0.5*uZ+0.5);
-	fColor = vec4(1.0, 1.0, 1.0, 1.0);
+	fColor = vec3(1.0, 1.0, 1.0);
 	fNormal = vNormal;
 
     gl_Position = uProjectionMatrix * uModelViewMatrix * modelSpaceCoord;

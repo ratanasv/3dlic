@@ -22,7 +22,6 @@ uniform float uNumStepsLIC;
 uniform float uVelocityScale;
 uniform float uDT;
 
-uniform bool uRenderRayDepth;
 
 const float SQRT3 = 1.732;
 
@@ -165,12 +164,7 @@ void main(void) {
 			break;
 		}
 	}
-	if (uRenderRayDepth) {
-		vec3 rainbow = Rainbow(1.0 - stepsTotal/uNumSteps);
-		gl_FragColor = vec4(rainbow, 1.0);
 
-	} else {
-		gl_FragColor = vec4(cstar, 1.0);
-	}
+	gl_FragColor = vec4(cstar, 1.0);
 
 }

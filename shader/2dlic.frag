@@ -1,6 +1,6 @@
 #version 430 compatibility
 
-uniform sampler3D uNoiseSampler;
+uniform sampler2D uNoiseSampler;
 uniform sampler3D uVectorData;
 
 in vec3 fTexCoord;
@@ -12,7 +12,6 @@ uniform float uRainbowValMin;
 uniform float uRainbowValMax;
 uniform float uMinMagnitude;
 uniform float uMaxMagnitude;
-uniform float uColorIntensity;
 
 uniform float uNumStepsLIC;
 uniform float uVelocityScale;
@@ -78,7 +77,7 @@ vec3 SolveAdvectionEqn(vec3 pos, vec3 vel) {
 }
 
 float FetchSparseNoise(vec3 stp) {
-	return texture(uNoiseSampler, stp).r;
+	return texture(uNoiseSampler, stp.st).r;
 }
 
 float ComputeLIC(vec3 stp) {
@@ -108,18 +107,13 @@ vec3 ClampRainbow(float t, float smin, float smax) {
 
 void main(void) {
 
-	float vectorMagnitude = texture(uVectorData, stp).a;
+	float vectorMagnitude = texture(uVectorData, fTexCoord).a;
 	vec3 rgb;
-	if (vectorMagnitude < uMinMagnitude || vectorMagnitude > uMaxMagnitude) {
-		rgb = vec3(0.0, 0.0, 0.0);
-	} else {
-		float accumulated = ComputeLIC(stp);
-		rgb = uColorIntensity*accumulated*
-			ClampRainbow(vectorMagnitude, uRainbowValMin, uRainbowValMax);
-	}
+
+	float accumulated = ComputeLIC(fTexCoord);
+	rgb = accumulated*ClampRainbow(vectorMagnitude, uRainbowValMin, uRainbowValMax);
 
 
-
-	gl_FragColor = vec4(rgb, 1.0);
+	gl_FragColor = vec4(accumulated, accumulated, accumulated, 1.0);
 
 }
