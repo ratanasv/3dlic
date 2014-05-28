@@ -22,6 +22,8 @@ uniform float uNumStepsLIC;
 uniform float uVelocityScale;
 uniform float uDT;
 
+uniform bool uDirectionStyle;
+
 
 const float SQRT3 = 1.732;
 
@@ -133,7 +135,13 @@ vec3 ClampRainbow(float t, float smin, float smax) {
 
 void main(void) {
 	vec3 stp = fTexCoord;
-	vec3 forwardDir = GetForwardDir();
+	vec3 forwardDir;
+
+	if (uDirectionStyle) {
+		forwardDir = GetForwardDirAlternate();
+	} else {
+		forwardDir = GetForwardDir();
+	}
 
 
 	float astar = 1.;

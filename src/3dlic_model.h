@@ -47,7 +47,7 @@ public:
 // };
 
 enum class LICBoolParam : int {
-	PROJECTION, ISPAUSED, CUTTING_PLANE
+	PROJECTION, ISPAUSED, CUTTING_PLANE, DIRECTION_STYLE
 };
 
 enum class PROJ_TYPE : int {

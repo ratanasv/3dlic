@@ -112,6 +112,10 @@ void create_proj6_panel(GLUI* main_glui) {
 	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
 		LICFloatParam::Z_CUTTING_PLANE, "Z-value Cutting Plane = %4.4f");
 
+	main_glui->add_separator();
+	GLUIPresentationLayer::INSTANCE->InsertCheckBox(main_glui, panel, 
+		LICBoolParam::DIRECTION_STYLE, "Direction Stle");
+
 		
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);
 	// 	char* labels[] = {"texture enviroment","no texture", "modulate", "replace"};

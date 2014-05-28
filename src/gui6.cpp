@@ -67,6 +67,7 @@ void draw6() {
 	BindFloatUniform("uMinMagnitude", LICFloatParam::MAGNITUDE_MIN);
 	BindFloatUniform("uMaxMagnitude", LICFloatParam::MAGNITUDE_MAX);
 	BindFloatUniform("uColorIntensity", LICFloatParam::COLOR_INTENSITY);
+	BindBoolUniform("uDirectionStyle", LICBoolParam::DIRECTION_STYLE);
 	Cube->render();
 	VectorDataTexture->post_render();
 	SparseNoise->post_render();
