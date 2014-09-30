@@ -66,6 +66,7 @@ THREEDLICParameters::THREEDLICParameters() {
 	InsertHelper(_floatParams, LICFloatParam::Z_CUTTING_PLANE, FloatParam(0.0, -1.0, 1.0));
 	InsertHelper(_boolParams, LICBoolParam::SHOW_FORWARD_VECTOR_DIFF, BoolParam(false));
 	InsertHelper(_boolParams, LICBoolParam::SHOW_NUM_ITERATIONS, BoolParam(false));
+	InsertHelper(_floatParams, LICFloatParam::TERMINATING_ALPHA, FloatParam(0.9, 0.0, 1.0));
 	_projection = PROJ_TYPE::PERSP;
 }
 

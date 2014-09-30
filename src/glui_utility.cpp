@@ -117,7 +117,8 @@ void create_proj6_panel(GLUI* main_glui) {
 		LICBoolParam::SHOW_FORWARD_VECTOR_DIFF, "Show forward vector difference");
 	GLUIPresentationLayer::INSTANCE->InsertCheckBox(main_glui, panel, 
 		LICBoolParam::SHOW_NUM_ITERATIONS, "Show number of iterations");
-
+	GLUIPresentationLayer::INSTANCE->InsertSlider(main_glui, panel, 
+		LICFloatParam::TERMINATING_ALPHA, "terminating alpha = %2.4f");
 
 		
 	// 	GLUI_RadioGroup* group = main_glui->add_radiogroup_to_panel(panel, &blah, -1, callback);

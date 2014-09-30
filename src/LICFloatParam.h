@@ -32,6 +32,7 @@ public:
 	static LICFloatParam NOISE_DENSITY;
 	static LICFloatParam NOISE_SIGMA;
 	static LICFloatParam Z_CUTTING_PLANE;
+	static LICFloatParam TERMINATING_ALPHA;
 
 	std::string GetStringRep() const;
 	int GetID() const;

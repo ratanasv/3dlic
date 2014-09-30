@@ -17,6 +17,7 @@ uniform float uRainbowValMax;
 uniform float uMinMagnitude;
 uniform float uMaxMagnitude;
 uniform float uColorIntensity;
+uniform float uTerminatingAlpha;
 
 uniform float uNumStepsLIC;
 uniform float uVelocityScale;
@@ -162,7 +163,7 @@ void main(void) {
 		cstar += astar * alpha * rgb;
 		astar *= ( 1. - alpha );
 		stp += forwardDir; // doing front-to-back composition
-		if ( astar < 0.05 ) {
+		if ( astar < uTerminatingAlpha ) {
 			break;
 		}
 	}

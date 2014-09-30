@@ -74,7 +74,6 @@ ProceduralTornado::ProceduralTornado(int xDim, int yDim, int zDim, int time) :
 {
 	_data.Set([=]() {
 		const unsigned numVectors		= xDim * yDim * zDim;
-		const unsigned numComponents	= 3;
 
 		auto tornadoFlow = initCStyleArray(new vec3<>[numVectors]);
 		gen_tornado(xDim, yDim, zDim, time, (float*)tornadoFlow.get());
@@ -96,7 +95,7 @@ ProceduralTornado::ProceduralTornado(int xDim, int yDim, int zDim, int time) :
 			tornadoFlowWithMagnitude.get(), 
 			tornadoFlowWithMagnitude.get() + numVectors, 
 			tornadoFlowWithMagnitude.get(),
-			[=](const vec4<>& vec) {
+			[=] (const vec4<>& vec) {
 				vec4<> scaled = vec;
 				scaled[3] = scaled[3]/maxLength;
 				return scaled;
