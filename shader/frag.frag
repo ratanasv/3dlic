@@ -23,6 +23,7 @@ uniform float uVelocityScale;
 uniform float uDT;
 
 uniform bool uShowForwardVectorDiff;
+uniform bool uShowNumIterations;
 
 
 const float SQRT3 = 1.732;
@@ -42,7 +43,6 @@ vec3 GetVelocityTextureData(vec3 stp) {
 
 vec3 Rainbow( float t ) {
 	//t = clamp( t, 0., 1. );
-	t = 1.0 - t;
 
 	vec3 rgb;
 
@@ -129,7 +129,7 @@ float ComputeLIC(vec3 stp) {
  * Clamps, and also converts it to rainbow color.
  */
 vec3 ClampRainbow(float t, float smin, float smax) {
-	return Rainbow(1.0 - (t - smin)/(smax - smin));
+	return Rainbow((t - smin)/(smax - smin));
 }
 
 
@@ -140,8 +140,8 @@ void main(void) {
 
 	float astar = 1.;
 	vec3 cstar = vec3(0.0, 0.0, 0.0);
-	int stepsTotal = 0;
-	for (stepsTotal=0; stepsTotal<uNumSteps; stepsTotal++) {
+	float stepsTotal = 0.0;
+	for (stepsTotal=0.0; stepsTotal<uNumSteps; stepsTotal++) {
 		float alpha = uBaseAlpha;
 		float vectorMagnitude = texture(uVectorData, stp).a;
 		vec3 rgb;
@@ -170,6 +170,9 @@ void main(void) {
 	if (uShowForwardVectorDiff) {
 		vec3 diff = normalize(GetForwardDir()) - normalize(GetForwardDirAlternate());
 		vec3 rainbow = Rainbow(1.0 - length(diff));
+		gl_FragColor = vec4(rainbow, 1.0);
+	} else if (uShowNumIterations) {
+		vec3 rainbow = Rainbow(stepsTotal/uNumSteps);
 		gl_FragColor = vec4(rainbow, 1.0);
 	} else {
 		gl_FragColor = vec4(cstar, 1.0);
