@@ -7,7 +7,8 @@
 using namespace std;
 
 mutex _mutex;
-shared_ptr<TextureData> _factory;
+shared_ptr<TextureData> _lowFreqNoisefactory;
+shared_ptr<TextureData> _highFreqNoisefactory;
 
 RegenerateNoise::RegenerateNoise(const LICFloatParam& param) : 
 	_param(param)
@@ -27,11 +28,14 @@ void RegenerateNoise::operator()() {
 		if (_lastSeenValue != newValue || _lastSeenSigma != newSigma) {
 			_lastSeenValue = newValue;
 			_lastSeenSigma = newSigma;
-			shared_ptr<TextureData> newFactory(new FilteredNoise(2, 3, 5, 256, 
+			shared_ptr<TextureData> newLowFreqNoiseFactory(new FilteredNoise(2, 3, 5, 256, 
 				_lastSeenValue, _lastSeenSigma));
+			shared_ptr<TextureData> newHighFreqNoiseFactory(new FilteredNoise(2, 3, 5, 256, 
+				_lastSeenValue * 3.0, _lastSeenSigma * 3.0));
 			{
 				lock_guard<mutex> synchronized(_mutex);
-				_factory = newFactory;
+				_lowFreqNoisefactory = newLowFreqNoiseFactory;
+				_highFreqNoisefactory = newHighFreqNoiseFactory;
 			}
 		}
 			
@@ -40,10 +44,14 @@ void RegenerateNoise::operator()() {
 
 }
 
-void RegenerateNoise::RunInMainThread(std::shared_ptr<GLTexture>& noise) {
+void RegenerateNoise::RunInMainThread(std::shared_ptr<GLTexture>& lowFreqNoise,
+	std::shared_ptr<GLTexture>& highFreqNoise) 
+{
 	lock_guard<mutex> synchronized(_mutex);
-	if (_factory) {
-		noise->send_to_gpu(_factory);
-		_factory.reset();
+	if (_lowFreqNoisefactory) {
+		lowFreqNoise->send_to_gpu(_lowFreqNoisefactory);
+		highFreqNoise->send_to_gpu(_highFreqNoisefactory);
+		_lowFreqNoisefactory.reset();
+		_highFreqNoisefactory.reset();
 	}
 }

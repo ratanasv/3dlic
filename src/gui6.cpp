@@ -24,7 +24,8 @@ static shared_ptr<GLSLProgram> TwoDLICShader;
 static shared_ptr<GLTexture> SparseNoise;
 static shared_ptr<VirModel> Cube;
 static shared_ptr<GLTexture> VectorDataTexture;
-static shared_ptr<GLTexture> VirNoise;
+static shared_ptr<GLTexture> LowFreqNoise;
+static shared_ptr<GLTexture> HighFreqNoise;
 static RegenerateNoise* RegenNoise = NULL;
 static shared_ptr<GLTexture> KernelNoise;
 static shared_ptr<GLTexture> Noise2D;
@@ -46,16 +47,19 @@ static void BindBoolUniform(const char* var, LICBoolParam param,
 
 
 void draw6() {
-	RegenNoise->RunInMainThread(VirNoise);
+	RegenNoise->RunInMainThread(LowFreqNoise, HighFreqNoise);
 
 	VolumeTracingShader->Use();
 	static shared_ptr<TextureVisitor> sparseNoiseVisitor(new GLSLTextureSamplerBinder(
 		VolumeTracingShader, "uSparseNoiseSampler"));
-	static shared_ptr<TextureVisitor> virNoiseVisitor(new GLSLTextureSamplerBinder(
-		VolumeTracingShader, "uVirNoiseSampler"));
+	static shared_ptr<TextureVisitor> lowFreqNoiseVisitor(new GLSLTextureSamplerBinder(
+		VolumeTracingShader, "uLowFreqNoiseSampler"));
+	static shared_ptr<TextureVisitor> highFreqNoiseVisitor(new GLSLTextureSamplerBinder(
+		VolumeTracingShader, "uHighFreqNoiseSampler"));
 	static shared_ptr<TextureVisitor> vectorDataVisitor(new GLSLTextureSamplerBinder(
 		VolumeTracingShader, "uVectorData"));
-	VirNoise->pre_render(virNoiseVisitor);
+	LowFreqNoise->pre_render(lowFreqNoiseVisitor);
+	HighFreqNoise->pre_render(highFreqNoiseVisitor);
 	SparseNoise->pre_render(sparseNoiseVisitor);
 	VectorDataTexture->pre_render(vectorDataVisitor);
 	BindFloatUniform("uNumSteps", LICFloatParam::NUM_STEPS);
@@ -74,7 +78,8 @@ void draw6() {
 	Cube->render();
 	VectorDataTexture->post_render();
 	SparseNoise->post_render();
-	VirNoise->post_render();
+	HighFreqNoise->post_render();
+	LowFreqNoise->post_render();
 
 	if (GetTDLPInstance().GetBoolParameter(LICBoolParam::CUTTING_PLANE).GetBool()) {
 
@@ -165,7 +170,12 @@ void init6() {
 	factory.reset(new FilteredNoise(2, 3, 5, 256, 
 		GetTDLPInstance().GetFloatParameter(LICFloatParam::NOISE_DENSITY).GetFloat(), 
 		0.5));
-	VirNoise.reset(new GLTexture(factory));
+	LowFreqNoise.reset(new GLTexture(factory));
+
+	factory.reset(new FilteredNoise(2, 3, 5, 256, 
+		GetTDLPInstance().GetFloatParameter(LICFloatParam::NOISE_DENSITY).GetFloat() * 3.0, 
+		0.5));
+	HighFreqNoise.reset(new GLTexture(factory));
 
 	factory.reset(new Texture2DData(GetStringProperty(Property::PATH_NOISE2D)));
 	Noise2D.reset(new GLTexture(factory));

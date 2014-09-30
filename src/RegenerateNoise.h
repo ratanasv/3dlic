@@ -14,5 +14,6 @@ private:
 public:
 	RegenerateNoise(const LICFloatParam& param);
 	void operator()();
-	void RunInMainThread(std::shared_ptr<GLTexture>& noise);
+	void RegenerateNoise::RunInMainThread(std::shared_ptr<GLTexture>& lowFreqNoise,
+		std::shared_ptr<GLTexture>& highFreqNoise); 
 };
