@@ -126,6 +126,12 @@
     <ClInclude Include="src\RegenerateNoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ProceduralTornado.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Normalizer.h">
+      <Filter>Header Files\datareader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\abstract.cpp">
@@ -205,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="src\RegenerateNoise.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ProceduralTornado.cpp">
+      <Filter>Source Files\datareader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

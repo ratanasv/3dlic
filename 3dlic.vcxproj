@@ -35,9 +35,11 @@
     <ClInclude Include="src\LICFloatParam.h" />
     <ClInclude Include="src\mfalk_reader_wrapper.h" />
     <ClInclude Include="src\model_controller.h" />
+    <ClInclude Include="src\Normalizer.h" />
     <ClInclude Include="src\ProceduralNoise.h" />
     <ClInclude Include="src\NoiseTex3DFactory.h" />
     <ClInclude Include="src\objload.h" />
+    <ClInclude Include="src\ProceduralTornado.h" />
     <ClInclude Include="src\property.h" />
     <ClInclude Include="src\reader.h" />
     <ClInclude Include="src\RegenerateNoise.h" />
@@ -65,6 +67,7 @@
     <ClCompile Include="src\model_controller.cpp" />
     <ClCompile Include="src\NoiseTex3DFactory.cpp" />
     <ClCompile Include="src\ProceduralNoise.cpp" />
+    <ClCompile Include="src\ProceduralTornado.cpp" />
     <ClCompile Include="src\property.cpp" />
     <ClCompile Include="src\reader.cpp" />
     <ClCompile Include="src\RegenerateNoise.cpp" />

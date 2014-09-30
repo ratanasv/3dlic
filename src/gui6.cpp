@@ -10,6 +10,7 @@
 #include "FilteredNoise.h"
 #include "LICFloatParam.h"
 #include "RegenerateNoise.h"
+#include "ProceduralTornado.h"
 
 using namespace vir;
 using std::string;
@@ -152,7 +153,7 @@ void init6() {
 		NOISE_PATH, 1));
 	SparseNoise.reset(new GLTexture(factory));
 
-	factory.reset(new MFalkDataTex3DFactory(DATA_PATH.c_str(), GL_RGBA32F));
+	factory.reset(new ProceduralTornado(128, 128, 128, 0));
 	VectorDataTexture.reset(new GLTexture(factory));
 
 	shared_ptr<GeometryAbstractFactory> cubeFactory(new CubeGeometryFactory());
