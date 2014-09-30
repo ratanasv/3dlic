@@ -1,7 +1,8 @@
 #version 430 compatibility
 
 uniform sampler3D uSparseNoiseSampler;
-uniform sampler3D uVirNoiseSampler;
+uniform sampler3D uLowFreqNoiseSampler;
+uniform sampler3D uHighFreqNoiseSampler;
 uniform sampler3D uVectorData;
 
 in vec3 fTexCoord;
@@ -105,8 +106,19 @@ vec3 SolveAdvectionEqn(vec3 pos, vec3 vel) {
 	return pos + vel*uDT;
 }
 
+float GetZoomLevel() {
+	float zShift = (-1.0 * uModelViewMatrix[3].z);
+	zShift = clamp(zShift, 2.5, 4.5);
+	zShift = 1.0 - (zShift - 2.5) / 2.0;
+	return zShift;
+}
+
 float FetchSparseNoise(vec3 stp) {
-	return texture(uVirNoiseSampler, stp).r;
+	float zoomLevel = GetZoomLevel();
+	float lowFreq = texture(uLowFreqNoiseSampler, stp).r;
+	float highFreq = texture(uHighFreqNoiseSampler, stp).r;
+	
+	return zoomLevel * highFreq + (1.0 - zoomLevel) * lowFreq;
 }
 
 float ComputeLIC(vec3 stp) {
@@ -173,7 +185,8 @@ void main(void) {
 		vec3 rainbow = Rainbow(1.0 - length(diff));
 		gl_FragColor = vec4(rainbow, 1.0);
 	} else if (uShowNumIterations) {
-		vec3 rainbow = Rainbow(stepsTotal/uNumSteps);
+		//vec3 rainbow = Rainbow(stepsTotal/uNumSteps);
+		vec3 rainbow = Rainbow(GetZoomLevel());
 		gl_FragColor = vec4(rainbow, 1.0);
 	} else {
 		gl_FragColor = vec4(cstar, 1.0);
