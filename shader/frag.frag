@@ -22,7 +22,7 @@ uniform float uNumStepsLIC;
 uniform float uVelocityScale;
 uniform float uDT;
 
-uniform bool uDirectionStyle;
+uniform bool uShowForwardVectorDiff;
 
 
 const float SQRT3 = 1.732;
@@ -135,13 +135,7 @@ vec3 ClampRainbow(float t, float smin, float smax) {
 
 void main(void) {
 	vec3 stp = fTexCoord;
-	vec3 forwardDir;
-
-	if (uDirectionStyle) {
-		forwardDir = GetForwardDirAlternate();
-	} else {
-		forwardDir = GetForwardDir();
-	}
+	vec3 forwardDir = GetForwardDirAlternate();
 
 
 	float astar = 1.;
@@ -173,6 +167,11 @@ void main(void) {
 		}
 	}
 
-	gl_FragColor = vec4(cstar, 1.0);
-
+	if (uShowForwardVectorDiff) {
+		vec3 diff = normalize(GetForwardDir()) - normalize(GetForwardDirAlternate());
+		vec3 rainbow = Rainbow(1.0 - length(diff));
+		gl_FragColor = vec4(rainbow, 1.0);
+	} else {
+		gl_FragColor = vec4(cstar, 1.0);
+	}
 }
