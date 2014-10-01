@@ -31,7 +31,7 @@ void RegenerateNoise::operator()() {
 			shared_ptr<TextureData> newLowFreqNoiseFactory(new FilteredNoise(2, 3, 5, 256, 
 				_lastSeenValue, _lastSeenSigma));
 			shared_ptr<TextureData> newHighFreqNoiseFactory(new FilteredNoise(2, 3, 5, 256, 
-				_lastSeenValue * 3.0, _lastSeenSigma * 3.0));
+				_lastSeenValue * 3.0, _lastSeenSigma));
 			{
 				lock_guard<mutex> synchronized(_mutex);
 				_lowFreqNoisefactory = newLowFreqNoiseFactory;

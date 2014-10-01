@@ -81,12 +81,12 @@ vec3 Rainbow( float t ) {
 }
 
 float transferFunction(vec3 stp, float accumulated) {
-	/*float magnitude = texture(uVectorData, stp).a;
+	float magnitude = texture(uVectorData, stp).a;
 	if (magnitude < uMinMagnitude || magnitude > uMaxMagnitude) {
-		return 0.0;
+		return accumulated * 0.1;
+	} else {
+		return accumulated;
 	}
-	return magnitude;*/
-	return accumulated;
 }
 
 vec3 GetForwardDir() {
@@ -108,8 +108,8 @@ vec3 SolveAdvectionEqn(vec3 pos, vec3 vel) {
 
 float GetZoomLevel() {
 	float zShift = (-1.0 * uModelViewMatrix[3].z);
-	zShift = clamp(zShift, 2.5, 4.5);
-	zShift = 1.0 - (zShift - 2.5) / 2.0;
+	zShift = clamp(zShift, 2.5, 5.5);
+	zShift = 1.0 - (zShift - 2.5) / 3.0;
 	return zShift;
 }
 
@@ -158,18 +158,17 @@ void main(void) {
 		float alpha = uBaseAlpha;
 		float vectorMagnitude = texture(uVectorData, stp).a;
 		vec3 rgb;
-		if (any(lessThan(stp, vec3(0.0,0.0,0.0))) || any(greaterThan(stp, vec3(1.,1.,1.))) || 
-			vectorMagnitude < uMinMagnitude || vectorMagnitude > uMaxMagnitude) 
-		{
-			alpha = 0.0;
-			rgb = vec3(0.0, 0.0, 0.0);
-		} else {
-			float accumulated = ComputeLIC(stp);
-			alpha = transferFunction(stp, accumulated) * uBaseAlpha;
-			rgb = uColorIntensity*accumulated*
-				ClampRainbow(vectorMagnitude, uRainbowValMin, uRainbowValMax);
+		if (any(greaterThan(stp, vec3(1.,1.,1.)))) {
+			break;
+		}
+		if (any(lessThan(stp, vec3(0.0,0.0,0.0)))) {
+			continue;
 		}
 
+		float accumulated = ComputeLIC(stp);
+		alpha = transferFunction(stp, accumulated) * uBaseAlpha;
+		rgb = uColorIntensity*accumulated*
+			ClampRainbow(vectorMagnitude, uRainbowValMin, uRainbowValMax);
 
 		
 		cstar += astar * alpha * rgb;
